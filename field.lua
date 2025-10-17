@@ -30,7 +30,7 @@ function Field.update()
 	lg.translate(Field.pos.x, Field.pos.y)
 	MousePosX, MousePosY = love.graphics.inverseTransformPoint(love.mouse.getPosition())
 	Field.selected.x = math.floor(MousePosX / Cell.cellSize)
-	Field.selected.y = math.floor(MousePosY / Cell.cellSize) 
+	Field.selected.y = math.floor(MousePosY / Cell.cellSize)
 end
 
 function Field.mousepressed()
@@ -41,7 +41,7 @@ function Field.mousepressed()
 		end
 	else
 		Cell.new(x, y, false)
-		Cell.reveal(x, y)		
+		Cell.reveal(x, y)
 	end
 end
 
@@ -89,7 +89,7 @@ function Cell.reveal(x, y)
 	end
 end
 
-function Cell.revealAround(x, y)	
+function Cell.revealAround(x, y)
 	for dx = -1, 1 do
 		for dy = -1, 1 do
 			if dx ~= 0 or dy ~= 0 then
@@ -99,8 +99,8 @@ function Cell.revealAround(x, y)
 	end
 end
 
-function Cell.new(x, y, isBomb) 
-	if Cell[x] == nill then 
+function Cell.new(x, y, isBomb)
+	if Cell[x] == nill then
 		Cell[x] = {}
 	end
 	self = {}
@@ -129,19 +129,19 @@ end
 Field.zoom = 1
 Field.pos = {x = 0 , y = 0}
 function Field.draw()
-	
+
 	if GM.state == "MainGame" then
 		lg.push ()
 			lg.translate(GM.Widht/2, GM.Height/2)
-			lg.scale(Field.zoom, Field.zoom)				
-			lg.push()				
+			lg.scale(Field.zoom, Field.zoom)
+			lg.push()
 				lg.translate(Field.pos.x, Field.pos.y)
 
 				RTCorX, RTCorY = love.graphics.inverseTransformPoint( 0, 0 )
 				LBCorX, LBCorY = love.graphics.inverseTransformPoint( GM.Widht, GM.Height )
 				RTCorX, RTCorY = math.floor( RTCorX / Cell.cellSize) , math.floor( RTCorY / Cell.cellSize)
 				LBCorX, LBCorY = math.floor( LBCorX / Cell.cellSize) , math.floor( LBCorY / Cell.cellSize)
-				for x  = RTCorX, LBCorX do 
+				for x  = RTCorX, LBCorX do
 					for y = RTCorY, LBCorY do
 						love.graphics.setLineWidth( Cell.rCorner)
 						if y == LBCorY  or y == RTCorY  or x == LBCorX  or x == RTCorX  then
@@ -151,26 +151,26 @@ function Field.draw()
 						end
 
 						if Field.selected.x ~= x or Field.selected.y ~= y or Cell.isRevealed(x, y) then
-							lg.rectangle("fill", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1) 
+							lg.rectangle("fill", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
 							lg.setColor(1, 1, 1, 0.2)
 							lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
 						else
-					
+
 							lg.setColor(0.3, 0.3, 0.28)
 							lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
 							lg.setColor(1, 1, 0.95, 0.2)
 							lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner)
-							--lg.rectangle("line", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner, Cell.rCorner, 1)  
+							--lg.rectangle("line", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner, Cell.rCorner, 1)
 						end
-							
-						
+
+
 						--if Cell.isNotNill(x, y) then
 							--if Cell[x][y].bomb then
 							--	lg.setColor(1, 0, 0)
-							--	lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)	
+							--	lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
 							--else
 								--lg.setColor(0, 1, 0)
-								--lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)	
+								--lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
 								if Cell.isRevealed(x, y ) then
 									lg.setColor(0, 0, 1)
 									lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
