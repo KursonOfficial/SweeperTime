@@ -1,5 +1,3 @@
-require "palette"
- 
 UI = {}
 
 function UI.printLogo()

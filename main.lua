@@ -3,6 +3,8 @@ require "ui"
 --Field! да ты! идём поговорим.
 require "field"
 --game manager типо
+require "palette"
+
 GM = {}
 
 GM.version = "v0.1"
