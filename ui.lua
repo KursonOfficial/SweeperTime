@@ -1,3 +1,5 @@
+require "palette"
+ 
 UI = {}
 
 function UI.printLogo()
@@ -12,7 +14,7 @@ end
 function UI.draw()
 	if GM.state == "MainMenu" then
 		lg.setFont(lg.newFont(10))
-		lg.setColor(0.2, 0.2, 0.2)
+		lg.setColor(H2C(palette.Gray))
 		lg.printf(GM.version,0 ,0 , GM.Widht, "right")
 		UI.printLogo()
 	end if GM.state == "MainGame" then

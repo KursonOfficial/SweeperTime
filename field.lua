@@ -145,14 +145,14 @@ function Field.draw()
 					for y = RTCorY, LBCorY do
 						love.graphics.setLineWidth( Cell.rCorner)
 						if y == LBCorY  or y == RTCorY  or x == LBCorX  or x == RTCorX  then
-							lg.setColor(0.2, 0.2, 0.2 , 0.8)
+							lg.setColor(0.2, 0.2, 0.2, 0.8)
 						else
-							lg.setColor(0.2, 0.2, 0.2)
+							lg.setColor(0.2, 0.2, 0.2, 1)
 						end
 
 						if Field.selected.x ~= x or Field.selected.y ~= y or Cell.isRevealed(x, y) then
 							lg.rectangle("fill", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
-							lg.setColor(1, 1, 1, 0.2)
+							lg.setColor(H2C(palette.CellFrame2))
 							lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
 						else
 							lg.setColor(0.3, 0.3, 0.28)
@@ -169,7 +169,7 @@ function Field.draw()
 								--lg.setColor(0, 1, 0)
 								--lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
 								if Cell.isRevealed(x, y ) then
-									lg.setColor(0, 0, 1)
+									lg.setColor(H2C(palette.CellRevealed))
 									lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
 									lg.setColor(1, 1, 1)
 									if Cell[x][y].mines ~= 0 then
