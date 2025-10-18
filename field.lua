@@ -19,6 +19,7 @@ function Field.init()
 	Field.selected  = {}
 	Field.zoom = 1
 	Cell.cellSize = GM.Height/10
+	Cell.Font = lg.newFont(GM.Height/10)
 	Cell.rCorner = Cell.cellSize/8
 	math.randomseed(os.time())
 
@@ -51,7 +52,7 @@ function Cell.reveal(x, y)
 	end
 	if not Cell[x][y].revealed then
 		Cell[x][y].revealed = true
-		BombsAround = 0
+		local BombsAround = 0
 		for dx = -1, 1 do
 			for dy = -1, 1 do
 				if not Cell.isNotNill(x + dx, y + dy) then
@@ -129,7 +130,6 @@ end
 Field.zoom = 1
 Field.pos = {x = 0 , y = 0}
 function Field.draw()
-
 	if GM.state == "MainGame" then
 		lg.push ()
 			lg.translate(GM.Widht/2, GM.Height/2)
@@ -155,15 +155,12 @@ function Field.draw()
 							lg.setColor(1, 1, 1, 0.2)
 							lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
 						else
-
 							lg.setColor(0.3, 0.3, 0.28)
 							lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
 							lg.setColor(1, 1, 0.95, 0.2)
 							lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner)
 							--lg.rectangle("line", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner, Cell.rCorner, 1)
 						end
-
-
 						--if Cell.isNotNill(x, y) then
 							--if Cell[x][y].bomb then
 							--	lg.setColor(1, 0, 0)
@@ -176,7 +173,7 @@ function Field.draw()
 									lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
 									lg.setColor(1, 1, 1)
 									if Cell[x][y].mines ~= 0 then
-										lg.setFont(lg.newFont(Cell.cellSize))
+										lg.setFont(Cell.Font)
 										lg.print(Cell[x][y].mines, x * Cell.cellSize, y * Cell.cellSize)
 									end
 								end
