@@ -12,6 +12,9 @@ end
 palette = {
 	Gray       = "333333FF";
 	LightGray  = "4C4C4CFF";
+	LogoFront  = "CCCCFFFF";
+	Hint       = "4C527FFF";
+	DebugInfo  = "4C197FFF";
 	CellInner  = "181818FF";
 	CellRevealed = "AAFF0022";
 	CellFrame  = "4C4C4CFF";
