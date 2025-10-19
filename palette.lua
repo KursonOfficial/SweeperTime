@@ -9,6 +9,7 @@ H2C = function(HexString, single) -- Hex to Color
 		return r, g, b, a
 	end
 end
+
 palette = {
 	Gray       = "333333FF";
 	LightGray  = "4C4C4CFF";
@@ -19,4 +20,9 @@ palette = {
 	CellRevealed = "AAFF0022";
 	CellFrame  = "4C4C4CFF";
 	CellFrame2 = "FFFFFF33";
+--  TODO: Rename all Mystic_* to their logical names
+	Mystic_1 = "333333CC";
+	Mystic_2 = "333333FF";
+	Mystic_3 = "4C4C47FF";
+	Mystic_4 = "FFFFF233";
 }

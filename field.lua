@@ -145,9 +145,9 @@ function Field.draw()
 					for y = RTCorY, LBCorY do
 						love.graphics.setLineWidth( Cell.rCorner)
 						if y == LBCorY  or y == RTCorY  or x == LBCorX  or x == RTCorX  then
-							lg.setColor(0.2, 0.2, 0.2, 0.8)
+							lg.setColor(H2C(palette.Mystic_1))
 						else
-							lg.setColor(0.2, 0.2, 0.2, 1)
+							lg.setColor(H2C(palette.Mystic_2))
 						end
 
 						if Field.selected.x ~= x or Field.selected.y ~= y or Cell.isRevealed(x, y) then
@@ -155,9 +155,9 @@ function Field.draw()
 							lg.setColor(H2C(palette.CellFrame2))
 							lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
 						else
-							lg.setColor(0.3, 0.3, 0.28)
+							lg.setColor(H2C(palette.Mystic_3))
 							lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
-							lg.setColor(1, 1, 0.95, 0.2)
+							lg.setColor(H2C(palette.Mystic_4))
 							lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner)
 							--lg.rectangle("line", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner, Cell.rCorner, 1)
 						end
