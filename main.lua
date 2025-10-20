@@ -2,6 +2,9 @@
 require "ui"
 --Field! да ты! идём поговорим.
 require "field"
+-- Йоу, радуга, палитра
+require "palette"
+
 --game manager типо
 GM = {}
 

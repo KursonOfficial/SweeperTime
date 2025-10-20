@@ -1,0 +1,23 @@
+H2C = function(HexString, single) -- Hex to Color
+	if single then
+		return tonumber(HexString, 16)/255
+	else
+		local r = tonumber(string.sub(HexString, 1, 2), 16)/255
+		local g = tonumber(string.sub(HexString, 3, 4), 16)/255
+		local b = tonumber(string.sub(HexString, 5, 6), 16)/255
+		local a = tonumber(string.sub(HexString, 7, 8), 16)/255
+		return r, g, b, a
+	end
+end
+
+palette = {
+	LogoFront    = "CCCCFFFF";
+	Hint         = "4C527FFF";
+	VersionText  = "333333FF";
+	DebugInfo    = "000000FF";
+	CellInner    = "333333FF";
+	CellRevealed = "AA00FF22";
+	CellFrame    = "FFFFFF33";
+	cellSelectedInner = "4C4C47FF";
+	cellSelectedFrame = "FFFFF233";
+}
