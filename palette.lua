@@ -11,13 +11,13 @@ H2C = function(HexString, single) -- Hex to Color
 end
 
 palette = {
-	LogoFront  = "CCCCFFFF";
-	Hint       = "4C527FFF";
+	LogoFront    = "CCCCFFFF";
+	Hint         = "4C527FFF";
 	VersionText  = "333333FF";
-	DebugInfo  = "000000FF";
-	CellInner = "333333FF";
+	DebugInfo    = "000000FF";
+	CellInner    = "333333FF";
 	CellRevealed = "AA00FF22";
-	CellFrame = "FFFFFF33";
+	CellFrame    = "FFFFFF33";
 	cellSelectedInner = "4C4C47FF";
 	cellSelectedFrame = "FFFFF233";
 }
