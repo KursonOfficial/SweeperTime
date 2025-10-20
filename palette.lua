@@ -11,10 +11,9 @@ H2C = function(HexString, single) -- Hex to Color
 end
 
 palette = {
-	Gray       = "333333FF";
-	LightGray  = "4C4C4CFF";
 	LogoFront  = "CCCCFFFF";
 	Hint       = "4C527FFF";
+	VersionText  = "333333FF";
 	DebugInfo  = "4C197FFF";
 	CellInner  = "181818FF";
 	CellRevealed = "AAFF0022";

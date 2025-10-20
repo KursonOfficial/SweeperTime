@@ -12,7 +12,7 @@ end
 function UI.draw()
 	if GM.state == "MainMenu" then
 		lg.setFont(lg.newFont(10))
-		lg.setColor(H2C(palette.Gray))
+		lg.setColor(H2C(palette.VersionText))
 		lg.printf(GM.version,0 ,0 , GM.Widht, "right")
 		UI.printLogo()
 	end if GM.state == "MainGame" then
