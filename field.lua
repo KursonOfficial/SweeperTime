@@ -151,9 +151,9 @@ function Field.draw()
 							lg.setColor(H2C(palette.CellFrame))
 							lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
 						else
-							lg.setColor(H2C(palette.cellSelectedInner))
+							lg.setColor(H2C(palette.CellSelectedInner))
 							lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
-							lg.setColor(H2C(palette.cellSelectedFrame))
+							lg.setColor(H2C(palette.CellSelectedFrame))
 							lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner)
 							--lg.rectangle("line", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner, Cell.rCorner, 1)
 						end

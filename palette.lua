@@ -18,6 +18,6 @@ palette = {
 	CellInner    = "333333FF";
 	CellRevealed = "AA00FF22";
 	CellFrame    = "FFFFFF33";
-	cellSelectedInner = "4C4C47FF";
-	cellSelectedFrame = "FFFFF233";
+	CellSelectedInner = "4C4C47FF";
+	CellSelectedFrame = "FFFFF233";
 }
