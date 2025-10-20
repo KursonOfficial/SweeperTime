@@ -14,14 +14,10 @@ palette = {
 	LogoFront  = "CCCCFFFF";
 	Hint       = "4C527FFF";
 	VersionText  = "333333FF";
-	DebugInfo  = "4C197FFF";
-	CellInner  = "181818FF";
-	CellRevealed = "AAFF0022";
-	CellFrame  = "4C4C4CFF";
-	CellFrame2 = "FFFFFF33";
---  TODO: Rename all Mystic_* to their logical names
-	Mystic_1 = "333333CC";
-	Mystic_2 = "333333FF";
-	Mystic_3 = "4C4C47FF";
-	Mystic_4 = "FFFFF233";
+	DebugInfo  = "000000FF";
+	CellInner = "333333FF";
+	CellRevealed = "AA00FF22";
+	CellFrame = "FFFFFF33";
+	cellSelectedInner = "4C4C47FF";
+	cellSelectedFrame = "FFFFF233";
 }
