@@ -66,7 +66,6 @@ function Cell.reveal(x, y)
 							Cell.new(x + dx, y + dy, isBomb)
 							if isBomb then
 								BombsAround = BombsAround + 1
-								print('bomb!!!!')
 							end
 						else
 							Cell.new(x + dx , y + dy, false)
@@ -74,7 +73,6 @@ function Cell.reveal(x, y)
 					end
 				else
 					if Cell[x + dx][y + dy].bomb then
-						print('bomb!!!!')
 						BombsAround = BombsAround + 1
 					end
 				end
@@ -84,7 +82,6 @@ function Cell.reveal(x, y)
 		print(BombsAround)
 		Cell[x][y].mines = BombsAround
 		if BombsAround == 0 then
-			print("open")
 			Cell.revealAround(x,y)
 		end
 	end
@@ -167,10 +164,12 @@ function Field.draw()
 								if Cell.isRevealed(x, y ) then
 									lg.setColor(H2C(palette.CellRevealed))
 									lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
-									lg.setColor(1, 1, 1)
+									
 									if Cell[x][y].mines ~= 0 then
+										lg.setColor(1, 1, 1)
 										lg.setFont(Cell.Font)
-										lg.print(Cell[x][y].mines, x * Cell.cellSize, y * Cell.cellSize)
+										lg.draw(sprite.numbers.image, sprite.numbers.quad[Cell[x][y].mines],  x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, 0, sprite.numbers.scaleFactor - Cell.rCorner/100)
+										--lg.print(Cell[x][y].mines, x * Cell.cellSize, y * Cell.cellSize)
 									end
 								end
 							--end
