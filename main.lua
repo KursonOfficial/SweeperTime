@@ -13,11 +13,22 @@ GM.version = "v0.1"
 lg = love.graphics
 
 function GM.init()
-	love.window.setFullscreen( true )
+	--love.window.setFullscreen( true )
 	GM.state = "MainMenu"
 	GM.Widht, GM.Height = lg.getDimensions()
 	GM.weelY = 0
 	GM.weelVel = .2
+
+	sprite = {numbers = {}, bombs = {}}
+	sprite.numbers = {quad ={}}
+	sprite.numbers.image = love.graphics.newImage("assets/images/numbers.png")
+	sprite.numbers.scaleFactor = GM.Height/(10 * 100) 
+	for y = 0 , 1 do
+		for x = 0, 6 do
+			sprite.numbers.quad[x + 1 + y * 7] = lg.newQuad(100 * x, 100 * y, 100, 100, sprite.numbers.image)
+		end
+	end
+	
 end
 
 function GM.reset()
