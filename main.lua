@@ -66,16 +66,15 @@ function GM.update(dt)
 end
 
 function love.keypressed(key, scancode, isrepeat)
-	if key == "escape" then
-		love.event.quit()
-	end
-	if key == "space" then
+	if key ~= "escape" then
 		if GM.state == "MainMenu" then
 			Field.init()
 			UI.starGame()
 			GM.state = "MainGame"
 		end
 		needReturn = true
+	else
+		love.event.quit()
 	end
 end
 
