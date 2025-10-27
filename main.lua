@@ -75,13 +75,13 @@ end
 function love.keypressed(key, scancode, isrepeat)
 	if GM.state == "MainMenu" then
 		if key ~= "escape" then
-			if GM.state == "MainMenu" then
-				Field.init()
-				UI.starGame()
-				GM.state = "MainGame"
-			end
-			needReturn = true
+			Field.init()
+			UI.starGame()
+			GM.state = "MainGame"
 		end
+	end
+	if GM.state == "MainGame" then
+		if key == "space" then needReturn = true end
 	end
 	if key == "escape" then love.event.quit() end
 	if key == "f11"    then flipFullscreen() end
