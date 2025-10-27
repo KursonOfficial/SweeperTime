@@ -11,9 +11,16 @@ GM = {}
 GM.version = "v0.1"
 
 lg = love.graphics
+lw = love.window
+
+function flip_fullscreen()
+	local mode = lw.getFullscreen()
+	lw.setFullscreen(not mode)
+	GM.Widht, GM.Height = lg.getDimensions()
+end
 
 function GM.init()
-	love.window.setFullscreen( true )
+	love.window.setFullscreen(true)
 	GM.state = "MainMenu"
 	GM.Widht, GM.Height = lg.getDimensions()
 	GM.weelY = 0
@@ -66,16 +73,19 @@ function GM.update(dt)
 end
 
 function love.keypressed(key, scancode, isrepeat)
-	if key ~= "escape" then
-		if GM.state == "MainMenu" then
-			Field.init()
-			UI.starGame()
-			GM.state = "MainGame"
+	if GM.state == "MainMenu" then
+		if key ~= "escape" then
+			if GM.state == "MainMenu" then
+				Field.init()
+				UI.starGame()
+				GM.state = "MainGame"
+			end
+			needReturn = true
+		else
+			love.event.quit()
 		end
-		needReturn = true
-	else
-		love.event.quit()
 	end
+	if key == "f11" then flip_fullscreen() end
 end
 
 function love.mousepressed(x, y, button, istouch)
