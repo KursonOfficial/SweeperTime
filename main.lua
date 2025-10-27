@@ -13,7 +13,7 @@ GM.version = "v0.1"
 lg = love.graphics
 
 function GM.init()
-	--love.window.setFullscreen( true )
+	love.window.setFullscreen( true )
 	GM.state = "MainMenu"
 	GM.Widht, GM.Height = lg.getDimensions()
 	GM.weelY = 0
@@ -89,6 +89,7 @@ function love.wheelmoved(x, y)
 	if GM.state == "MainGame" then
 		GM.weelY = math.max(-3, math.min( 3, GM.weelY + y * GM.weelVel))
 		Field.zoom = 2 ^ (GM.weelY)
+		Field.inverseZoom = 2 ^ (-GM.weelY)
 		Field.speed = GM.Height * (1/2 ^ (GM.weelY/2))
 	end
 end

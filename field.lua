@@ -1,3 +1,5 @@
+--забейте этот коментарий не атуален, я всё меняю
+
 --[[короче рассказываю как тут всё устроенно
 	Field посути наше поле, с методами для отрисовки клекток, установки значний при старте, обработки нажйтий по клеткам и тп
 	Cell тоже имеет метооды но для взаимодействия с самим клетками, в Cell хранятся все клетки в 2х мерном массиве типо Cell[x][y]
@@ -19,10 +21,8 @@ function Field.init()
 	Field.selected  = {}
 	Field.zoom = 1
 	Cell.cellSize = GM.Height/10
-	Cell.Font = lg.newFont(GM.Height/10)
 	Cell.rCorner = Cell.cellSize/8
 	math.randomseed(os.time())
-
 end
 
 function Field.update()
@@ -133,47 +133,73 @@ function Field.draw()
 			lg.scale(Field.zoom, Field.zoom)
 			lg.push()
 				lg.translate(Field.pos.x, Field.pos.y)
-
 				RTCorX, RTCorY = love.graphics.inverseTransformPoint( 0, 0 )
 				LBCorX, LBCorY = love.graphics.inverseTransformPoint( GM.Widht, GM.Height )
 				RTCorX, RTCorY = math.floor( RTCorX / Cell.cellSize) , math.floor( RTCorY / Cell.cellSize)
 				LBCorX, LBCorY = math.floor( LBCorX / Cell.cellSize) , math.floor( LBCorY / Cell.cellSize)
-				for x  = RTCorX, LBCorX do
-					for y = RTCorY, LBCorY do
-						love.graphics.setLineWidth( Cell.rCorner)
+				if Field.zoom > 0.2 then
+					for x  = RTCorX, LBCorX do
+						for y = RTCorY, LBCorY do	
+							love.graphics.setLineWidth( Cell.rCorner)
 							lg.setColor(H2C(palette.CellInner))
-
-						if Field.selected.x ~= x or Field.selected.y ~= y or Cell.isRevealed(x, y) then
-							lg.rectangle("fill", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
-							lg.setColor(H2C(palette.CellFrame))
-							lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
-						else
-							lg.setColor(H2C(palette.CellSelectedInner))
-							lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
-							lg.setColor(H2C(palette.CellSelectedFrame))
-							lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner)
-							--lg.rectangle("line", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner, Cell.rCorner, 1)
-						end
-						--if Cell.isNotNill(x, y) then
-							--if Cell[x][y].bomb then
-							--	lg.setColor(1, 0, 0)
-							--	lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
-							--else
-								--lg.setColor(0, 1, 0)
-								--lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
-								if Cell.isRevealed(x, y ) then
-									lg.setColor(H2C(palette.CellRevealed))
+							if Field.selected.x ~= x or Field.selected.y ~= y  then
+								lg.rectangle("fill", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
+								lg.setColor(H2C(palette.CellFrame))
+								lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
+							else
+								if Cell.isRevealed(x, y) then
+									lg.rectangle("fill", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
+									lg.setColor(H2C(palette.CellFrame))
+									lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
+									--lg.setColor(0,0,0, 0.4)
+									--lg.rectangle("line", (x-1) * Cell.cellSize, (y-1) * Cell.cellSize , Cell.cellSize * 3  , Cell.cellSize * 3 , Cell.rCorner / 2)
+								else
+									lg.setColor(1, 1, 0.8, 0.4 + 0.05 * math.cos(love.timer.getTime()))
 									lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
-									
-									if Cell[x][y].mines ~= 0 then
-										lg.setColor(1, 1, 1)
-										lg.setFont(Cell.Font)
-										lg.draw(sprite.numbers.image, sprite.numbers.quad[Cell[x][y].mines],  x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, 0, sprite.numbers.scaleFactor - Cell.rCorner/100)
-										--lg.print(Cell[x][y].mines, x * Cell.cellSize, y * Cell.cellSize)
-									end
+									lg.setColor(H2C(palette.CellSelectedFrame))
+									lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner)
 								end
-							--end
-						--end
+							end
+							if Cell.isRevealed(x, y ) then
+								lg.setColor(H2C(palette.CellRevealed))
+								lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
+								
+								if Cell[x][y].mines ~= 0 then
+									lg.setColor(1, 1, 1)
+									lg.draw(sprite.numbers.image, sprite.numbers.quad[Cell[x][y].mines],  x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, 0, sprite.numbers.scaleFactor - Cell.rCorner/100)
+								end
+							end
+						--for end	
+						end
+					--for end	
+					end
+				else
+					lg.setColor(H2C(palette.CellInner))
+					lg.rectangle("fill", -GM.Widht/2* Field.inverseZoom - Field.pos.x, -GM.Height/2* Field.inverseZoom - Field.pos.y, GM.Widht * Field.inverseZoom, GM.Height * Field.inverseZoom)
+					lg.setColor(H2C(palette.CellFrame))
+					for x  = RTCorX, LBCorX do
+						love.graphics.line( x * Cell.cellSize , -GM.Height/2* Field.inverseZoom - Field.pos.y, x * Cell.cellSize,  GM.Height/2* Field.inverseZoom - Field.pos.y)
+					end
+					for y  = RTCorX, LBCorX do
+						love.graphics.line( -GM.Widht/2* Field.inverseZoom - Field.pos.x, y * Cell.cellSize, GM.Widht/2* Field.inverseZoom - Field.pos.x, y * Cell.cellSize)
+					end
+					for x  = RTCorX, LBCorX do
+						for y = RTCorY, LBCorY do
+							if Cell.isRevealed(x, y) then
+								lg.setColor(H2C(palette.CellRevealed))
+								lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
+								if Cell[x][y].mines ~= 0 then
+									lg.setColor(1, 1, 1)
+									lg.draw(sprite.numbers.image, sprite.numbers.quad[Cell[x][y].mines],  x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, 0, sprite.numbers.scaleFactor - Cell.rCorner/100)
+								end
+							end
+								if Field.selected.x == x and Field.selected.y == y and not Cell.isRevealed(x, y) then
+									lg.setColor(1, 1, 0.8, 0.4 + 0.05 * math.cos(love.timer.getTime()))
+									lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
+									lg.setColor(H2C(palette.CellSelectedFrame))
+									lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner)
+								end
+						end
 					end
 				end
 			lg.pop()
