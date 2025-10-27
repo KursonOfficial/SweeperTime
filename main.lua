@@ -84,7 +84,7 @@ function love.keypressed(key, scancode, isrepeat)
 		end
 	end
 	if key == "escape" then love.event.quit() end
-	if key == "f11"    then flipFullscreean() end
+	if key == "f11"    then flipFullscreen() end
 end
 
 function love.mousepressed(x, y, button, istouch)
