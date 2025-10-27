@@ -13,14 +13,14 @@ GM.version = "v0.1"
 lg = love.graphics
 lw = love.window
 
-function flip_fullscreen()
+function flipFullscreen()
 	local mode = lw.getFullscreen()
 	lw.setFullscreen(not mode)
 	GM.Widht, GM.Height = lg.getDimensions()
 end
 
 function GM.init()
-	love.window.setFullscreen(true)
+	lw.setFullscreen(true)
 	GM.state = "MainMenu"
 	GM.Widht, GM.Height = lg.getDimensions()
 	GM.weelY = 0
@@ -85,7 +85,7 @@ function love.keypressed(key, scancode, isrepeat)
 			love.event.quit()
 		end
 	end
-	if key == "f11" then flip_fullscreen() end
+	if key == "f11" then flipFullscreean() end
 end
 
 function love.mousepressed(x, y, button, istouch)
