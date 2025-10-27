@@ -81,11 +81,10 @@ function love.keypressed(key, scancode, isrepeat)
 				GM.state = "MainGame"
 			end
 			needReturn = true
-		else
-			love.event.quit()
 		end
 	end
-	if key == "f11" then flipFullscreean() end
+	if key == "escape" then love.event.quit() end
+	if key == "f11"    then flipFullscreean() end
 end
 
 function love.mousepressed(x, y, button, istouch)
