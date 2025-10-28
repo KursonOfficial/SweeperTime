@@ -41,9 +41,9 @@ function GM.init()
 
 	sprite.bombs.scaleFactor = GM.Height/(10 * 200)
 	sprite.bombs.quad ={}
-	for y = 0 , 2 do
+	for y = 0 , 1 do
 		for x = 0, 4 do
-			sprite.bombs.quad[x + 1 + y * 5] = lg.newQuad(200 * x, 200 * y, 200, 200, sprite.bombs.image)
+			sprite.bombs.quad[x + y * 5] = lg.newQuad(200 * x, 200 * y, 200, 200, sprite.bombs.image)
 		end
 	end
 end
@@ -51,6 +51,7 @@ end
 function GM.reset()
 	Field.firstCell = true
 end
+
 function GM.draw()
 	Field.draw()
 	UI.draw()

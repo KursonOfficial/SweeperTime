@@ -2,9 +2,9 @@
 
 --[[короче рассказываю как тут всё устроенно
 	Field посути наше поле, с методами для отрисовки клекток, установки значний при старте, обработки нажйтий по клеткам и тп
-	Cell тоже имеет метооды но для взаимодействия с самим клетками, в Cell хранятся все клетки в 2х мерном массиве типо Cell[x][y]
-	нужно быть с этим аккуратно тк если Cell[x] не существует то обратиться к Y не получится(выдаст ошибку), поэтому тут есть метод Cell.isNotNill(x, y)
-	который сначало проверят есть ли Cell[x] а после этого и Cell[x][y]
+	Cell тоже имеет метооды но для взаимодействия с самим клетками, в Cell хранятся все клетки в 2х мерном массиве типо Cells[x][y]
+	нужно быть с этим аккуратно тк если Cells[x] не существует то обратиться к Y не получится(выдаст ошибку), поэтому тут есть метод Cell.isNotNill(x, y)
+	который сначало проверят есть ли Cells[x] а после этого и Cells[x][y]
 
 
 	конечно в коде нет комметариев чтоб обяснить все тонкости,
@@ -14,6 +14,7 @@
 Field = {}
 Field.firstCell = true
 Cell = {}
+Cells = {}
 
 function Field.init()
 	Field.firstCell = true
@@ -47,11 +48,11 @@ function Field.mousepressed()
 end
 
 function Cell.reveal(x, y)
-	if Cell[x][y].bomb then
+	if Cells[x][y].bomb then
 		GM.state = "MainMenu"
 	end
-	if not Cell[x][y].revealed then
-		Cell[x][y].revealed = true
+	if not Cells[x][y].revealed then
+		Cells[x][y].revealed = true
 		local BombsAround = 0
 		for dx = -1, 1 do
 			for dy = -1, 1 do
@@ -72,7 +73,7 @@ function Cell.reveal(x, y)
 						end
 					end
 				else
-					if Cell[x + dx][y + dy].bomb then
+					if Cells[x + dx][y + dy].bomb then
 						BombsAround = BombsAround + 1
 					end
 				end
@@ -80,7 +81,7 @@ function Cell.reveal(x, y)
 		end
 		Field.firstCell = false
 		print(BombsAround)
-		Cell[x][y].mines = BombsAround
+		Cells[x][y].mines = BombsAround
 		if BombsAround == 0 then
 			Cell.revealAround(x,y)
 		end
@@ -98,19 +99,20 @@ function Cell.revealAround(x, y)
 end
 
 function Cell.new(x, y, isBomb)
-	if Cell[x] == nill then
-		Cell[x] = {}
+	if Cells[x] == nill then
+		Cells[x] = {}
 	end
 	self = {}
 	self.mines = 0
 	self.bomb = isBomb
+	if isBomb then self.bombImage = math.random(0 , #sprite.bombs.quad + 1) end
 	self.revealed = false
-	Cell[x][y] = self
+	Cells[x][y] = self
 end
 
 function Cell.isNotNill(x, y)
-	if Cell[x] ~= nill then
-		if Cell[x][y] ~= nill then
+	if Cells[x] ~= nill then
+		if Cells[x][y] ~= nill then
 			return true
 		end
 	end
@@ -119,7 +121,7 @@ end
 
 function Cell.isRevealed(x, y)
 	if Cell.isNotNill(x, y) then
-		return Cell[x][y].revealed
+		return Cells[x][y].revealed
 	end
 	return false
 end
@@ -164,9 +166,13 @@ function Field.draw()
 								lg.setColor(H2C(palette.CellRevealed))
 								lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
 								
-								if Cell[x][y].mines ~= 0 then
-									lg.setColor(1, 1, 1)
-									lg.draw(sprite.numbers.image, sprite.numbers.quad[Cell[x][y].mines],  x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, 0, sprite.numbers.scaleFactor - Cell.rCorner/100)
+								lg.setColor(1, 1, 1)
+								if Cells[x][y].bomb then 
+									lg.draw(sprite.bombs.image, sprite.bombs.quad[Cells[x][y].bombImage],  x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, 0, sprite.bombs.scaleFactor - Cell.rCorner/200)
+								else
+									if Cells[x][y].mines ~= 0 then
+										lg.draw(sprite.numbers.image, sprite.numbers.quad[Cells[x][y].mines],  x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, 0, sprite.numbers.scaleFactor - Cell.rCorner/100)
+									end
 								end
 							end
 						--for end	
@@ -188,17 +194,17 @@ function Field.draw()
 							if Cell.isRevealed(x, y) then
 								lg.setColor(H2C(palette.CellRevealed))
 								lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
-								if Cell[x][y].mines ~= 0 then
+								if Cells[x][y].mines ~= 0 then
 									lg.setColor(1, 1, 1)
-									lg.draw(sprite.numbers.image, sprite.numbers.quad[Cell[x][y].mines],  x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, 0, sprite.numbers.scaleFactor - Cell.rCorner/100)
+									lg.draw(sprite.numbers.image, sprite.numbers.quad[Cells[x][y].mines],  x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, 0, sprite.numbers.scaleFactor - Cell.rCorner/100)
 								end
 							end
-								if Field.selected.x == x and Field.selected.y == y and not Cell.isRevealed(x, y) then
-									lg.setColor(1, 1, 0.8, 0.4 + 0.05 * math.cos(love.timer.getTime()))
-									lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
-									lg.setColor(H2C(palette.CellSelectedFrame))
-									lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner)
-								end
+							if Field.selected.x == x and Field.selected.y == y and not Cell.isRevealed(x, y) then
+								lg.setColor(1, 1, 0.8, 0.4 + 0.05 * math.cos(love.timer.getTime()))
+								lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
+								lg.setColor(H2C(palette.CellSelectedFrame))
+								lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner)
+							end
 						end
 					end
 				end
