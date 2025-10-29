@@ -10,6 +10,17 @@ H2C = function(HexString, single) -- Hex to Color
 	end
 end
 
+getColor = function(hexValue) --> Color
+	local color = {};
+
+	color.r = (hexValue >> 24) & 0xff
+	color.g = (hexValue >> 16) & 0xff
+	color.b = (hexValue >> 8 ) & 0xff
+	color.a =  hexValue        & 0xff
+
+	return table.unpack(color);
+end
+
 palette = {
 	LogoFront    = "CCCCFFFF";
 	Hint         = "4C527FFF";
