@@ -10,6 +10,7 @@ H2C = function(HexString, single) -- Hex to Color
 	end
 end
 
+--[[
 getColor = function(hexValue) --> Color
 	local color = {};
 
@@ -19,7 +20,7 @@ getColor = function(hexValue) --> Color
 	color.a =  hexValue        & 0xff
 
 	return table.unpack(color);
-end
+end]]
 
 palette = {
 	LogoFront    = "CCCCFFFF";
