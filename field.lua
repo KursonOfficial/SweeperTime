@@ -143,27 +143,27 @@ function Field.draw()
 					for x  = RTCorX, LBCorX do
 						for y = RTCorY, LBCorY do	
 							love.graphics.setLineWidth( Cell.rCorner)
-							lg.setColor(H2C(palette.CellInner))
+							lg.setColor(cup(palette.cellInner))
 							if Field.selected.x ~= x or Field.selected.y ~= y  then
 								lg.rectangle("fill", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
-								lg.setColor(H2C(palette.CellFrame))
+								lg.setColor(cup(palette.cellFrame))
 								lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
 							else
 								if Cell.isRevealed(x, y) then
 									lg.rectangle("fill", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
-									lg.setColor(H2C(palette.CellFrame))
+									lg.setColor(cup(palette.cellFrame))
 									lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner, 1)
 									--lg.setColor(0,0,0, 0.4)
 									--lg.rectangle("line", (x-1) * Cell.cellSize, (y-1) * Cell.cellSize , Cell.cellSize * 3  , Cell.cellSize * 3 , Cell.rCorner / 2)
 								else
 									lg.setColor(1, 1, 0.8, 0.4 + 0.05 * math.cos(love.timer.getTime()))
 									lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
-									lg.setColor(H2C(palette.CellSelectedFrame))
+									lg.setColor(cup(palette.cellSelectedFrame))
 									lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner)
 								end
 							end
 							if Cell.isRevealed(x, y ) then
-								lg.setColor(H2C(palette.CellRevealed))
+								lg.setColor(cup(palette.cellRevealed))
 								lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
 								
 								lg.setColor(1, 1, 1)
@@ -180,9 +180,9 @@ function Field.draw()
 					--for end	
 					end
 				else
-					lg.setColor(H2C(palette.CellInner))
+					lg.setColor(cup(palette.cellInner))
 					lg.rectangle("fill", -GM.Widht/2* Field.inverseZoom - Field.pos.x, -GM.Height/2* Field.inverseZoom - Field.pos.y, GM.Widht * Field.inverseZoom, GM.Height * Field.inverseZoom)
-					lg.setColor(H2C(palette.CellFrame))
+					lg.setColor(cup(palette.cellFrame))
 					for x  = RTCorX, LBCorX do
 						love.graphics.line( x * Cell.cellSize , -GM.Height/2* Field.inverseZoom - Field.pos.y, x * Cell.cellSize,  GM.Height/2* Field.inverseZoom - Field.pos.y)
 					end
@@ -192,7 +192,7 @@ function Field.draw()
 					for x  = RTCorX, LBCorX do
 						for y = RTCorY, LBCorY do
 							if Cell.isRevealed(x, y) then
-								lg.setColor(H2C(palette.CellRevealed))
+								lg.setColor(cup(palette.cellRevealed))
 								lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
 								if Cells[x][y].mines ~= 0 then
 									lg.setColor(1, 1, 1)
@@ -202,7 +202,7 @@ function Field.draw()
 							if Field.selected.x == x and Field.selected.y == y and not Cell.isRevealed(x, y) then
 								lg.setColor(1, 1, 0.8, 0.4 + 0.05 * math.cos(love.timer.getTime()))
 								lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
-								lg.setColor(H2C(palette.CellSelectedFrame))
+								lg.setColor(cup(palette.cellSelectedFrame))
 								lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner)
 							end
 						end
