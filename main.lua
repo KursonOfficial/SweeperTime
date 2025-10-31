@@ -48,10 +48,6 @@ function GM.init()
 	end
 end
 
-function GM.reset()
-	Field.firstCell = true
-end
-
 function GM.draw()
 	Field.draw()
 	UI.draw()
