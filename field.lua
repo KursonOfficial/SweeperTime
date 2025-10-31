@@ -180,7 +180,7 @@ function Field.draw()
 					for x  = RTCorX, LBCorX do
 						love.graphics.line( x * Cell.cellSize , -GM.Height/2* Field.inverseZoom - Field.pos.y, x * Cell.cellSize,  GM.Height/2* Field.inverseZoom - Field.pos.y)
 					end
-					for y  = RTCorX, LBCorX do
+					for y  = RTCorY, LBCorY do
 						love.graphics.line( -GM.Widht/2* Field.inverseZoom - Field.pos.x, y * Cell.cellSize, GM.Widht/2* Field.inverseZoom - Field.pos.x, y * Cell.cellSize)
 					end
 					for x  = RTCorX, LBCorX do
