@@ -94,6 +94,13 @@ function love.keypressed(key, scancode, isrepeat)
 	if key == "f11"    then flipFullscreen() end
 end
 
+function love.mousemoved(x, y, dx, dy, istouch)
+	if love.mouse.isDown(3) and GM.state == "MainGame" then
+		Field.pos.x = Field.pos.x + dx / Field.zoom
+		Field.pos.y = Field.pos.y + dy / Field.zoom
+	end
+end
+
 function love.mousepressed(x, y, button, istouch)
 	if GM.state == "MainGame" and button == 1 then
 		Field.mousepressed()
