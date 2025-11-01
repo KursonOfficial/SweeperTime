@@ -3,6 +3,8 @@ Field.firstCell = true
 Cell = {}
 Cells = {}
 
+local bombChance = 15/100 -- 15% default
+
 function Field.init()
 	Field.firstCell = true
 	Field.speed = GM.Height
@@ -52,16 +54,10 @@ function Cell.reveal(x, y)
 			for dy = -1, 1 do
 				if not Cell.isNotNill(x + dx, y + dy) then
 					if dx ~= 0 or dy ~= 0 then
-						if math.random() < 0.15 then
-							isBomb = true
-						else
-							isBomb = false
-						end
+						isBomb = math.random() < bombChance
 						if not Field.firstCell then
 							Cell.new(x + dx, y + dy, isBomb)
-							if isBomb then
-								BombsAround = BombsAround + 1
-							end
+							BombsAround = BombsAround + (isBomb and 1 or 0)
 						else
 							Cell.new(x + dx , y + dy, false)
 						end
@@ -83,6 +79,16 @@ function Cell.reveal(x, y)
 end
 
 function Cell.revealAround(x, y)
+	Cell.reveal(x - 1, y - 1)
+	Cell.reveal(x - 1, y    )
+	Cell.reveal(x - 1, y + 1)
+	Cell.reveal(x    , y + 1)
+	Cell.reveal(x    , y - 1)
+	Cell.reveal(x + 1, y - 1)
+	Cell.reveal(x + 1, y    )
+	Cell.reveal(x + 1, y + 1)
+	-- Unroll of:
+	--[[
 	for dx = -1, 1 do
 		for dy = -1, 1 do
 			if dx ~= 0 or dy ~= 0 then
@@ -90,6 +96,7 @@ function Cell.revealAround(x, y)
 			end
 		end
 	end
+	]]
 end
 
 function Cell.new(x, y, isBomb)
