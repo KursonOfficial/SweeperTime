@@ -44,10 +44,7 @@ getColorHL = function(hexLitteral)
 	return color
 end
 cup = function(color) -- Color unpack
-	local t = {color.r, color.g, color.b, color.a}
-	-- In Lua: return table.unpack(t)
-	-- In Luajit:
-	return unpack(t)
+	return color.r, color.g, color.b, color.a
 end
 
 palette = {
