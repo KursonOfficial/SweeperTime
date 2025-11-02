@@ -11,12 +11,12 @@ end
 
 function UI.draw()
 	if GM.state == "MainMenu" then
-		lg.setFont(lg.newFont(10))
+		lg.setFont(logoFont)
 		lg.setColor(cup(palette.versionText))
 		lg.printf(GM.version,0 ,0 , GM.Widht, "right")
 		UI.printLogo()
 	end if GM.state == "MainGame" then
-		lg.setFont(lg.newFont(20))
+		lg.setFont(debugInfoFont)
 		lg.setColor(cup(palette.debugInfo))
 		lg.printf(Field.zoom,0 ,0 , GM.Widht, "right")
 		lg.printf(love.mouse.getX() - GM.Widht/2 ,0 ,20 , GM.Widht, "right")
@@ -29,6 +29,9 @@ function UI.draw()
 		end
 	end
 end
-
+function UI.init()
+	logoFont = lg.newFont(10)
+	debugInfoFont = lg.newFont(20)
+end
 function UI.starGame()
 end

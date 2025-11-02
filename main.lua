@@ -25,6 +25,7 @@ function GM.init()
 	GM.Widht, GM.Height = lg.getDimensions()
 	GM.weelY = 0
 	GM.weelVel = .2
+	UI.init()
 
 	sprite = {numbers = {}, bombs = {}, flag = {}}
 	sprite.flag.image = love.graphics.newImage("assets/images/flag.png")
