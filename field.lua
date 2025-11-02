@@ -29,16 +29,25 @@ function Field.reset()
 	Field.firstCell = true
 end
 
-function Field.mousepressed()
+function Field.mousepressed(button)
 	x, y = Field.selected.x, Field.selected.y
-	lastClickedCell = { x = Field.selected.x; y = Field.selected.y}
-	if not Field.firstCell then
-		if Cell.isNotNill(x, y) then
+	if button == 1 then
+		lastClickedCell = { x = Field.selected.x; y = Field.selected.y}
+		if not Field.firstCell then
+			if Cell.isNotNill(x, y) then
+				if not Cells[x][y].flag then
+					Cell.reveal(x, y)
+				end
+			end
+		else
+			Cell.new(x, y, false)
 			Cell.reveal(x, y)
 		end
-	else
-		Cell.new(x, y, false)
-		Cell.reveal(x, y)
+	end
+	if button == 2 and not Cell.isRevealed(x, y) then 
+		if Cell.isNotNill(x, y) then
+			Cells[x][y].flag = not Cells[x][y].flag
+		end
 	end
 end
 
@@ -107,6 +116,7 @@ function Cell.new(x, y, isBomb)
 		Cells[x] = {}
 	end
 	self = {}
+	self.flag = false
 	self.mines = 0
 	self.bomb = isBomb
 	if isBomb then self.bombImage = math.random(0 , #sprite.bombs.quad) end
@@ -166,7 +176,13 @@ function Field.draw()
 									lg.rectangle("line", x * Cell.cellSize, y * Cell.cellSize, Cell.cellSize, Cell.cellSize, Cell.rCorner, Cell.rCorner)
 								end
 							end
-							if Cell.isRevealed(x, y ) then
+							if Cell.isNotNill(x, y) then
+								if Cells[x][y].flag then
+									lg.setColor(1, 1, 1)
+									lg.draw(sprite.flag.image, x * Cell.cellSize, y * Cell.cellSize, 0, sprite.flag.scaleFactor)
+								end
+							end
+							if Cell.isRevealed(x, y) then
 								lg.setColor(cup(palette.cellRevealed))
 								lg.rectangle("fill", x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, Cell.cellSize - Cell.rCorner , Cell.cellSize - Cell.rCorner, Cell.rCorner / 2)
 								

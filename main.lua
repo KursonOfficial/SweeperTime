@@ -32,6 +32,7 @@ function GM.init()
 	sprite.numbers.image = love.graphics.newImage("assets/images/numbers.png")
 	sprite.bombs.image = love.graphics.newImage("assets/images/bombs.png")
 
+	sprite.flag.scaleFactor = GM.Height/(10 * 200)
 	sprite.numbers.scaleFactor = GM.Height/(10 * 100)
 	sprite.numbers.quad ={}
 	for y = 0 , 1 do
@@ -103,8 +104,8 @@ function love.mousemoved(x, y, dx, dy, istouch)
 end
 
 function love.mousepressed(x, y, button, istouch)
-	if GM.state == "MainGame" and button == 1 then
-		Field.mousepressed()
+	if GM.state == "MainGame" then
+		Field.mousepressed(button)
 	end
 end
 
