@@ -31,6 +31,7 @@ end
 
 function Field.mousepressed()
 	x, y = Field.selected.x, Field.selected.y
+	lastClickedCell = { x = Field.selected.x; y = Field.selected.y}
 	if not Field.firstCell then
 		if Cell.isNotNill(x, y) then
 			Cell.reveal(x, y)
@@ -72,7 +73,9 @@ function Cell.reveal(x, y)
 		Field.firstCell = false
 		print(BombsAround)
 		Cells[x][y].mines = BombsAround
-		if BombsAround == 0 then
+		local radius = 43 -- Was guessed by many tests. This value is optimal
+		local inRadius = math.sqrt((x - lastClickedCell.x)^2 + (y - lastClickedCell.y)^2) <= radius
+		if BombsAround == 0 and inRadius then
 			Cell.revealAround(x,y)
 		end
 	end
