@@ -4,6 +4,8 @@ require "ui"
 require "field"
 -- Йоу, радуга, палитра
 require "palette"
+--А НУКА СПРАЙТ СЮДА БЫСТРО, Я ПИТЬ ХОЧУ!
+require "sprite"
 
 --game manager типо
 GM = {}
@@ -19,6 +21,16 @@ function flipFullscreen()
 	GM.Widht, GM.Height = lg.getDimensions()
 end
 
+function love.resize(w , h)
+	GM.Widht, GM.Height = w, h
+	
+	Field.speed = GM.Height
+	Cell.cellSize = GM.Height/10
+	Cell.rCorner = Cell.cellSize/8
+
+	sprite.quads()
+end
+
 function GM.init()
 	lw.setFullscreen(true)
 	GM.state = "MainMenu"
@@ -27,27 +39,7 @@ function GM.init()
 	GM.weelVel = .2
 	UI.init()
 
-	sprite = {numbers = {}, bombs = {}, flag = {}}
-	sprite.flag.image = love.graphics.newImage("assets/images/flag.png")
-	sprite.numbers.image = love.graphics.newImage("assets/images/numbers.png")
-	sprite.bombs.image = love.graphics.newImage("assets/images/bombs.png")
-
-	sprite.flag.scaleFactor = GM.Height/(10 * 200)
-	sprite.numbers.scaleFactor = GM.Height/(10 * 100)
-	sprite.numbers.quad ={}
-	for y = 0 , 1 do
-		for x = 0, 6 do
-			sprite.numbers.quad[x + 1 + y * 7] = lg.newQuad(100 * x, 100 * y, 100, 100, sprite.numbers.image)
-		end
-	end
-
-	sprite.bombs.scaleFactor = GM.Height/(10 * 200)
-	sprite.bombs.quad ={}
-	for y = 0 , 1 do
-		for x = 0, 4 do
-			sprite.bombs.quad[x + y * 5] = lg.newQuad(200 * x, 200 * y, 200, 200, sprite.bombs.image)
-		end
-	end
+	sprite.init()
 end
 
 function GM.draw()

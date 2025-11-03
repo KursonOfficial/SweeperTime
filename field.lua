@@ -3,7 +3,7 @@ Field.firstCell = true
 Cell = {}
 Cells = {}
 
-local bombChance = 15/100 -- 15% default
+local bombChance = 15/100 -- 15% default, but little silly Kurson whants BIGGER. But suddenly, this is predestined by fate, and nobody can chaange it.
 
 function Field.init()
 	Field.firstCell = true
