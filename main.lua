@@ -1,11 +1,11 @@
 --слыш UI подойтика сюда!
-require "ui"
+require "modules.ui"
 --Field! да ты! идём поговорим.
-require "field"
+require "modules.field"
 -- Йоу, радуга, палитра
-require "palette"
+require "modules.palette"
 --А НУКА СПРАЙТ СЮДА БЫСТРО, Я ПИТЬ ХОЧУ!
-require "sprite"
+require "modules.sprite"
 
 --game manager типо
 GM = {}
