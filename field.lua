@@ -59,6 +59,7 @@ function Cell.reveal(x, y)
 	end
 	if not Cells[x][y].revealed then
 		Cells[x][y].revealed = true
+		Cells[x][y].flag = nill
 		local BombsAround = 0
 		for dx = -1, 1 do
 			for dy = -1, 1 do
@@ -222,6 +223,12 @@ function Field.draw()
 									if Cells[x][y].mines ~= 0 then
 										lg.draw(sprite.numbers.image, sprite.numbers.quad[Cells[x][y].mines], x * Cell.cellSize + Cell.rCorner/2, y * Cell.cellSize + Cell.rCorner/2, 0, sprite.numbers.scaleFactor - Cell.rCorner/100)
 									end
+								end
+							end
+							if Cell.isNotNill(x, y) then
+								if Cells[x][y].flag then
+									lg.setColor(1, 1, 1)
+									lg.draw(sprite.flag.image, x * Cell.cellSize, y * Cell.cellSize, 0, sprite.flag.scaleFactor)
 								end
 							end
 							if Field.selected.x == x and Field.selected.y == y and not Cell.isRevealed(x, y) then
