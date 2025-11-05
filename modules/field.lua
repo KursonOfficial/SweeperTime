@@ -43,6 +43,18 @@ function Field.mousepressed(button)
 			Cell.new(x, y, false)
 			Cell.reveal(x, y)
 		end
+		if Cell.isRevealed(x, y) then
+			if Cells[x][y].mines == Cell.CountAround(x, y, "flags") then
+				if not Cells[x-1][y-1].flag then Cell.reveal(x-1, y-1) end
+				if not Cells[x-1][y  ].flag then Cell.reveal(x-1, y  ) end
+				if not Cells[x-1][y+1].flag then Cell.reveal(x-1, y+1) end
+				if not Cells[x  ][y+1].flag then Cell.reveal(x  , y+1) end
+				if not Cells[x  ][y-1].flag then Cell.reveal(x  , y-1) end
+				if not Cells[x+1][y-1].flag then Cell.reveal(x+1, y-1) end
+				if not Cells[x+1][y  ].flag then Cell.reveal(x+1, y  ) end
+				if not Cells[x+1][y+1].flag then Cell.reveal(x+1, y+1) end
+			end
+		end
 	end
 	if button == 2 and not Cell.isRevealed(x, y) then 
 		if Cell.isNotNill(x, y) then
@@ -56,6 +68,7 @@ function Cell.reveal(x, y)
 		--Field.reset()
 		--GM.state = "MainMenu"
 		--return
+		--TO DO: ultraMegaSuperScaryScreamer()
 	end
 	if not Cells[x][y].revealed then
 		Cells[x][y].revealed = true
@@ -110,6 +123,21 @@ function Cell.revealAround(x, y)
 		end
 	end
 	]]
+end
+
+function Cell.CountAround(x, y, type)
+	if type == "flags" then
+		flags = 0
+		if Cells[x-1][y-1].flag then flags = flags + 1 end
+		if Cells[x-1][y  ].flag then flags = flags + 1 end
+		if Cells[x-1][y+1].flag then flags = flags + 1 end
+		if Cells[x  ][y+1].flag then flags = flags + 1 end
+		if Cells[x  ][y-1].flag then flags = flags + 1 end
+		if Cells[x+1][y-1].flag then flags = flags + 1 end
+		if Cells[x+1][y  ].flag then flags = flags + 1 end
+		if Cells[x+1][y+1].flag then flags = flags + 1 end
+		return flags
+	end
 end
 
 function Cell.new(x, y, isBomb)
