@@ -69,7 +69,7 @@ ocean = {
 	cellInner    = getColorHS("#04151FFF");
 	cellRevealed = getColorHS("#66999B44");
 	cellFrame    = getColorHS("#6E889488");
-	cellSelectedInner = getColorHS("#85BAA1FF");
+	cellSelectedInner = getColorHS("#85BAA1CC");
 	cellSelectedFrame = getColorHS("#FFFFF233");
 }
 groovebox = {

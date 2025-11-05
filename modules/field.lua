@@ -197,7 +197,11 @@ function Field.draw()
 										Cell.cellSize * 3,
 										Cell.rCorner / 2)]]
 								else
-									lg.setColor(1, 1, 0.8, 0.4 + 0.05 * math.cos(love.timer.getTime()))
+									lg.setColor(
+										palette.cellSelectedInner.r,
+										palette.cellSelectedInner.g,
+										palette.cellSelectedInner.b,
+										palette.cellSelectedInner.a + 0.05 * math.cos(love.timer.getTime()))
 									lg.rectangle("fill",
 										x * Cell.cellSize + Cell.rCorner/2,
 										y * Cell.cellSize + Cell.rCorner/2,
@@ -318,7 +322,11 @@ function Field.draw()
 								end
 							end
 							if Field.selected.x == x and Field.selected.y == y and not Cell.isRevealed(x, y) then
-								lg.setColor(1, 1, 0.8, 0.4 + 0.05 * math.cos(love.timer.getTime()))
+								lg.setColor(
+									pallette.cellSelectedInner.r,
+									pallette.cellSelectedInner.g,
+									pallette.cellSelectedInner.b,
+									pallette.cellSelectedInner.a + 0.05 * math.cos(love.timer.getTime()))
 								lg.rectangle("fill",
 									x * Cell.cellSize + Cell.rCorner/2,
 									y * Cell.cellSize + Cell.rCorner/2,
