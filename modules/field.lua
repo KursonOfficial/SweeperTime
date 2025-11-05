@@ -56,8 +56,8 @@ function Field.mousepressed(button)
 			end
 		end
 	end
-	if button == 2 and not Cell.isRevealed(x, y) then
-		if Cell.isNotNill(x, y) then
+	if button == 2 then
+		if Cell.isNotNill(x, y) and not Cell.isRevealed(x, y)then
 			Cells[x][y].flag = not Cells[x][y].flag
 		end
 		if Cell.isRevealed(x, y) then
