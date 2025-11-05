@@ -44,7 +44,7 @@ function Field.mousepressed(button)
 			Cell.reveal(x, y)
 		end
 		if Cell.isRevealed(x, y) then
-			if Cells[x][y].mines == Cell.CountAround(x, y, "flags") then
+			if Cells[x][y].mines == Cell.countAround(x, y, "flags") then
 				if not Cells[x-1][y-1].flag then Cell.reveal(x-1, y-1) end
 				if not Cells[x-1][y  ].flag then Cell.reveal(x-1, y  ) end
 				if not Cells[x-1][y+1].flag then Cell.reveal(x-1, y+1) end
@@ -80,7 +80,7 @@ function Cell.reveal(x, y)
 		--Field.reset()
 		--GM.state = "MainMenu"
 		--return
-		--TO DO: ultraMegaSuperScaryScreamer()
+		-- TODO: ultraMegaSuperScaryScreamer()
 	end
 	if not Cells[x][y].revealed then
 		Cells[x][y].revealed = true
@@ -137,7 +137,7 @@ function Cell.revealAround(x, y)
 	]]
 end
 
-function Cell.CountAround(x, y, type)
+function Cell.countAround(x, y, type)
 	if type == "flags" then
 		flags = 0
 		if Cells[x-1][y-1].flag then flags = flags + 1 end
@@ -163,6 +163,7 @@ function Cell.CountAround(x, y, type)
 		print(hidden)
 		return hidden
 	end
+	assert(false, "UNREACHABLE")
 end
 
 function Cell.new(x, y, isBomb)
