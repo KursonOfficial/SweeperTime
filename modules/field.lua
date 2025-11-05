@@ -56,8 +56,8 @@ function Field.mousepressed(button)
 			end
 		end
 	end
-	if button == 2 then 
-		if Cell.isNotNill(x, y) and not Cell.isRevealed(x, y)then
+	if button == 2 and not Cell.isRevealed(x, y) then
+		if Cell.isNotNill(x, y) then
 			Cells[x][y].flag = not Cells[x][y].flag
 		end
 		if Cell.isRevealed(x, y) then
@@ -180,19 +180,11 @@ function Cell.new(x, y, isBomb)
 end
 
 function Cell.isNotNill(x, y)
-	if Cells[x] ~= nill then
-		if Cells[x][y] ~= nill then
-			return true
-		end
-	end
-	return false
+	return (Cells[x] ~= nil) and (Cells[x][y] ~= nil)
 end
 
 function Cell.isRevealed(x, y)
-	if Cell.isNotNill(x, y) then
-		return Cells[x][y].revealed
-	end
-	return false
+	return Cell.isNotNill(x, y) and Cells[x][y].revealed
 end
 
 Field.zoom = 1
