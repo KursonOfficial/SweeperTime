@@ -43,10 +43,34 @@ function Field.mousepressed(button)
 			Cell.new(x, y, false)
 			Cell.reveal(x, y)
 		end
+		if Cell.isRevealed(x, y) then
+			if Cells[x][y].mines == Cell.countAround(x, y, "flags") then
+				if not Cells[x-1][y-1].flag then Cell.reveal(x-1, y-1) end
+				if not Cells[x-1][y  ].flag then Cell.reveal(x-1, y  ) end
+				if not Cells[x-1][y+1].flag then Cell.reveal(x-1, y+1) end
+				if not Cells[x  ][y+1].flag then Cell.reveal(x  , y+1) end
+				if not Cells[x  ][y-1].flag then Cell.reveal(x  , y-1) end
+				if not Cells[x+1][y-1].flag then Cell.reveal(x+1, y-1) end
+				if not Cells[x+1][y  ].flag then Cell.reveal(x+1, y  ) end
+				if not Cells[x+1][y+1].flag then Cell.reveal(x+1, y+1) end
+			end
+		end
 	end
-	if button == 2 and not Cell.isRevealed(x, y) then
-		if Cell.isNotNill(x, y) then
+	if button == 2 then
+		if Cell.isNotNill(x, y) and not Cell.isRevealed(x, y)then
 			Cells[x][y].flag = not Cells[x][y].flag
+		end
+		if Cell.isRevealed(x, y) then
+			if Cells[x][y].mines == Cell.countAround(x, y, "hidden") then
+				if not Cells[x-1][y-1].revealed then Cells[x-1][y-1].flag = true end
+				if not Cells[x-1][y  ].revealed then Cells[x-1][y  ].flag = true end
+				if not Cells[x-1][y+1].revealed then Cells[x-1][y+1].flag = true end
+				if not Cells[x  ][y+1].revealed then Cells[x  ][y+1].flag = true end
+				if not Cells[x  ][y-1].revealed then Cells[x  ][y-1].flag = true end
+				if not Cells[x+1][y-1].revealed then Cells[x+1][y-1].flag = true end
+				if not Cells[x+1][y  ].revealed then Cells[x+1][y  ].flag = true end
+				if not Cells[x+1][y+1].revealed then Cells[x+1][y+1].flag = true end
+			end
 		end
 	end
 end
@@ -56,6 +80,7 @@ function Cell.reveal(x, y)
 		--Field.reset()
 		--GM.state = "MainMenu"
 		--return
+		-- TODO: ultraMegaSuperScaryScreamer()
 	end
 	if not Cells[x][y].revealed then
 		Cells[x][y].revealed = true
@@ -110,6 +135,35 @@ function Cell.revealAround(x, y)
 		end
 	end
 	]]
+end
+
+function Cell.countAround(x, y, type)
+	if type == "flags" then
+		flags = 0
+		if Cells[x-1][y-1].flag then flags = flags + 1 end
+		if Cells[x-1][y  ].flag then flags = flags + 1 end
+		if Cells[x-1][y+1].flag then flags = flags + 1 end
+		if Cells[x  ][y+1].flag then flags = flags + 1 end
+		if Cells[x  ][y-1].flag then flags = flags + 1 end
+		if Cells[x+1][y-1].flag then flags = flags + 1 end
+		if Cells[x+1][y  ].flag then flags = flags + 1 end
+		if Cells[x+1][y+1].flag then flags = flags + 1 end
+		return flags
+	end
+	if type == "hidden" then
+		hidden = 0
+		if not Cells[x-1][y-1].revealed then hidden = hidden + 1 end
+		if not Cells[x-1][y  ].revealed then hidden = hidden + 1 end
+		if not Cells[x-1][y+1].revealed then hidden = hidden + 1 end
+		if not Cells[x  ][y+1].revealed then hidden = hidden + 1 end
+		if not Cells[x  ][y-1].revealed then hidden = hidden + 1 end
+		if not Cells[x+1][y-1].revealed then hidden = hidden + 1 end
+		if not Cells[x+1][y  ].revealed then hidden = hidden + 1 end
+		if not Cells[x+1][y+1].revealed then hidden = hidden + 1 end
+		print(hidden)
+		return hidden
+	end
+	assert(false, "UNREACHABLE")
 end
 
 function Cell.new(x, y, isBomb)
