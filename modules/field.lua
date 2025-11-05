@@ -61,7 +61,7 @@ function Field.mousepressed(button)
 			Cells[x][y].flag = not Cells[x][y].flag
 		end
 		if Cell.isRevealed(x, y) then
-			if Cells[x][y].mines == Cell.CountAround(x, y, "hidden") then
+			if Cells[x][y].mines == Cell.countAround(x, y, "hidden") then
 				if not Cells[x-1][y-1].revealed then Cells[x-1][y-1].flag = true end
 				if not Cells[x-1][y  ].revealed then Cells[x-1][y  ].flag = true end
 				if not Cells[x-1][y+1].revealed then Cells[x-1][y+1].flag = true end
