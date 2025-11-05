@@ -106,7 +106,6 @@ function Cell.reveal(x, y)
 			end
 		end
 		Field.firstCell = false
-		print(BombsAround)
 		Cells[x][y].mines = BombsAround
 		local radius = 43 -- Was guessed by many tests. This value is optimal
 		local inRadius = math.sqrt((x - lastClickedCell.x)^2 + (y - lastClickedCell.y)^2) <= radius
@@ -160,7 +159,6 @@ function Cell.countAround(x, y, type)
 		if not Cells[x+1][y-1].revealed then hidden = hidden + 1 end
 		if not Cells[x+1][y  ].revealed then hidden = hidden + 1 end
 		if not Cells[x+1][y+1].revealed then hidden = hidden + 1 end
-		print(hidden)
 		return hidden
 	end
 	assert(false, "UNREACHABLE")
