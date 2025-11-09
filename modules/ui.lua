@@ -5,10 +5,10 @@ local lerp = function(a, b, t)
 end
 
 function UI.init()
-	versionFont = lg.newFont(20)
-	logoFont = lg.newFont(128)
-	anyButtonHintFont = lg.newFont(40)
-	debugInfoFont = lg.newFont(23)
+	versionFont       = lg.newFont(GM.Height * 1/72)
+	logoFont          = lg.newFont(GM.Height * 4/45)
+	anyButtonHintFont = lg.newFont(GM.Height * 1/36)
+	debugInfoFont     = lg.newFont(GM.Height * 1/60)
 end
 
 function UI.update()
