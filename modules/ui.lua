@@ -12,9 +12,8 @@ function UI.init()
 end
 
 function UI.update()
-	if GM.state == "MainMenu" then
-	end
-	if GM.state == "MainGame" then
+	if     GM.state == "MainMenu" then
+	elseif GM.state == "MainGame" then
 	end
 end
 
@@ -57,7 +56,7 @@ function UI.draw()
 		lg.printf("Press any button to play...",
 			0, GM.Height*(1 - 1/8),
 			GM.Widht, "center")
-	end if GM.state == "MainGame" then
+	elseif GM.state == "MainGame" then
 		lg.setFont(debugInfoFont)
 		lg.setColor(cup(palette.debugInfo))
 		local trunk = function(x, n)
