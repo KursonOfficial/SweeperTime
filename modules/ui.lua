@@ -1,20 +1,62 @@
 UI = {}
 
-function UI.printLogo()
-	lg.setFont(lg.newFont(50))
-	lg.setColor(0.2 * math.cos(love.timer.getTime()*2), 0.2, 0.2)
-	lg.printf("SWEEPER TIME", math.cos(love.timer.getTime())*3, math.sin(love.timer.getTime())*3, GM.Widht, "center")
-	lg.setFont(lg.newFont(50))
+local lerp = function(a, b, t)
+	return a + (b - a)*t
+end
+
+function UI.init()
+	versionFont = lg.newFont(20)
+	logoFont = lg.newFont(128)
+	anyButtonHintFont = lg.newFont(40)
+	debugInfoFont = lg.newFont(23)
+end
+
+function UI.update()
+	if GM.state == "MainMenu" then
+	end
+	if GM.state == "MainGame" then
+	end
+end
+
+function UI.printLogo(x, y, speed, amplitude)
+	lg.setFont(logoFont)
+	lg.setColor(0.2 * math.cos(love.timer.getTime()*speed), 0.2, 0.2)
+	lg.printf("SWEEPER TIME",
+		math.cos(love.timer.getTime()*speed)*(amplitude+0.2) + x,
+		math.sin(love.timer.getTime()*speed)*amplitude + y,
+		GM.Widht, "center",
+		0, 1, 1, 0, 0, 0.2 * math.cos(love.timer.getTime()*speed))
 	lg.setColor(cup(palette.logoFront))
-	lg.printf("SWEEPER TIME", 0, 0, GM.Widht, "center", 0, 1, 1, 0, 0, 0.2 * math.cos(love.timer.getTime()*0.2))
+	lg.printf("SWEEPER TIME",
+		x, y,
+		GM.Widht, "center",
+		0, 1, 1, 0, 0, 0.2 * math.cos(love.timer.getTime()*speed))
 end
 
 function UI.draw()
 	if GM.state == "MainMenu" then
-		lg.setFont(logoFont)
+		-- Verson
+		lg.setFont(versionFont)
 		lg.setColor(cup(palette.versionText))
 		lg.printf(GM.version,0 ,0 , GM.Widht, "right")
-		UI.printLogo()
+		-- Logo (Which is Title)
+		local logoPosY =
+			(GM.Height - logoFont:getHeight())*(1/8)
+		UI.printLogo(0, logoPosY, 2, GM.Height/80)
+		-- Press any button hint
+		-- local hintTilt = (math.cos(love.timer.getTime()*3)+1)/2/2
+		local hintTilt = lerp(0.3, 0.7, (math.sin(love.timer.getTime()*2 + math.pi/2)+1)/2)
+		lg.setColor(
+			hintTilt,
+			hintTilt,
+			hintTilt)
+		lg.setFont(anyButtonHintFont)
+		-- lg.printf("Press any button to play...",
+		-- 	0, logoPos.y + logoFont:getHeight() + 50,
+		-- 	GM.Widht, "center")
+		lg.printf("Press any button to play...",
+			0, GM.Height*(1 - 1/8),
+			GM.Widht, "center")
 	end if GM.state == "MainGame" then
 		lg.setFont(debugInfoFont)
 		lg.setColor(cup(palette.debugInfo))
@@ -33,9 +75,6 @@ function UI.draw()
 		end
 	end
 end
-function UI.init()
-	logoFont = lg.newFont(10)
-	debugInfoFont = lg.newFont(23)
-end
+
 function UI.starGame()
 end

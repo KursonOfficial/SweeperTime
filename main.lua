@@ -48,6 +48,7 @@ function GM.draw()
 end
 
 function GM.update(dt)
+	UI.update()
 	if needReturn == true then
 		if math.abs(Field.pos.x) > 10 or math.abs(Field.pos.y) > 10 then
 			Field.pos.x = Field.pos.x - Field.pos.x / 2 * dt * 10
