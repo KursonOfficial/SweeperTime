@@ -10,7 +10,7 @@ require "modules.sprite"
 --game manager типо
 GM = {}
 
-GM.version = "v0.1"
+GM.version = "v0.3-dev"
 
 lg = love.graphics
 lw = love.window
