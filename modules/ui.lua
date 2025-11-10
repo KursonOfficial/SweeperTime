@@ -1,21 +1,76 @@
 UI = {}
 
-function UI.printLogo()
-	lg.setFont(lg.newFont(50))
-	lg.setColor(0.2 * math.cos(love.timer.getTime()*2), 0.2, 0.2)
-	lg.printf("SWEEPER TIME", math.cos(love.timer.getTime())*3, math.sin(love.timer.getTime())*3, GM.Widht, "center")
-	lg.setFont(lg.newFont(50))
+local lerp = function(a, b, t)
+	return a + (b - a)*t
+end
+
+function UI.init()
+	versionFont       = lg.newFont(GM.Height * 1/72)
+	logoFont          = lg.newFont(GM.Height * 4/45)
+	anyButtonHintFont = lg.newFont(GM.Height * 1/36)
+	debugInfoFont     = lg.newFont(GM.Height * 1/60)
+	bgShader = lg.newShader("assets/missing.glsl")
+	bgShader:send("time",  0)
+	bgShader:send("speed", GM.Height/28)
+	bgShader:send("sqare_sz", GM.Height/28)
+	bgShader:send("col1", {0, 0, 0, 0.25})
+	bgShader:send("col2", {1, 0, 1, 0.25})
+end
+
+function UI.update()
+	if     GM.state == "MainMenu" then
+		bgShader:send("time", love.timer.getTime()*2)
+	elseif GM.state == "MainGame" then
+	end
+end
+
+function UI.printLogo(x, y, speed, amplitude)
+	lg.setFont(logoFont)
+	lg.setColor(
+		0.2 * math.cos((love.timer.getTime()-2)*speed) - 0.05,
+		0.2 * math.cos((love.timer.getTime()  )*speed) - 0.05,
+		0.2 * math.cos((love.timer.getTime()+2)*speed) - 0.05,
+		0.8)
+	lg.printf("SWEEPER TIME",
+		math.cos(love.timer.getTime()*speed)*(amplitude+0.2) + x,
+		math.sin(love.timer.getTime()*speed)*amplitude + y,
+		GM.Widht, "center",
+		0, 1, 1, 0, 0, 0.2 * math.cos(love.timer.getTime()*speed))
 	lg.setColor(cup(palette.logoFront))
-	lg.printf("SWEEPER TIME", 0, 0, GM.Widht, "center", 0, 1, 1, 0, 0, 0.2 * math.cos(love.timer.getTime()*0.2))
+	lg.printf("SWEEPER TIME",
+		x, y,
+		GM.Widht, "center",
+		0, 1, 1, 0, 0, 0.2 * math.cos(love.timer.getTime()*speed))
 end
 
 function UI.draw()
 	if GM.state == "MainMenu" then
-		lg.setFont(logoFont)
+		-- Background
+		local sw, sh = lg.getDimensions()
+		lg.setShader(bgShader)
+		lg.setColor(1, 1, 1, 1)
+		lg.rectangle("fill", 0, 0, sw, sh)
+		lg.setShader()
+		-- Verson
+		lg.setFont(versionFont)
 		lg.setColor(cup(palette.versionText))
 		lg.printf(GM.version,0 ,0 , GM.Widht, "right")
-		UI.printLogo()
-	end if GM.state == "MainGame" then
+		-- Logo (Which is Title)
+		local logoPosY =
+			(GM.Height - logoFont:getHeight())*(1/8)
+		UI.printLogo(0, logoPosY, 2, GM.Height/80)
+		-- Press any button hint
+		local hintTilt = lerp(0.4, 0.8, (math.cos(love.timer.getTime()*2 + math.pi/2)+1)/2)
+		lg.setColor(
+			1,
+			1,
+			1,
+			hintTilt)
+		lg.setFont(anyButtonHintFont)
+		lg.printf("Press any button to play...",
+			0, GM.Height*(1 - 1/8),
+			GM.Widht, "center")
+	elseif GM.state == "MainGame" then
 		lg.setFont(debugInfoFont)
 		lg.setColor(cup(palette.debugInfo))
 		local trunk = function(x, n)
@@ -33,9 +88,6 @@ function UI.draw()
 		end
 	end
 end
-function UI.init()
-	logoFont = lg.newFont(10)
-	debugInfoFont = lg.newFont(23)
-end
+
 function UI.starGame()
 end
