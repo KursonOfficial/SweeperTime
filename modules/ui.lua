@@ -12,6 +12,7 @@ function UI.init()
 	bgShader = lg.newShader("assets/missing.glsl")
 	bgShader:send("time",  0)
 	bgShader:send("speed", 80)
+	bgShader:send("sqare_sz", GM.Height/28)
 	bgShader:send("col1", {0, 0, 0, 0.25})
 	bgShader:send("col2", {1, 0, 1, 0.25})
 end
