@@ -59,10 +59,11 @@ function UI.draw()
 			(GM.Height - logoFont:getHeight())*(1/8)
 		UI.printLogo(0, logoPosY, 2, GM.Height/80)
 		-- Press any button hint
-		local hintTilt = lerp(0.3, 0.7, (math.sin(love.timer.getTime()*2 + math.pi/2)+1)/2)
+		local hintTilt = lerp(0.4, 0.8, (math.cos(love.timer.getTime()*2 + math.pi/2)+1)/2)
 		lg.setColor(
-			hintTilt,
-			hintTilt,
+			1,
+			1,
+			1,
 			hintTilt)
 		lg.setFont(anyButtonHintFont)
 		lg.printf("Press any button to play...",
