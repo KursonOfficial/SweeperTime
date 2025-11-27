@@ -1,8 +1,41 @@
 UI = {}
 
+local Vector2 = {
+	new = function(_x, _y)
+		return setmetatable({x = _x, y = _y}, self)
+	end,
+	__index = {
+		x = 0,
+		y = 0,
+	},
+}
+local Rec = {
+	new = function(_x, _y, _w, _h)
+		return setmetatable({x = _x, y = _y, w = _w, h = _h}, self)
+	end,
+	__index = {
+		x = 0,
+		y = 0,
+		w = 0,
+		h = 0,
+	},
+}
+
 local lerp = function(a, b, t)
 	return a + (b - a)*t
 end
+
+local checkCollisionPointRec = function(point, rec)
+	local collision = false
+	if (point.x >= rec.x)          and
+	   (point.x < (rec.x + rec.w)) and
+	   (point.y >= rec.y)          and
+	   (point.y < (rec.y + rec.h)) then
+	   collision = true
+	end
+	return collision
+end
+
 
 function UI.init()
 	versionFont       = lg.newFont(GM.Height * 1/72)
