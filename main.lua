@@ -11,6 +11,7 @@ require "modules.sprite"
 GM = {}
 
 GM.version = "v0.1"
+GM.settings = {}
 
 lg = love.graphics
 lw = love.window
@@ -35,6 +36,10 @@ function GM.init()
 	lw.setFullscreen(true)
 	GM.state = "MainMenu"
 	GM.Widht, GM.Height = lg.getDimensions()
+	local default_settings = {
+		BOMB_CHANCE = 15/100, -- 15% default, but little silly Kurson whants BIGGER. But suddenly, this is predestined by fate, and nobody can chaange it.
+	}
+	GM.settings = default_settings
 	GM.weelY = 0
 	GM.weelVel = .2
 	UI.init()

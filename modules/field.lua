@@ -3,8 +3,6 @@ Field.firstCell = true
 Cell = {}
 Cells = {}
 
-local bombChance = 15/100 -- 15% default, but little silly Kurson whants BIGGER. But suddenly, this is predestined by fate, and nobody can chaange it.
-
 function Field.init()
 	Field.firstCell = true
 	Field.speed = GM.Height
@@ -90,7 +88,7 @@ function Cell.reveal(x, y)
 			for dy = -1, 1 do
 				if not Cell.isNotNill(x + dx, y + dy) then
 					if dx ~= 0 or dy ~= 0 then
-						isBomb = math.random() < bombChance
+						isBomb = math.random() < GM.settings.BOMB_CHANCE
 						if not Field.firstCell then
 							Cell.new(x + dx, y + dy, isBomb)
 							BombsAround = BombsAround + (isBomb and 1 or 0)
