@@ -4,8 +4,8 @@ local default_user_settings = {
 		But suddenly, this is predestined by fate, and nobody
 		can chaange it.
 	]]
-	BOMB_CHANCE = 15/100,
-	FULLSCREEN  = true,
+	bomb_chance = 15/100,
+	fullscreen  = true,
 }
 local module = {
 	loadUserData = function(need_reset)

@@ -1,32 +1,33 @@
---слыш UI подойтика сюда!
+-- слыш UI подойтика сюда!
 require "modules.ui"
---Field! да ты! идём поговорим.
+-- Field! да ты! идём поговорим.
 require "modules.field"
 -- Йоу, радуга, палитра
 require "modules.palette"
---А НУКА СПРАЙТ СЮДА БЫСТРО, Я ПИТЬ ХОЧУ!
+-- А НУКА СПРАЙТ СЮДА БЫСТРО, Я ПИТЬ ХОЧУ!
 require "modules.sprite"
 
---game manager типо
+-- game manager типо
 GM = {}
 GM.version = "v0.1"
 GM.settings = {}
 -- Ну и кем ты будешь? Бугалтером? Будешь вести учёты? Пффф... А мы-то думали...
-GM.UDM = require "modules.user_data_manager"
+GM.UDM = require "modules.user_data_manager" -- NOTE: must be initialised after GM.settings
 
 
 lg = love.graphics
 lw = love.window
 
 function flipFullscreen()
-	local mode = lw.getFullscreen()
-	lw.setFullscreen(not mode)
+	local target_mode = not lw.getFullscreen()
+	GM.settings.fullscreen = target_mode
+	lw.setFullscreen(target_mode)
 	GM.Widht, GM.Height = lg.getDimensions()
 end
 
-function love.resize(w , h)
+function love.resize(w, h)
 	GM.Widht, GM.Height = w, h
-	
+
 	Field.speed = GM.Height
 	Cell.cellSize = GM.Height/10
 	Cell.rCorner = Cell.cellSize/8
@@ -36,7 +37,7 @@ end
 
 function GM.init()
 	GM.UDM.loadUserData()
-	lw.setFullscreen(GM.settings.FULLSCREEN)
+	lw.setFullscreen(GM.settings.fullscreen)
 	GM.state = "MainMenu"
 	GM.Widht, GM.Height = lg.getDimensions()
 	GM.weelY = 0
@@ -128,3 +129,4 @@ end
 function love.draw()
 	GM.draw()
 end
+
