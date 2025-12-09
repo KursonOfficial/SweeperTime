@@ -12,6 +12,7 @@ local module = {
 	loadUserData = function(need_reset)
 		local need_reset = need_reset or false
 		local save_file_exists = false -- TODO: actually check it
+		
 		-- Read user's save file from disc and dispatch
 		-- all properties accordingly
 		if save_file_exists and (not need_reset) then
@@ -22,14 +23,18 @@ local module = {
 			GM.settings = default_user_settings
 			-- GM.xxx1 = default_yyy1
 			-- GM.xxx2 = default_yyy2
+			-- e.g.
+			-- GM.stats.maxScore = 0
+			-- GM.maingame_state.lives = 3
 			-- ...
 			-- TODO: Serealise and write save file to userdata folder
 		end
 	end;
 	applySettings = function()
 		local ss = GM.settings
+
 		love.window.setFullscreen(ss.fullscreen)
 		setTheme(ss.theme)
-	end
+	end;
 }
 return module
