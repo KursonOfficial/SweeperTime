@@ -9,20 +9,14 @@ require "modules.sprite"
 
 --game manager типо
 GM = {}
-
 GM.version = "v0.1"
 GM.settings = {}
+-- Ну и кем ты будешь? Бугалтером? Будешь вести учёты? Пффф... А мы-то думали...
+GM.UDM = require "modules.user_data_manager"
+
 
 lg = love.graphics
 lw = love.window
-
-GM.loadSettings = function()
-	local default_settings = {
-		BOMB_CHANCE = 15/100, -- 15% default, but little silly Kurson whants BIGGER. But suddenly, this is predestined by fate, and nobody can chaange it.
-		FULLSCREEN  = true,
-	}
-	GM.settings = default_settings
-end
 
 function flipFullscreen()
 	local mode = lw.getFullscreen()
@@ -41,7 +35,7 @@ function love.resize(w , h)
 end
 
 function GM.init()
-	GM.loadSettings()
+	GM.UDM.loadUserData()
 	lw.setFullscreen(GM.settings.FULLSCREEN)
 	GM.state = "MainMenu"
 	GM.Widht, GM.Height = lg.getDimensions()
