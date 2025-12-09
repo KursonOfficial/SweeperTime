@@ -73,7 +73,7 @@ local themes = {
 		cellSelectedFrame = getColorHS("#FFFFF233");
 	},
 	{
-		name = "GrooveBox";
+		name = "Coffee";
 		logoFront    = getColorHS("#CCCCFFFF");
 		hint         = getColorHS("#4C527FFF");
 		versionText  = getColorHS("#333333FF");
