@@ -4,8 +4,9 @@ local default_user_settings = {
 		But suddenly, this is predestined by fate, and nobody
 		can chaange it.
 	]]
-	bomb_chance = 15/100,
 	fullscreen  = true,
+	theme       = "Ocean",
+	bomb_chance = 15/100,
 }
 local module = {
 	loadUserData = function(need_reset)
@@ -24,6 +25,11 @@ local module = {
 			-- ...
 			-- TODO: Serealise and write save file to userdata folder
 		end
+	end;
+	applySettings = function()
+		local ss = GM.settings
+		love.window.setFullscreen(ss.fullscreen)
+		setTheme(ss.theme)
 	end
 }
 return module

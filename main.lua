@@ -37,7 +37,7 @@ end
 
 function GM.init()
 	GM.UDM.loadUserData()
-	lw.setFullscreen(GM.settings.fullscreen)
+	GM.UDM.applySettings()
 	GM.state = "MainMenu"
 	GM.Widht, GM.Height = lg.getDimensions()
 	GM.weelY = 0
