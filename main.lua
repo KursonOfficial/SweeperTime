@@ -16,6 +16,14 @@ GM.settings = {}
 lg = love.graphics
 lw = love.window
 
+GM.loadSettings = function()
+	local default_settings = {
+		BOMB_CHANCE = 15/100, -- 15% default, but little silly Kurson whants BIGGER. But suddenly, this is predestined by fate, and nobody can chaange it.
+		FULLSCREEN  = true,
+	}
+	GM.settings = default_settings
+end
+
 function flipFullscreen()
 	local mode = lw.getFullscreen()
 	lw.setFullscreen(not mode)
@@ -33,17 +41,13 @@ function love.resize(w , h)
 end
 
 function GM.init()
-	lw.setFullscreen(true)
+	GM.loadSettings()
+	lw.setFullscreen(GM.settings.FULLSCREEN)
 	GM.state = "MainMenu"
 	GM.Widht, GM.Height = lg.getDimensions()
-	local default_settings = {
-		BOMB_CHANCE = 15/100, -- 15% default, but little silly Kurson whants BIGGER. But suddenly, this is predestined by fate, and nobody can chaange it.
-	}
-	GM.settings = default_settings
 	GM.weelY = 0
 	GM.weelVel = .2
 	UI.init()
-
 	sprite.init()
 end
 
