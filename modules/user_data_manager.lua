@@ -30,10 +30,12 @@ local module = {
 			-- TODO: Serealise and write save file to userdata folder
 		end
 	end;
-	applySettings = function()
+	apply = function()
 		local ss = GM.settings
 
 		love.window.setFullscreen(ss.fullscreen)
+		GM.Widht, GM.Height = love.graphics.getDimensions()
+		UI.refreshFonts()
 		setTheme(ss.theme)
 	end;
 }

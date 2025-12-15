@@ -20,8 +20,7 @@ lw = love.window
 function flipFullscreen()
 	local target_mode = not lw.getFullscreen()
 	GM.settings.fullscreen = target_mode
-	lw.setFullscreen(target_mode)
-	GM.Widht, GM.Height = lg.getDimensions()
+	GM.UDM.apply()
 end
 
 function love.resize(w, h)
@@ -36,7 +35,7 @@ end
 
 function GM.init()
 	GM.UDM.loadUserData()
-	GM.UDM.applySettings()
+	GM.UDM.apply()
 	GM.state = "MainMenu"
 	GM.Widht, GM.Height = lg.getDimensions()
 	GM.weelY = 0

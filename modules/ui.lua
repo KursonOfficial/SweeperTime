@@ -36,12 +36,14 @@ local checkCollisionPointRec = function(point, rec)
 	return collision
 end
 
-
-function UI.init()
+UI.refreshFonts = function()
 	versionFont       = lg.newFont(GM.Height * 1/72)
 	logoFont          = lg.newFont(GM.Height * 4/45)
 	anyButtonHintFont = lg.newFont(GM.Height * 1/36)
 	debugInfoFont     = lg.newFont(GM.Height * 1/60)
+end
+function UI.init()
+	UI.refreshFonts()
 	bgShader = lg.newShader("assets/missing.glsl")
 	bgShader:send("time",  0)
 	bgShader:send("speed", GM.Height/28)
