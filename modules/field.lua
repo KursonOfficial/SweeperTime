@@ -88,7 +88,7 @@ function Cell.reveal(x, y)
 			for dy = -1, 1 do
 				if not Cell.isNotNill(x + dx, y + dy) then
 					if dx ~= 0 or dy ~= 0 then
-						isBomb = math.random() < GM.settings.bomb_chance
+						isBomb = math.random() < GM.UD.settings.bomb_chance
 						if not Field.firstCell then
 							Cell.new(x + dx, y + dy, isBomb)
 							BombsAround = BombsAround + (isBomb and 1 or 0)

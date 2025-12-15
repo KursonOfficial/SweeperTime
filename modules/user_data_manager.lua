@@ -8,8 +8,19 @@ local default_user_settings = {
 	theme       = "Ocean",
 	bomb_chance = 15/100,
 }
+local default_UD = {
+	settings = default_user_settings,
+	-- stats.maxScore = 0
+	-- maingame_state.lives = 3
+	-- ...
+}
+
 local module = {
-	loadUserData = function(need_reset)
+	save = function()
+		-- TODO: Serealise and write save file to userdata folder
+		assert(false, "Not yet implemented user data saving")
+	end;
+	load = function(need_reset)
 		local need_reset = need_reset or false
 		local save_file_exists = false -- TODO: actually check it
 		
@@ -19,19 +30,13 @@ local module = {
 			-- TODO: load save file
 			assert(false, "Not yet implemented save file loading")
 		else
-			-- We don' have any saves, load defalt values and create one
-			GM.settings = default_user_settings
-			-- GM.xxx1 = default_yyy1
-			-- GM.xxx2 = default_yyy2
-			-- e.g.
-			-- GM.stats.maxScore = 0
-			-- GM.maingame_state.lives = 3
-			-- ...
-			-- TODO: Serealise and write save file to userdata folder
+			-- We don' have any saves, load default values and create one
+			GM.UD = default_UD
+			-- self.save()
 		end
 	end;
 	apply = function()
-		local ss = GM.settings
+		local ss = GM.UD.settings
 
 		love.window.setFullscreen(ss.fullscreen)
 		GM.Widht, GM.Height = love.graphics.getDimensions()
