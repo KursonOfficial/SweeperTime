@@ -57,6 +57,8 @@ end
 function UI.update()
 	if     GM.state == "MainMenu" then
 		bgShader:send("time", love.timer.getTime()*2)
+		bgShader:send("speed", GM.Height/28)
+		bgShader:send("sqare_sz", GM.Height/28)
 	elseif GM.state == "MainGame" then
 	end
 end
