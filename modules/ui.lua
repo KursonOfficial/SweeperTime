@@ -42,6 +42,7 @@ UI.refreshFonts = function()
 	anyButtonHintFont = lg.newFont(GM.Height * 1/36)
 	debugInfoFont     = lg.newFont(GM.Height * 1/60)
 end
+local versionDisplayText = ""
 function UI.init()
 	UI.refreshFonts()
 	bgShader = lg.newShader("assets/missing.glsl")
@@ -50,6 +51,7 @@ function UI.init()
 	bgShader:send("sqare_sz", GM.Height/28)
 	bgShader:send("col1", {0, 0, 0, 0.25})
 	bgShader:send("col2", {1, 0, 1, 0.25})
+	versionDisplayText = string.format("SweeperTime %s", GM.version)
 end
 
 function UI.update()
@@ -90,7 +92,7 @@ function UI.draw()
 		lg.setFont(versionFont)
 		lg.setColor(cup(palette.versionText))
 		local versionTextPadding = {w = 10, h = 5}
-		lg.printf(GM.version,
+		lg.printf(versionDisplayText,
 			versionTextPadding.w,
 			GM.Height - versionFont:getHeight() - versionTextPadding.h,
 			GM.Widht, "left")

@@ -9,7 +9,7 @@ require "modules.sprite"
 
 -- game manager типо
 GM = {}
-GM.version = "v0.3-dev"
+GM.version = "v0.3.0-dev"
 GM.UD = {}
 -- Ну и кем ты будешь? Бугалтером? Будешь вести учёты? Пффф... А мы-то думали...
 GM.UDM = require "modules.user_data_manager" -- NOTE: must be initialised after GM and may be after GM.UD
