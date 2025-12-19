@@ -89,7 +89,11 @@ function UI.draw()
 		-- Verson
 		lg.setFont(versionFont)
 		lg.setColor(cup(palette.versionText))
-		lg.printf(GM.version,0 ,0 , GM.Widht, "right")
+		local versionTextPadding = {w = 10, h = 5}
+		lg.printf(GM.version,
+			versionTextPadding.w,
+			GM.Height - versionFont:getHeight() - versionTextPadding.h,
+			GM.Widht, "left")
 		-- Logo (Which is Title)
 		local logoPosY =
 			(GM.Height - logoFont:getHeight())*(1/8)
