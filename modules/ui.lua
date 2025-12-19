@@ -64,22 +64,23 @@ function UI.update()
 end
 
 function UI.printLogo(x, y, speed, amplitude)
+	local time = love.timer.getTime()
 	lg.setFont(logoFont)
 	lg.setColor(
-		0.2 * math.cos((love.timer.getTime()-2)*speed) - 0.05,
-		0.2 * math.cos((love.timer.getTime()  )*speed) - 0.05,
-		0.2 * math.cos((love.timer.getTime()+2)*speed) - 0.05,
+		0.2 * math.cos((time-2)*speed) - 0.05,
+		0.2 * math.cos((time  )*speed) - 0.05,
+		0.2 * math.cos((time+2)*speed) - 0.05,
 		0.8)
 	lg.printf("SWEEPER TIME",
-		math.cos(love.timer.getTime()*speed)*(amplitude+0.2) + x,
-		math.sin(love.timer.getTime()*speed)*amplitude + y,
+		math.cos(time*speed)*(amplitude+0.2) + x,
+		math.sin(time*speed)*amplitude + y,
 		GM.Widht, "center",
-		0, 1, 1, 0, 0, 0.2 * math.cos(love.timer.getTime()*speed))
+		0, 1, 1, 0, 0, 0.2 * math.cos(time*speed))
 	lg.setColor(cup(palette.logoFront))
 	lg.printf("SWEEPER TIME",
 		x, y,
 		GM.Widht, "center",
-		0, 1, 1, 0, 0, 0.2 * math.cos(love.timer.getTime()*speed))
+		0, 1, 1, 0, 0, 0.2 * math.cos(time*speed))
 end
 
 function UI.draw()
