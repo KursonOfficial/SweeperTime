@@ -85,6 +85,9 @@ end
 
 function UI.draw()
 	if GM.state == "MainMenu" then
+		local BUTTON_AMMOUNT = 3
+		local SEGMENTS = 12
+		local NSEGMENT = 4
 		-- Background
 		local sw, sh = lg.getDimensions()
 		lg.setShader(bgShader)
@@ -101,9 +104,45 @@ function UI.draw()
 			GM.Widht, "left")
 		-- Logo (Which is Title)
 		local logoPosY =
-			(GM.Height - logoFont:getHeight())*(1/8)
+			(GM.Height - logoFont:getHeight())*(NSEGMENT/SEGMENTS)
 		UI.printLogo(0, logoPosY, 2, GM.Height/80)
+		-- Buttons
+		-- TODO: clean up this mess
+		local GMHUnit = GM.Height/60
+		local buttonUIPad = GMHUnit
+		local buttonUIW = logoFont:getWidth("Sweeper Time")*3/4
+		local buttonUIH = GMHUnit*3
+		local allButtonsHeight = buttonUIH*BUTTON_AMMOUNT + buttonUIPad*(BUTTON_AMMOUNT-1)
+		local buttonUIFirstButtonY = GM.Height*((SEGMENTS-NSEGMENT)/SEGMENTS)-allButtonsHeight/2
+		buttons = {}
+		assert(BUTTON_AMMOUNT >= 1)
+		-- TODO: aling first button not by logo, but all buttons to center
+		buttons[1] = Rec.new(
+			(GM.Widht-buttonUIW)/2,
+			buttonUIFirstButtonY,
+			buttonUIW,
+			buttonUIH)
+		for i = 1, BUTTON_AMMOUNT-1 do
+			buttons[#buttons+1] = Rec.new(
+				(GM.Widht-buttonUIW)/2,
+				buttons[#buttons].y + buttons[#buttons].h + buttonUIPad,
+				buttonUIW,
+				buttonUIH)
+		end
+		local drawButton = function(mode, button)
+			lg.rectangle(mode, button.x, button.y, button.w, button.h)
+		end
+		for i = 1, #buttons do
+			-- TODO: add text to buttons
+			-- TODO: add cool effects
+			-- lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 0.8)
+			-- drawButton("fill", buttons[i])
+			love.graphics.setLineWidth(GMHUnit/12)
+			lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 1)
+			drawButton("line", buttons[i])
+		end
 		-- Press any button hint
+		--[[
 		local hintTilt = lerp(0.4, 0.8, (math.cos(love.timer.getTime()*2 + math.pi/2)+1)/2)
 		lg.setColor(
 			1,
@@ -114,6 +153,7 @@ function UI.draw()
 		lg.printf("Press any button to play...",
 			0, GM.Height*(1 - 1/8),
 			GM.Widht, "center")
+		--]]
 	elseif GM.state == "MainGame" then
 		lg.setFont(debugInfoFont)
 		lg.setColor(cup(palette.debugInfo))
