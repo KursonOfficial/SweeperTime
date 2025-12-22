@@ -1,16 +1,5 @@
 UI = {}
 
-local checkCollisionPointRec = function(point, rec)
-	local collision = false
-	if (point.x >= rec.x)          and
-	   (point.x < (rec.x + rec.w)) and
-	   (point.y >= rec.y)          and
-	   (point.y < (rec.y + rec.h)) then
-	   collision = true
-	end
-	return collision
-end
-
 UI.refreshFonts = function()
 	versionFont       = lg.newFont(GM.Height * 1/72)
 	logoFont          = lg.newFont(GM.Height * 4/45)
