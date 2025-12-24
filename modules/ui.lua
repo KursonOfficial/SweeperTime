@@ -3,6 +3,7 @@ UI = {}
 UI.refreshFonts = function()
 	versionFont       = lg.newFont(GM.Height * 1/72)
 	logoFont          = lg.newFont(GM.Height * 4/45)
+	mainMenuButtons   = lg.newFont(GM.Height * 2/60)
 	anyButtonHintFont = lg.newFont(GM.Height * 1/36)
 	debugInfoFont     = lg.newFont(GM.Height * 1/60)
 end
@@ -48,10 +49,18 @@ function UI.printLogo(x, y, speed, amplitude)
 end
 
 function UI.draw()
+	local GMHUnit = math.ceil(GM.Height/60) -- GM.Height Unit
+	--[[ NOTE:
+		SEGMENTS and NSEGMENT are needed to define paddings of
+		title and buttons from top and bottom of the screen accordingly.
+		SEGMENTS is the ammount of rows for GM.Height division and
+		NSEGMENT is the index of row you pick from top or bottom
+		(I am aware that this is a wierd solution)
+		.                                           - Cadragonit
+	--]]
+	local SEGMENTS = 12
+	local NSEGMENT = 4
 	if GM.state == "MainMenu" then
-		local GMHUnit = GM.Height/60 -- GM.Height Unit
-		local SEGMENTS = 12
-		local NSEGMENT = 4
 		-- Background
 		lg.setShader(bgShader)
 		lg.setColor(1, 1, 1, 1)
@@ -68,38 +77,58 @@ function UI.draw()
 		-- Logo (Which is Title)
 		local logoPosY =
 			(GM.Height - logoFont:getHeight())*(NSEGMENT/SEGMENTS)
-		UI.printLogo(0, logoPosY, 2, GM.Height/80)
+		UI.printLogo(0, logoPosY, 2, GMHUnit*3/4)
+
+-- REFACTORING ZONE ---------------------------------------------------------------------
 		-- Buttons
-		local BUTTON_AMMOUNT = 3
-		-- TODO: clean up this mess
-		local buttonUIPad = GMHUnit
-		local buttonUIW = logoFont:getWidth("Sweeper Time")*3/4
-		local buttonUIH = GMHUnit*3
-		local allButtonsHeight = buttonUIH*BUTTON_AMMOUNT + buttonUIPad*(BUTTON_AMMOUNT-1)
-		local buttonUIFirstButtonY = GM.Height*((SEGMENTS-NSEGMENT)/SEGMENTS)-allButtonsHeight/2
-		buttons = {}
+		-- TODO:
+		--[[
+			- [ ] Move calculatons to init and update
+			- [ ] Make New Game button actually work
+			- [ ] Add cool effects
+		--]]
+		-- CALCULATONS
+		local buttons_as_text = {
+			"New Game",
+			"Options",
+		}
+		local BUTTON_AMMOUNT = #buttons_as_text
 		assert(BUTTON_AMMOUNT >= 1)
-		buttons[1] = Rec.new(
-			(GM.Widht-buttonUIW)/2,
-			buttonUIFirstButtonY,
-			buttonUIW,
-			buttonUIH)
-		for i = 1, BUTTON_AMMOUNT-1 do
-			buttons[#buttons+1] = Rec.new(
-				(GM.Widht-buttonUIW)/2,
-				buttons[#buttons].y + buttons[#buttons].h + buttonUIPad,
-				buttonUIW,
-				buttonUIH)
+		local UIButtonPad = GMHUnit
+		local UIButton = {
+			w = logoFont:getWidth("Sweeper Time")*3/4,
+			h = GMHUnit*3,
+		}
+		buttons_as_recs = {}
+		local BUTTON_BLOCK_HEIGHT = UIButton.h*BUTTON_AMMOUNT + UIButtonPad*(BUTTON_AMMOUNT-1)
+		buttons_as_recs[1] = Rec.new(
+			(GM.Widht-UIButton.w)/2,
+			GM.Height*((SEGMENTS-NSEGMENT)/SEGMENTS)-BUTTON_BLOCK_HEIGHT/2,
+			UIButton.w,
+			UIButton.h)
+		for i = 2, BUTTON_AMMOUNT do
+			buttons_as_recs[i] = Rec.new(
+				(GM.Widht-UIButton.w)/2,
+				buttons_as_recs[i-1].y + UIButton.h + UIButtonPad,
+				UIButton.w,
+				UIButton.h)
 		end
-		for i = 1, #buttons do
-			-- TODO: add text to buttons
-			-- TODO: add cool effects
+		-- DRAWING
+		for i = 1, #buttons_as_recs do
+			butrec = buttons_as_recs[i]
 			lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 0x20/0xFF)
-			drawRec("fill", buttons[i])
+			drawRec("fill", butrec)
 			love.graphics.setLineWidth(GMHUnit/12)
 			lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 1)
-			drawRec("line", buttons[i])
+			drawRec("line", butrec)
+			lg.setFont(mainMenuButtons)
+			lg.printf(buttons_as_text[i],
+				butrec.x,
+				butrec.y + (butrec.h - mainMenuButtons:getHeight())/2,
+				butrec.w, "center")
 		end
+-- REFACTORING ZONE END -----------------------------------------------------------------
+
 	elseif GM.state == "MainGame" then
 		lg.setFont(debugInfoFont)
 		lg.setColor(cup(palette.debugInfo))
