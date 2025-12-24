@@ -1,3 +1,5 @@
+-- Чё, самый умный?
+require "modules.algebra"
 -- слыш UI подойтика сюда!
 require "modules.ui"
 -- Field! да ты! идём поговорим.
@@ -31,6 +33,7 @@ function love.resize(w, h)
 	Cell.rCorner = Cell.cellSize/8
 
 	sprite.quads()
+	UI.refreshFonts()
 end
 
 function GM.init()
@@ -78,13 +81,7 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
 	if GM.state == "MainMenu" then
-		if key ~= "escape" then
-			Field.init()
-			UI.starGame()
-			GM.state = "MainGame"
-		end
-	end
-	if GM.state == "MainGame" then
+	elseif GM.state == "MainGame" then
 		if key == "space" then needReturn = true end
 	end
 	if key == "escape" then love.event.quit() end
@@ -101,12 +98,14 @@ end
 function love.mousepressed(x, y, button, istouch)
 	if GM.state == "MainGame" then
 		Field.mousepressed(button)
+	elseif GM.state == "MainMenu" then
+		UI.mousepressed(x, y, button)
 	end
 end
 
 function love.wheelmoved(x, y)
 	if GM.state == "MainGame" then
-		GM.weelY = math.max(-3, math.min( 3, GM.weelY + y * GM.weelVel))
+		GM.weelY = clamp(GM.weelY + y*GM.weelVel, -3, 3)
 		Field.zoom = 2 ^ (GM.weelY)
 		Field.inverseZoom = 2 ^ (-GM.weelY)
 		Field.speed = GM.Height * (1/2 ^ (GM.weelY/2))

@@ -51,7 +51,6 @@ local themes = {
 	{
 		name = "Theme Zero";
 		logoFront    = getColorHS("#CCCCFFFF");
-		hint         = getColorHS("#4C527FFF");
 		versionText  = getColorHS("#333333FF");
 		debugInfo    = getColorNV(0, 0, 0, 1);
 		cellInner    = getColorHS("#333333FF");
@@ -63,7 +62,6 @@ local themes = {
 	{
 		name = "Ocean";
 		logoFront    = getColorHS("#CCCCFFFF");
-		hint         = getColorHS("#4C527FFF");
 		versionText  = getColorHS("#333333FF");
 		debugInfo    = getColorHL(0x5DfDCDFF);
 		cellInner    = getColorHS("#04151FFF");
@@ -75,7 +73,6 @@ local themes = {
 	{
 		name = "Coffee";
 		logoFront    = getColorHS("#CCCCFFFF");
-		hint         = getColorHS("#4C527FFF");
 		versionText  = getColorHS("#333333FF");
 		debugInfo    = getColorHS("#8EC07CFF");
 		cellInner    = getColorHS("#282828FF");
@@ -88,7 +85,6 @@ local themes = {
 	{
 		name = "EverForest";
 		logoFront    = getColorHS("#CCCCFFFF");
-		hint         = getColorHS("#4C527FFF");
 		versionText  = getColorHS("#333333FF");
 		debugInfo    = getColorNV(0, 0, 0, 1);
 		cellInner    = getColorHS("#1e2326FF");
