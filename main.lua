@@ -81,11 +81,6 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
 	if GM.state == "MainMenu" then
-		if key ~= "escape" then
-			-- Starting game at this point
-			Field.init()
-			GM.state = "MainGame"
-		end
 	elseif GM.state == "MainGame" then
 		if key == "space" then needReturn = true end
 	end
@@ -103,6 +98,8 @@ end
 function love.mousepressed(x, y, button, istouch)
 	if GM.state == "MainGame" then
 		Field.mousepressed(button)
+	elseif GM.state == "MainMenu" then
+		UI.mousepressed(x, y, button)
 	end
 end
 

@@ -33,9 +33,19 @@ function UI.init()
 	MMButtons = {
 		{
 			text = "New Game",
+			isHover = false,
+			action = function()
+				-- Starting game at this point
+				Field.init()
+				GM.state = "MainGame"
+			end,
 		},
 		{
 			text = "Options",
+			isHover = false,
+			action = function()
+				print("[SweeperTime UI]: ERROR: Nope, `Options` button is not yet implemented")
+			end,
 		},
 	}
 	BUTTON_AMMOUNT = #MMButtons
@@ -44,6 +54,7 @@ end
 local buttons_Y = {}
 local UIButton = {}
 function UI.update()
+	local mice = Vector2.new(love.mouse.getPosition())
 	GMHUnit = math.ceil(GM.Height/60) -- GM.Height Unit
 	if     GM.state == "MainMenu" then
 		-- Background
@@ -63,7 +74,25 @@ function UI.update()
 		for i = 2, BUTTON_AMMOUNT do
 			buttons_Y[i] = buttons_Y[i-1] + UIButton.h + UIButtonPad
 		end
+		for i = 1, BUTTON_AMMOUNT do
+			local thisButton = MMButtons[i]
+			local cbuttbbox = Rec.new(UIButton.x, buttons_Y[i], UIButton.w, UIButton.h)
+			if checkCollisionPointRec(mice, cbuttbbox) then
+				thisButton.isHover = true
+			else
+				thisButton.isHover = false
+			end
+		end
 	elseif GM.state == "MainGame" then
+	end
+end
+
+function UI.mousepressed(x, y, button)
+	for i = 1, BUTTON_AMMOUNT do
+		local thisButton = MMButtons[i]
+		if button == 1 and thisButton.isHover then
+			thisButton.action()
+		end
 	end
 end
 
@@ -106,19 +135,16 @@ function UI.draw()
 		local logoPosY =
 			(GM.Height - logoFont:getHeight())*(NSEGMENT/SEGMENTS)
 		UI.printLogo(0, logoPosY, 2, GMHUnit*3/4)
-
--- REFACTORING ZONE ---------------------------------------------------------------------
 		-- Buttons
-		-- TODO:
-		--[[
-			- [X] Move calculatons to init and update
-			- [ ] Make New Game button actually work
-			- [ ] Add cool effects
-		--]]
+		-- TODO: Add cool effects
 		for i = 1, BUTTON_AMMOUNT do
 			assert(buttons_Y[i])
 			local butrec = Rec.new(UIButton.x, buttons_Y[i], UIButton.w, UIButton.h)
-			lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 0x20/0xFF)
+			if not MMButtons[i].isHover then
+				lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 0x20/0xFF)
+			else
+				lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 0x40/0xFF)
+			end
 			drawRec("fill", butrec)
 			love.graphics.setLineWidth(GMHUnit/12)
 			lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 1)
@@ -129,8 +155,6 @@ function UI.draw()
 				butrec.y + (butrec.h - MMButtonsFont:getHeight())/2,
 				butrec.w, "center")
 		end
--- REFACTORING ZONE END -----------------------------------------------------------------
-
 	elseif GM.state == "MainGame" then
 		lg.setFont(debugInfoFont)
 		lg.setColor(cup(palette.debugInfo))
