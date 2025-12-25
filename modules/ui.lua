@@ -64,7 +64,7 @@ function UI.update()
 		-- Buttons
 		local UIButtonPad = GMHUnit
 		UIButton = {
-			w = logoFont:getWidth("Sweeper Time")*3/4,
+			w = logoFont:getWidth("SWEEPER TIME")*3/4,
 			h = GMHUnit*3,
 		}
 		UIButton.x = (GM.Widht-UIButton.w)/2
