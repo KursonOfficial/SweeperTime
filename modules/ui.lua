@@ -3,7 +3,7 @@ UI = {}
 UI.refreshFonts = function()
 	versionFont       = lg.newFont(GM.Height * 1/72)
 	logoFont          = lg.newFont(GM.Height * 4/45)
-	MMButtonsFont     = lg.newFont(GM.Height * 2/60)
+	MMButtonsFont     = lg.newFont(GM.Height * 2/80)
 	anyButtonHintFont = lg.newFont(GM.Height * 1/36)
 	debugInfoFont     = lg.newFont(GM.Height * 1/60)
 end
