@@ -23,12 +23,7 @@ local SEGMENTS = 12
 local NSEGMENT = 4
 function UI.init()
 	UI.refreshFonts()
-	bgShader = lg.newShader("assets/missing.glsl")
-	bgShader:send("time",  0)
-	bgShader:send("speed", GM.Height/28)
-	bgShader:send("sqare_sz", GM.Height/28)
-	bgShader:send("col1", {0, 0, 0, 0.25})
-	bgShader:send("col2", {1, 0, 1, 0.25})
+	bgShader = lg.newShader("assets/background.glsl")
 	versionDisplayText = string.format("SweeperTime %s", GM.version)
 	MMButtons = {
 		{
@@ -58,9 +53,9 @@ function UI.update()
 	GMHUnit = math.ceil(GM.Height/60) -- GM.Height Unit
 	if     GM.state == "MainMenu" then
 		-- Background
-		bgShader:send("time", love.timer.getTime()*2)
-		bgShader:send("speed", GM.Height/28)
-		bgShader:send("sqare_sz", GM.Height/28)
+		bgShader:send("time", love.timer.getTime())
+		bgShader:send("speed", 0.1)
+		bgShader:send("size", 3)
 		-- Buttons
 		local UIButtonPad = GMHUnit
 		UIButton = {
@@ -163,4 +158,3 @@ function UI.draw()
 			0, 0, GM.Widht, "right")
 	end
 end
-
