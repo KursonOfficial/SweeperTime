@@ -11,6 +11,17 @@ extern HPMP number time;
 extern HPMP number speed;
 extern HPMP number size;
 
+float smoothen(float x) { return 1./(1. + exp(-x*3.)); }
+
+vec3 smoothen(vec3 c)
+{
+	return vec3(
+		smoothen(c.x),
+		smoothen(c.y),
+		smoothen(c.z)
+	);
+}
+
 vec4 effect(vec4 color, Image texture, vec2 textureCoords, vec2 screenCoords)
 {
 	// Pixel coordinates from -1 to 1 (height)
@@ -41,5 +52,5 @@ vec4 effect(vec4 color, Image texture, vec2 textureCoords, vec2 screenCoords)
 	retCol *= vignette;
 
 	// Output to screen
-	return vec4(retCol, 1.);
+	return vec4((smoothen(retCol)-0.5)*2, 1.);
 }
