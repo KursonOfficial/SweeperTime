@@ -8,3 +8,8 @@
 	<li>There is no telemetry, diagnostics or user data collection.</li>
 	<li>It is open source sofware.</li>
 </ul>
+<h3>Credits</h3>
+
+| File | Type | License | Source |
+| --- | --- | --- | --- |
+| [ProstoOne](assets/fonts/ProstoOne-Regular.ttf) | Font | [Open Font License (OFL)](https://fonts.google.com/specimen/Prosto+One/license) | https://fonts.google.com/specimen/Prosto+One |
