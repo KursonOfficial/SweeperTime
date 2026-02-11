@@ -11,6 +11,6 @@
 <h3>Credits</h3>
 
 | File | Type | License | Source |
-| --- | --- | --- | --- |
+| :--: | :--: | :-----: | ------ |
 | Love2D | Framework | [zlib/libpng](https://github.com/love2d/love/blob/main/license.txt) | https://love2d.org/ |
 | [ProstoOne](assets/fonts/ProstoOne-Regular.ttf) | Font | [Open Font License (OFL)](https://fonts.google.com/specimen/Prosto+One/license) | https://fonts.google.com/specimen/Prosto+One |
