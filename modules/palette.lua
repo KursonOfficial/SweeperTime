@@ -48,8 +48,7 @@ cup = function(color) -- Color unpack
 end
 -- Theme list:
 local themes = {
-	{
-		name = "Theme Zero";
+	["Theme Zero"] = {
 		logoFront    = getColorHS("#CCCCFFFF");
 		versionText  = getColorHS("#333333FF");
 		debugInfo    = getColorNV(0, 0, 0, 1);
@@ -59,8 +58,7 @@ local themes = {
 		cellSelectedInner = getColorHS("#4C4C47FF");
 		cellSelectedFrame = getColorHS("#FFFFF233");
 	},
-	{
-		name = "Ocean";
+	["Ocean"] = {
 		logoFront    = getColorHS("#CCCCFFFF");
 		versionText  = getColorHS("#333333FF");
 		debugInfo    = getColorHL(0x5DfDCDFF);
@@ -70,8 +68,7 @@ local themes = {
 		cellSelectedInner = getColorHS("#85BAA1CC");
 		cellSelectedFrame = getColorHS("#FFFFF233");
 	},
-	{
-		name = "Coffee";
+	["Coffee"] = {
 		logoFront    = getColorHS("#CCCCFFFF");
 		versionText  = getColorHS("#333333FF");
 		debugInfo    = getColorHS("#8EC07CFF");
@@ -82,8 +79,7 @@ local themes = {
 		cellSelectedFrame = getColorHS("#FFFFF233");
 	},
 	--[[ Not Ready yet
-	{
-		name = "EverForest";
+	["EverForest"] = {
 		logoFront    = getColorHS("#CCCCFFFF");
 		versionText  = getColorHS("#333333FF");
 		debugInfo    = getColorNV(0, 0, 0, 1);
@@ -95,17 +91,18 @@ local themes = {
 		cellSelectedFrame = getColorHS("#FFFFF233");
 	},]]
 }
-palette = themes[1]
+
+local DEFAULT_THEME_NAME = "Theme Zero"
+local DEFAULT_THEME = themes[DEFAULT_THEME_NAME]
+palette = DEFAULT_THEME
 setTheme = function(themeName)
 	assert(themeName, "theme name is not provided")
-	local theme = themes[1]
-	for i = 1, #themes do
-		if themes[i].name == themeName then
-			palette = themes[i]
-			return
-		end
+	local theme = themes[themeName]
+	if not theme then
+		print(string.format("WARNING: Theme not found, using default `%s`", DEFAULT_THEME_NAME))
+		palette = DEFAULT_THEME
+		return
 	end
-	print("WARNING: Theme not found, using default `Theme Zero`")
 	palette = theme
 end
 
