@@ -99,7 +99,7 @@ setTheme = function(themeName)
 	assert(themeName, "theme name is not provided")
 	local theme = themes[themeName]
 	if not theme then
-		print(string.format("WARNING: Theme not found, using default `%s`", DEFAULT_THEME_NAME))
+		print(string.format("WARNING: Theme `%s` not found, using default `%s`", themeName, DEFAULT_THEME_NAME))
 		palette = DEFAULT_THEME
 		return
 	end
