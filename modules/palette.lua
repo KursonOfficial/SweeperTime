@@ -46,54 +46,63 @@ end
 cup = function(color) -- Color unpack
 	return color.r, color.g, color.b, color.a
 end
-
-palette = theme0 -- Default theme
-setTheme = function() palette = ocean --[[ Set theme here ]]end
 -- Theme list:
-theme0 = {
-	logoFront    = getColorHS("#CCCCFFFF");
-	hint         = getColorHS("#4C527FFF");
-	versionText  = getColorHS("#333333FF");
-	debugInfo    = getColorNV(0, 0, 0, 1);
-	cellInner    = getColorHS("#333333FF");
-	cellRevealed = getColorHS("#FFFFFF22");
-	cellFrame    = getColorHS("#FFFFFF33");
-	cellSelectedInner = getColorHS("#4C4C47FF");
-	cellSelectedFrame = getColorHS("#FFFFF233");
+local themes = {
+	["Theme Zero"] = {
+		logoFront    = getColorHS("#CCCCFFFF");
+		versionText  = getColorHS("#333333FF");
+		debugInfo    = getColorNV(0, 0, 0, 1);
+		cellInner    = getColorHS("#333333FF");
+		cellRevealed = getColorHS("#FFFFFF22");
+		cellFrame    = getColorHS("#FFFFFF33");
+		cellSelectedInner = getColorHS("#4C4C47FF");
+		cellSelectedFrame = getColorHS("#FFFFF233");
+	},
+	["Ocean"] = {
+		logoFront    = getColorHS("#CCCCFFFF");
+		versionText  = getColorHS("#333333FF");
+		debugInfo    = getColorHL(0x5DfDCDFF);
+		cellInner    = getColorHS("#04151FFF");
+		cellRevealed = getColorHS("#66999B44");
+		cellFrame    = getColorHS("#6E889488");
+		cellSelectedInner = getColorHS("#85BAA1CC");
+		cellSelectedFrame = getColorHS("#FFFFF233");
+	},
+	["Coffee"] = {
+		logoFront    = getColorHS("#CCCCFFFF");
+		versionText  = getColorHS("#333333FF");
+		debugInfo    = getColorHS("#8EC07CFF");
+		cellInner    = getColorHS("#282828FF");
+		cellRevealed = getColorHS("#92837444");
+		cellFrame    = getColorHS("#92837488");
+		cellSelectedInner = getColorHS("#85BAA1FF");
+		cellSelectedFrame = getColorHS("#FFFFF233");
+	},
+	--[[ Not Ready yet
+	["EverForest"] = {
+		logoFront    = getColorHS("#CCCCFFFF");
+		versionText  = getColorHS("#333333FF");
+		debugInfo    = getColorNV(0, 0, 0, 1);
+		cellInner    = getColorHS("#1e2326FF");
+		cellRevealed = getColorHS("#2e383cAA");
+		-- cellFrame    = getColorHS("#4f5b5866");
+		cellFrame    = getColorHS("#a7c08034");
+		cellSelectedInner = getColorHS("#4C4C47FF");
+		cellSelectedFrame = getColorHS("#FFFFF233");
+	},]]
 }
-ocean = {
-	logoFront    = getColorHS("#CCCCFFFF");
-	hint         = getColorHS("#4C527FFF");
-	versionText  = getColorHS("#333333FF");
-	debugInfo    = getColorHL(0x5DfDCDFF);
-	cellInner    = getColorHS("#04151FFF");
-	cellRevealed = getColorHS("#66999B44");
-	cellFrame    = getColorHS("#6E889488");
-	cellSelectedInner = getColorHS("#85BAA1CC");
-	cellSelectedFrame = getColorHS("#FFFFF233");
-}
-groovebox = {
-	logoFront    = getColorHS("#CCCCFFFF");
-	hint         = getColorHS("#4C527FFF");
-	versionText  = getColorHS("#333333FF");
-	debugInfo    = getColorHS("#8EC07CFF");
-	cellInner    = getColorHS("#282828FF");
-	cellRevealed = getColorHS("#92837444");
-	cellFrame    = getColorHS("#92837488");
-	cellSelectedInner = getColorHS("#85BAA1FF");
-	cellSelectedFrame = getColorHS("#FFFFF233");
-}
---[[ Not Ready yet
-everforest = {
-	logoFront    = getColorHS("#CCCCFFFF");
-	hint         = getColorHS("#4C527FFF");
-	versionText  = getColorHS("#333333FF");
-	debugInfo    = getColorNV(0, 0, 0, 1);
-	cellInner    = getColorHS("#1e2326FF");
-	cellRevealed = getColorHS("#2e383cAA");
-	-- cellFrame    = getColorHS("#4f5b5866");
-	cellFrame    = getColorHS("#a7c08034");
-	cellSelectedInner = getColorHS("#4C4C47FF");
-	cellSelectedFrame = getColorHS("#FFFFF233");
-}]]
-setTheme()
+
+local DEFAULT_THEME_NAME = "Theme Zero"
+local DEFAULT_THEME = themes[DEFAULT_THEME_NAME]
+palette = DEFAULT_THEME
+setTheme = function(themeName)
+	assert(themeName, "theme name is not provided")
+	local theme = themes[themeName]
+	if not theme then
+		print(string.format("WARNING: Theme `%s` not found, using default `%s`", themeName, DEFAULT_THEME_NAME))
+		palette = DEFAULT_THEME
+		return
+	end
+	palette = theme
+end
+

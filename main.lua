@@ -1,44 +1,49 @@
---слыш UI подойтика сюда!
+-- Чё, самый умный?
+require "modules.algebra"
+-- слыш UI подойтика сюда!
 require "modules.ui"
---Field! да ты! идём поговорим.
+-- Field! да ты! идём поговорим.
 require "modules.field"
 -- Йоу, радуга, палитра
 require "modules.palette"
---А НУКА СПРАЙТ СЮДА БЫСТРО, Я ПИТЬ ХОЧУ!
+-- А НУКА СПРАЙТ СЮДА БЫСТРО, Я ПИТЬ ХОЧУ!
 require "modules.sprite"
 
---game manager типо
+-- game manager типо
 GM = {}
-
-GM.version = "v0.3-dev"
+GM.version = "v0.3.0-dev"
+GM.UD = {}
+-- Ну и кем ты будешь? Бугалтером? Будешь вести учёты? Пффф... А мы-то думали...
+GM.UDM = require "modules.user_data_manager" -- NOTE: must be initialised after GM and may be after GM.UD
 
 lg = love.graphics
 lw = love.window
 
 function flipFullscreen()
-	local mode = lw.getFullscreen()
-	lw.setFullscreen(not mode)
-	GM.Widht, GM.Height = lg.getDimensions()
+	local target_mode = not lw.getFullscreen()
+	GM.UD.settings.fullscreen = target_mode
+	GM.UDM.apply()
 end
 
-function love.resize(w , h)
+function love.resize(w, h)
 	GM.Widht, GM.Height = w, h
-	
+
 	Field.speed = GM.Height
 	Cell.cellSize = GM.Height/10
 	Cell.rCorner = Cell.cellSize/8
 
 	sprite.quads()
+	UI.refreshFonts()
 end
 
 function GM.init()
-	lw.setFullscreen(true)
+	GM.UDM.load()
+	GM.UDM.apply()
 	GM.state = "MainMenu"
 	GM.Widht, GM.Height = lg.getDimensions()
 	GM.weelY = 0
 	GM.weelVel = .2
 	UI.init()
-
 	sprite.init()
 end
 
@@ -48,6 +53,7 @@ function GM.draw()
 end
 
 function GM.update(dt)
+	UI.update()
 	if needReturn == true then
 		if math.abs(Field.pos.x) > 10 or math.abs(Field.pos.y) > 10 then
 			Field.pos.x = Field.pos.x - Field.pos.x / 2 * dt * 10
@@ -75,13 +81,7 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
 	if GM.state == "MainMenu" then
-		if key ~= "escape" then
-			Field.init()
-			UI.starGame()
-			GM.state = "MainGame"
-		end
-	end
-	if GM.state == "MainGame" then
+	elseif GM.state == "MainGame" then
 		if key == "space" then needReturn = true end
 	end
 	if key == "escape" then love.event.quit() end
@@ -98,12 +98,14 @@ end
 function love.mousepressed(x, y, button, istouch)
 	if GM.state == "MainGame" then
 		Field.mousepressed(button)
+	elseif GM.state == "MainMenu" then
+		UI.mousepressed(x, y, button)
 	end
 end
 
 function love.wheelmoved(x, y)
 	if GM.state == "MainGame" then
-		GM.weelY = math.max(-3, math.min( 3, GM.weelY + y * GM.weelVel))
+		GM.weelY = clamp(GM.weelY + y*GM.weelVel, -3, 3)
 		Field.zoom = 2 ^ (GM.weelY)
 		Field.inverseZoom = 2 ^ (-GM.weelY)
 		Field.speed = GM.Height * (1/2 ^ (GM.weelY/2))
@@ -124,3 +126,4 @@ end
 function love.draw()
 	GM.draw()
 end
+
