@@ -102,6 +102,12 @@ function love.mousepressed(x, y, button, istouch)
 		UI.mousepressed(x, y, button)
 	end
 end
+function love.mousereleased(x, y, button, istouch)
+	if GM.state == "MainGame" then
+	elseif GM.state == "MainMenu" then
+		UI.mousereleased(x, y, button)
+	end
+end
 
 function love.wheelmoved(x, y)
 	if GM.state == "MainGame" then

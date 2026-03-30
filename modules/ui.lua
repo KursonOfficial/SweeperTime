@@ -83,6 +83,8 @@ function UI.update()
 end
 
 function UI.mousepressed(x, y, button)
+end
+function UI.mousereleased(x, y, button)
 	for i = 1, BUTTON_AMMOUNT do
 		local thisButton = MMButtons[i]
 		if button == 1 and thisButton.isHover then
