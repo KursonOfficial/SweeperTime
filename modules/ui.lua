@@ -21,6 +21,8 @@ local GMHUnit = -1
 --]]
 local SEGMENTS = 12
 local NSEGMENT = 4
+
+local focused_on_options = false
 function UI.init()
 	UI.refreshFonts()
 	bgShader = lg.newShader("assets/background.glsl")
@@ -39,7 +41,13 @@ function UI.init()
 			text = "Options",
 			isHover = false,
 			action = function()
-				print("[SweeperTime UI]: ERROR: Nope, `Options` button is not yet implemented")
+				-- TODO: It's really easy to implement an animation for opening
+				--       of this menu using coroutines but I'm not doing that now
+				--       because it requires a global queue of coroutines and a loop
+				--       to drain all of them which is really off-topic.
+				focused_on_options = true
+				-- Don't really know how to do it better
+				MMButtons[2].isHover = false
 			end,
 		},
 	}
@@ -69,14 +77,19 @@ function UI.update()
 		for i = 2, BUTTON_AMMOUNT do
 			buttons_Y[i] = buttons_Y[i-1] + UIButton.h + UIButtonPad
 		end
-		for i = 1, BUTTON_AMMOUNT do
-			local thisButton = MMButtons[i]
-			local cbuttbbox = Rec.new(UIButton.x, buttons_Y[i], UIButton.w, UIButton.h)
-			if checkCollisionPointRec(mice, cbuttbbox) then
-				thisButton.isHover = true
-			else
-				thisButton.isHover = false
+		if not focused_on_options then
+			for i = 1, BUTTON_AMMOUNT do
+				local thisButton = MMButtons[i]
+				local cbuttbbox = Rec.new(UIButton.x, buttons_Y[i], UIButton.w, UIButton.h)
+				if checkCollisionPointRec(mice, cbuttbbox) then
+					thisButton.isHover = true
+				else
+					thisButton.isHover = false
+				end
 			end
+		else
+			-- options menu update
+			-- nothing yet
 		end
 	elseif GM.state == "MainGame" then
 	end
@@ -116,9 +129,10 @@ end
 function UI.draw()
 	if GM.state == "MainMenu" then
 		-- Background
+		local screen = Rec.new(0, 0, GM.Widht, GM.Height)
 		lg.setShader(bgShader)
 		lg.setColor(1, 1, 1, 1)
-		lg.rectangle("fill", 0, 0, GM.Widht, GM.Height)
+		drawRec("fill", screen)
 		lg.setShader()
 		-- Verson
 		local VERSION_TEXT_PADDING = {w = 10, h = 5}
@@ -134,6 +148,7 @@ function UI.draw()
 		UI.printLogo(0, logoPosY, 2, GMHUnit*3/4)
 		-- Buttons
 		-- TODO: Add cool effects
+		local button_frame_width = GMHUnit/12
 		for i = 1, BUTTON_AMMOUNT do
 			assert(buttons_Y[i])
 			local butrec = Rec.new(UIButton.x, buttons_Y[i], UIButton.w, UIButton.h)
@@ -143,7 +158,7 @@ function UI.draw()
 				lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 0x40/0xFF)
 			end
 			drawRec("fill", butrec)
-			love.graphics.setLineWidth(GMHUnit/12)
+			love.graphics.setLineWidth(button_frame_width)
 			lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 1)
 			drawRec("line", butrec)
 			lg.setFont(MMButtonsFont)
@@ -151,6 +166,26 @@ function UI.draw()
 				butrec.x,
 				butrec.y + (butrec.h - MMButtonsFont:getHeight())/2,
 				butrec.w, "center")
+		end
+		if focused_on_options then
+			local setucol = function(color) lg.setColor(cup(color)) end -- Set unpacked Color
+			local set_col_opacity = function(color, opacity) return {r = color.r, g = color.g, b = color.b, a = opacity} end
+			local bg = set_col_opacity(palette.cellInner, 0.8)
+			local fg = set_col_opacity(palette.cellFrame, 1)
+			local fade = {r = 0, g = 0, b = 0, a = 0.5}
+			local tmp_unit = math.min(screen.w, screen.h)/6
+			-- This is 4×2 ratio
+			setucol(fade)
+			drawRec("fill", screen)
+			lg.push()
+			lg.translate(screen.w/2, screen.h/2)
+				local menu_rec = Rec.new(-2*tmp_unit, -1*tmp_unit, 4*tmp_unit, 2*tmp_unit)
+				setucol(bg)
+				drawRec("fill", menu_rec)
+				setucol(fg)
+				love.graphics.setLineWidth(button_frame_width)
+				drawRec("line", menu_rec)
+			lg.pop()
 		end
 	elseif GM.state == "MainGame" then
 		lg.setFont(debugInfoFont)
