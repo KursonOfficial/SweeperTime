@@ -78,14 +78,21 @@ function GM.update(dt)
 		end
 	end
 end
-
+function love.keyreleased(key, scancode)
+	UI.keyreleased(key, scancode)
+end
 function love.keypressed(key, scancode, isrepeat)
+	UI.keypressed(key, scancode, isrepea)
 	if GM.state == "MainMenu" then
 	elseif GM.state == "MainGame" then
 		if key == "space" then needReturn = true end
 	end
-	if key == "escape" then love.event.quit() end
-	if key == "f11"    then flipFullscreen() end
+	-- NOTE: This should not really be a thing. I think escape button would
+	--       be usefull for a lot of other stuff. This is too much of a
+	--       usefull button to just use it for exiting a game. To close the
+	--       game user always can just close the window.
+	-- if key == "escape" then love.event.quit() end
+	if key == "f11" then flipFullscreen() end
 end
 
 function love.mousemoved(x, y, dx, dy, istouch)

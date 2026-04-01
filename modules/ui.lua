@@ -95,6 +95,11 @@ function UI.update()
 	end
 end
 
+function UI.keypressed(key, scancode, isrepeat)
+	if key == "escape" then focused_on_options = false end
+end
+function UI.keyreleased(key, scancode)
+end
 function UI.mousepressed(x, y, button)
 end
 function UI.mousereleased(x, y, button)
@@ -173,19 +178,22 @@ function UI.draw()
 			local bg = set_col_opacity(palette.cellInner, 0.8)
 			local fg = set_col_opacity(palette.cellFrame, 1)
 			local fade = {r = 0, g = 0, b = 0, a = 0.5}
-			local tmp_unit = math.min(screen.w, screen.h)/6
-			-- This is 4×2 ratio
+			local button_pad = GMHUnit
+			local menu_margin = GMHUnit/3
+			local N = 4
+			local menu_height = UIButton.h*N + button_pad*(N - 1)
+			local menu_rec = Rec.new(
+				(screen.w - UIButton.w)/2  - menu_margin,
+				(screen.h - menu_height)/2 - menu_margin,
+				UIButton.w                 + menu_margin*2,
+				menu_height                + menu_margin*2)
 			setucol(fade)
 			drawRec("fill", screen)
-			lg.push()
-			lg.translate(screen.w/2, screen.h/2)
-				local menu_rec = Rec.new(-2*tmp_unit, -1*tmp_unit, 4*tmp_unit, 2*tmp_unit)
-				setucol(bg)
-				drawRec("fill", menu_rec)
-				setucol(fg)
-				love.graphics.setLineWidth(button_frame_width)
-				drawRec("line", menu_rec)
-			lg.pop()
+			setucol(bg)
+			drawRec("fill", menu_rec)
+			setucol(fg)
+			love.graphics.setLineWidth(button_frame_width)
+			drawRec("line", menu_rec)
 		end
 	elseif GM.state == "MainGame" then
 		lg.setFont(debugInfoFont)
