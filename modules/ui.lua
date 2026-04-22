@@ -25,7 +25,7 @@ local NSEGMENT = 4
 function UI.init()
 	UI.state = "MainMenu"
 	UI.refreshFonts()
-	isBgEnabled = false
+	isBgEnabled = true
 	bgShader = lg.newShader("assets/background.glsl")
 	versionDisplayText = string.format("SweeperTime %s", GM.version)
 	MMButtons = {
@@ -85,6 +85,7 @@ function UI.init()
 			end
 		},
 		count = nil,
+		Y = {},
 	}
 	OButtons.count = #OButtons
 	assert(OButtons.count >= 1)
@@ -110,11 +111,11 @@ function UI.update()
 		UIButton.x = (GM.Widht-UIButton.w)/2
 		local BUTTON_BLOCK_HEIGHT = UIButton.h*MMButtons.count + UIButtonPad*(MMButtons.count-1)
 		buttons_Y[1] = GM.Height*((SEGMENTS-NSEGMENT)/SEGMENTS)-BUTTON_BLOCK_HEIGHT/2
+		assert(MMButtons.count >= 1)
+		for i = 2, MMButtons.count do
+			buttons_Y[i] = buttons_Y[i-1] + UIButton.h + UIButtonPad
+		end
 		if UI.state == "MainMenu" then
-			assert(MMButtons.count >= 1)
-			for i = 2, MMButtons.count do
-				buttons_Y[i] = buttons_Y[i-1] + UIButton.h + UIButtonPad
-			end
 			for i = 1, MMButtons.count do
 				local thisButton = MMButtons[i]
 				local cbuttbbox = Rec.new(UIButton.x, buttons_Y[i], UIButton.w, UIButton.h)
@@ -128,9 +129,9 @@ function UI.update()
 			-- options menu update
 			assert(OButtons.count >= 1)
 			local N = OButtons.count
-			buttons_Y[1] = (GM.Height - UIButton.h*N - GMHUnit*(N - 1))/2 
+			OButtons.Y[1] = (GM.Height - UIButton.h*N - GMHUnit*(N - 1))/2 
 			for i = 2, OButtons.count do
-				buttons_Y[i] = buttons_Y[i-1] + UIButton.h + UIButtonPad
+				OButtons.Y[i] = OButtons.Y[i-1] + UIButton.h + UIButtonPad
 			end
 		end
 	elseif GM.state == "MainGame" then
@@ -240,8 +241,8 @@ function UI.draw()
 			drawRec("line", menu_rec)
 
 			for i = 1, OButtons.count do
-				assert(buttons_Y[i])
-				local butrec = Rec.new(UIButton.x, buttons_Y[i], UIButton.w, UIButton.h)
+				assert(OButtons.Y[i])
+				local butrec = Rec.new(UIButton.x, OButtons.Y[i], UIButton.w, UIButton.h)
 				if not OButtons[i].isHover then
 					lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 0x20/0xFF)
 				else
