@@ -82,7 +82,7 @@ function Cell.reveal(x, y)
 	end
 	if not Cells[x][y].revealed then
 		Cells[x][y].revealed = true
-		Cells[x][y].flag = nill
+		Cells[x][y].flag = nil
 		local BombsAround = 0
 		for dx = -1, 1 do
 			for dy = -1, 1 do
@@ -163,7 +163,7 @@ function Cell.countAround(x, y, type)
 end
 
 function Cell.new(x, y, isBomb)
-	if Cells[x] == nill then
+	if Cells[x] == nil then
 		Cells[x] = {}
 	end
 	self = {}
