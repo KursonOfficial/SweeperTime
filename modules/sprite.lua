@@ -40,3 +40,4 @@ function sprite.quads()
 	sprite.hearts.quad["hollow"] = lg.newQuad(512, 0, 512, 512, sprite.hearts.image)
 
 end
+
