@@ -200,17 +200,16 @@ function Field.draw()
 	lg.push()
 	  lg.translate(GM.width/2, GM.height/2)
 	  lg.scale(Field.zoom, Field.zoom)
-	lg.push()
 	  lg.translate(Field.pos.x, Field.pos.y)
+
+	local cellSize = Cell.cellSize
+	local rCorner = Cell.rCorner
 
 	local RTCorX, RTCorY = love.graphics.inverseTransformPoint(0, 0)
 	local LBCorX, LBCorY = love.graphics.inverseTransformPoint(GM.width, GM.height)
-	RTCorX, RTCorY = math.floor(RTCorX / Cell.cellSize), math.floor(RTCorY / Cell.cellSize)
-	LBCorX, LBCorY = math.floor(LBCorX / Cell.cellSize), math.floor(LBCorY / Cell.cellSize)
+	RTCorX, RTCorY = math.floor(RTCorX / cellSize), math.floor(RTCorY / cellSize)
+	LBCorX, LBCorY = math.floor(LBCorX / cellSize), math.floor(LBCorY / cellSize)
 	for x = RTCorX, LBCorX do for y = RTCorY, LBCorY do
-
-		local cellSize = Cell.cellSize
-		local rCorner = Cell.rCorner
 
 		lg.setLineWidth(rCorner)
 
@@ -235,8 +234,8 @@ function Field.draw()
 		if Cells[x][y].flag then
 			lg.setColor(1, 1, 1)
 			lg.draw(sprite.flag.image,
-			        x * Cell.cellSize,
-			        y * Cell.cellSize,
+			        x * cellSize,
+			        y * cellSize,
 			        0, sprite.flag.scaleFactor)
 			goto continue
 		end
@@ -244,28 +243,27 @@ function Field.draw()
 		if Cell.isRevealed(x, y) then
 			lg.setColor(cup(palette.cellRevealed))
 			lg.rectangle("fill",
-			             x * Cell.cellSize + Cell.rCorner/2,
-			             y * Cell.cellSize + Cell.rCorner/2,
-			             Cell.cellSize - Cell.rCorner,
-			             Cell.cellSize - Cell.rCorner,
-			             Cell.rCorner / 2)
+			             x * cellSize + rCorner/2,
+			             y * cellSize + rCorner/2,
+			             cellSize - rCorner,
+			             cellSize - rCorner,
+			             rCorner / 2)
 
 			lg.setColor(1, 1, 1)
 			if Cells[x][y].bomb then
 				lg.draw(sprite.bombs.image, sprite.bombs.quad[Cells[x][y].bombImage],
-				        x * Cell.cellSize + Cell.rCorner/2,
-				        y * Cell.cellSize + Cell.rCorner/2,
-				        0, sprite.bombs.scaleFactor - Cell.rCorner/200)
+				        x * cellSize + rCorner/2,
+				        y * cellSize + rCorner/2,
+				        0, sprite.bombs.scaleFactor - rCorner/200)
 			elseif Cells[x][y].bombs_around > 0 then
 				lg.draw(sprite.numbers.image, sprite.numbers.quad[Cells[x][y].bombs_around],
-				        x * Cell.cellSize + Cell.rCorner/2,
-				        y * Cell.cellSize + Cell.rCorner/2,
-				        0, sprite.numbers.scaleFactor - Cell.rCorner/100)
+				        x * cellSize + rCorner/2,
+				        y * cellSize + rCorner/2,
+				        0, sprite.numbers.scaleFactor - rCorner/100)
 			end
 		end
 
 		::continue::
 	end end
-	lg.pop()
 	lg.pop()
 end
