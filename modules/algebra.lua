@@ -1,4 +1,6 @@
-local lg = love.graphics
+-- This file is just included into main, so all modules can use
+-- these functions and "classes".
+
 Vector2 = {
 	new = function(_x, _y)
 		return setmetatable({x = _x, y = _y}, self)
@@ -8,6 +10,7 @@ Vector2 = {
 		y = 0,
 	},
 }
+
 Rec = {
 	new = function(_x, _y, _w, _h)
 		return setmetatable({x = _x, y = _y, w = _w, h = _h}, self)
@@ -19,9 +22,11 @@ Rec = {
 		h = 0,
 	},
 }
+
 function drawRec(mode, rec)
-	lg.rectangle(mode, rec.x, rec.y, rec.w, rec.h)
+	love.graphics.rectangle(mode, rec.x, rec.y, rec.w, rec.h)
 end
+
 function checkCollisionPointRec(point, rec)
 	local collision = false
 	if (point.x >= rec.x)          and
@@ -32,8 +37,11 @@ function checkCollisionPointRec(point, rec)
 	end
 	return collision
 end
-function clamp(t, min, max) return math.max(min, math.min(max, t)) end
-function trunk(x, n) return x - (x % 10^(-n)) end
-function round(number) return number >= 0 and math.floor(number + 0.5) or math.ceil(number - 0.5) end
-function lerp(a, b, t) return a + (b - a)*t end
 
+function clamp(t, min, max) return math.max(min, math.min(max, t)) end
+
+function trunk(x, n) return x - (x % 10^(-n)) end
+
+function round(number) return number >= 0 and math.floor(number + 0.5) or math.ceil(number - 0.5) end
+
+function lerp(a, b, t) return a + (b - a)*t end

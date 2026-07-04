@@ -16,11 +16,10 @@ GM.UD = {}
 -- Ну и кем ты будешь? Бугалтером? Будешь вести учёты? Пффф... А мы-то думали...
 GM.UDM = require "modules.user_data_manager" -- NOTE: must be initialised after GM and may be after GM.UD
 
-lg = love.graphics
-lw = love.window
+local lg = love.graphics
 
-function flipFullscreen()
-	local target_mode = not lw.getFullscreen()
+local function flipFullscreen()
+	local target_mode = not love.window.getFullscreen()
 	GM.UD.settings.fullscreen = target_mode
 	GM.UDM.apply()
 end
@@ -28,9 +27,7 @@ end
 function love.resize(w, h)
 	GM.Widht, GM.Height = w, h
 
-	Field.speed = GM.Height
-	Cell.cellSize = GM.Height/10
-	Cell.rCorner = Cell.cellSize/8
+	Field.resize(w, h)
 
 	sprite.quads()
 	UI.refreshFonts()

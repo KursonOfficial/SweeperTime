@@ -1,27 +1,35 @@
+sprite = { numbers  = { image       = nil,
+                        scaleFactor = nil,
+                        quad        = {} },
 
-sprite = {numbers = {},
-		  bombs   = {},
-		  flag    = {},
-		  hearts  = {}}
+           bombs    = { image       = nil,
+                        scaleFactor = nil,
+                        quad        = {} },
+
+           flag     = { image       = nil,
+                        scaleFactor = nil,
+                        quad        = {} },
+
+           hearts   = { image       = nil,
+                        scaleFactor = nil,
+                        quad        = {} }}
+
+local lg = love.graphics
 
 function sprite.init()
-	sprite.flag.image    = love.graphics.newImage("assets/images/flag.png"   )
 	sprite.numbers.image = love.graphics.newImage("assets/images/numbers.png")
 	sprite.bombs.image   = love.graphics.newImage("assets/images/bombs.png"  )
+	sprite.flag.image    = love.graphics.newImage("assets/images/flag.png"   )
 	sprite.hearts.image  = love.graphics.newImage("assets/images/hearts.png" )
 
 	sprite.quads()
 end
 
 function sprite.quads()
-	sprite.flag.scaleFactor    = GM.Height/(10 * 200)
 	sprite.numbers.scaleFactor = GM.Height/(10 * 100)
 	sprite.bombs.scaleFactor   = GM.Height/(10 * 200)
+	sprite.flag.scaleFactor    = GM.Height/(10 * 200)
 	sprite.hearts.scaleFactor  = GM.Height/(5  * 512)
-
-	sprite.numbers.quad = {}
-	sprite.bombs.quad   = {}
-	sprite.hearts.quad  = {}
 
 	--quads for numbers
 	for y = 0 , 1 do
@@ -38,6 +46,5 @@ function sprite.quads()
 	--quads for hearts
 	sprite.hearts.quad["full"  ] = lg.newQuad(  0, 0, 512, 512, sprite.hearts.image)
 	sprite.hearts.quad["hollow"] = lg.newQuad(512, 0, 512, 512, sprite.hearts.image)
-
 end
 

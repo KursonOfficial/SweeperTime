@@ -1,5 +1,7 @@
 UI = {}
 
+local lg = love.graphics
+
 UI.refreshFonts = function()
 	versionFont       = lg.newFont("assets/fonts/ProstoOne-Regular.ttf",GM.Height * 1/72)
 	logoFont          = lg.newFont("assets/fonts/ProstoOne-Regular.ttf", GM.Height * 4/45)
@@ -7,10 +9,13 @@ UI.refreshFonts = function()
 	anyButtonHintFont = lg.newFont(GM.Height * 1/36)
 	debugInfoFont     = lg.newFont(GM.Height * 1/60)
 end
-local versionDisplayText = ""
-local MMButtons = {}
-local BUTTON_AMMOUNT = -1
-local GMHUnit = -1
+
+local bgShader
+local versionDisplayText
+local MMButtons -- array
+local MMButtons_len -- (just to not recompute it)
+local GMHUnit -- integer (unit dependent on GM.Height)
+local focused_on_options = false
 --[[ NOTE:
 	SEGMENTS and NSEGMENT are needed to define paddings of
 	title and buttons from top and bottom of the screen accordingly.
@@ -22,7 +27,6 @@ local GMHUnit = -1
 local SEGMENTS = 12
 local NSEGMENT = 4
 
-local focused_on_options = false
 function UI.init()
 	UI.refreshFonts()
 	bgShader = lg.newShader("assets/background.glsl")
@@ -45,14 +49,16 @@ function UI.init()
 				--       of this menu using coroutines but I'm not doing that now
 				--       because it requires a global queue of coroutines and a loop
 				--       to drain all of them which is really off-topic.
+
+				print("WARNING: Options are not implemented yet.")
 				focused_on_options = true
+
 				-- Don't really know how to do it better
 				MMButtons[2].isHover = false
 			end,
 		},
 	}
-	BUTTON_AMMOUNT = #MMButtons
-	assert(BUTTON_AMMOUNT >= 1)
+	MMButtons_len = #MMButtons
 end
 local buttons_Y = {}
 local UIButton = {}
@@ -71,14 +77,14 @@ function UI.update()
 			h = GMHUnit*3,
 		}
 		UIButton.x = (GM.Widht-UIButton.w)/2
-		local BUTTON_BLOCK_HEIGHT = UIButton.h*BUTTON_AMMOUNT + UIButtonPad*(BUTTON_AMMOUNT-1)
+		local BUTTON_BLOCK_HEIGHT = UIButton.h*MMButtons_len + UIButtonPad*(MMButtons_len-1)
 		buttons_Y[1] = GM.Height*((SEGMENTS-NSEGMENT)/SEGMENTS)-BUTTON_BLOCK_HEIGHT/2
-		assert(BUTTON_AMMOUNT >= 1)
-		for i = 2, BUTTON_AMMOUNT do
+		assert(MMButtons_len >= 1)
+		for i = 2, MMButtons_len do
 			buttons_Y[i] = buttons_Y[i-1] + UIButton.h + UIButtonPad
 		end
 		if not focused_on_options then
-			for i = 1, BUTTON_AMMOUNT do
+			for i = 1, MMButtons_len do
 				local thisButton = MMButtons[i]
 				local cbuttbbox = Rec.new(UIButton.x, buttons_Y[i], UIButton.w, UIButton.h)
 				if checkCollisionPointRec(mice, cbuttbbox) then
@@ -103,7 +109,7 @@ end
 function UI.mousepressed(x, y, button)
 end
 function UI.mousereleased(x, y, button)
-	for i = 1, BUTTON_AMMOUNT do
+	for i = 1, MMButtons_len do
 		local thisButton = MMButtons[i]
 		if button == 1 and thisButton.isHover then
 			thisButton.action()
@@ -148,13 +154,12 @@ function UI.draw()
 			GM.Height - versionFont:getHeight() - VERSION_TEXT_PADDING.h,
 			GM.Widht, "left")
 		-- Logo (Which is Title)
-		local logoPosY =
-			(GM.Height - logoFont:getHeight())*(NSEGMENT/SEGMENTS)
+		local logoPosY = (GM.Height - logoFont:getHeight())*(NSEGMENT/SEGMENTS)
 		UI.printLogo(0, logoPosY, 2, GMHUnit*3/4)
 		-- Buttons
 		-- TODO: Add cool effects
 		local button_frame_width = GMHUnit/12
-		for i = 1, BUTTON_AMMOUNT do
+		for i = 1, MMButtons_len do
 			assert(buttons_Y[i])
 			local butrec = Rec.new(UIButton.x, buttons_Y[i], UIButton.w, UIButton.h)
 			if not MMButtons[i].isHover then

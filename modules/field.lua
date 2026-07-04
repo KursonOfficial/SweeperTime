@@ -1,7 +1,10 @@
 Field = {}
-Field.firstCell = true
-Cell = {}
-Cells = {}
+
+local Cell = {}
+local Cells = {}
+local lastClickedCell = { x = nil, y = nil }
+
+local lg = love.graphics
 
 function Field.init()
 	Field.firstCell = true
@@ -17,7 +20,7 @@ function Field.update()
 	lg.translate(GM.Widht/2, GM.Height/2)
 	lg.scale(Field.zoom, Field.zoom)
 	lg.translate(Field.pos.x, Field.pos.y)
-	MousePosX, MousePosY = love.graphics.inverseTransformPoint(love.mouse.getPosition())
+	local MousePosX, MousePosY = love.graphics.inverseTransformPoint(love.mouse.getPosition())
 	Field.selected.x = math.floor(MousePosX / Cell.cellSize)
 	Field.selected.y = math.floor(MousePosY / Cell.cellSize)
 end
@@ -27,10 +30,17 @@ function Field.reset()
 	Field.firstCell = true
 end
 
+function Field.resize(w, h)
+	Field.speed = GM.Height
+	Cell.cellSize = GM.Height/10
+	Cell.rCorner = Cell.cellSize/8
+end
+
 function Field.mousepressed(button)
-	x, y = Field.selected.x, Field.selected.y
+	local x, y = Field.selected.x, Field.selected.y
 	if button == 1 then
-		lastClickedCell = { x = Field.selected.x; y = Field.selected.y}
+		lastClickedCell.x = Field.selected.x
+		lastClickedCell.y = Field.selected.y
 		if not Field.firstCell then
 			if Cell.isNotNill(x, y) then
 				if not Cells[x][y].flag then
@@ -88,7 +98,7 @@ function Cell.reveal(x, y)
 			for dy = -1, 1 do
 				if not Cell.isNotNill(x + dx, y + dy) then
 					if dx ~= 0 or dy ~= 0 then
-						isBomb = math.random() < GM.UD.settings.bomb_chance
+						local isBomb = math.random() < GM.UD.settings.bomb_chance
 						if not Field.firstCell then
 							Cell.new(x + dx, y + dy, isBomb)
 							BombsAround = BombsAround + (isBomb and 1 or 0)
@@ -136,7 +146,7 @@ end
 
 function Cell.countAround(x, y, type)
 	if type == "flags" then
-		flags = 0
+		local flags = 0
 		if Cells[x-1][y-1].flag then flags = flags + 1 end
 		if Cells[x-1][y  ].flag then flags = flags + 1 end
 		if Cells[x-1][y+1].flag then flags = flags + 1 end
@@ -148,7 +158,7 @@ function Cell.countAround(x, y, type)
 		return flags
 	end
 	if type == "hidden" then
-		hidden = 0
+		local hidden = 0
 		if not Cells[x-1][y-1].revealed then hidden = hidden + 1 end
 		if not Cells[x-1][y  ].revealed then hidden = hidden + 1 end
 		if not Cells[x-1][y+1].revealed then hidden = hidden + 1 end
@@ -166,7 +176,7 @@ function Cell.new(x, y, isBomb)
 	if Cells[x] == nil then
 		Cells[x] = {}
 	end
-	self = {}
+	local self = {}
 	self.flag = false
 	self.mines = 0
 	self.bomb = isBomb
@@ -184,7 +194,7 @@ function Cell.isRevealed(x, y)
 end
 
 Field.zoom = 1
-Field.pos = {x = 0 , y = 0}
+Field.pos = { x = 0 , y = 0 }
 function Field.draw()
 	if GM.state == "MainGame" then
 		lg.push ()
@@ -192,10 +202,10 @@ function Field.draw()
 			lg.scale(Field.zoom, Field.zoom)
 			lg.push()
 				lg.translate(Field.pos.x, Field.pos.y)
-				RTCorX, RTCorY = love.graphics.inverseTransformPoint( 0, 0 )
-				LBCorX, LBCorY = love.graphics.inverseTransformPoint( GM.Widht, GM.Height )
-				RTCorX, RTCorY = math.floor( RTCorX / Cell.cellSize) , math.floor( RTCorY / Cell.cellSize)
-				LBCorX, LBCorY = math.floor( LBCorX / Cell.cellSize) , math.floor( LBCorY / Cell.cellSize)
+				local RTCorX, RTCorY = love.graphics.inverseTransformPoint(0, 0)
+				local LBCorX, LBCorY = love.graphics.inverseTransformPoint(GM.Widht, GM.Height)
+				RTCorX, RTCorY = math.floor(RTCorX / Cell.cellSize) , math.floor(RTCorY / Cell.cellSize)
+				LBCorX, LBCorY = math.floor(LBCorX / Cell.cellSize) , math.floor(LBCorY / Cell.cellSize)
 --[[-- FIXME: -------------------------------------------------------------------------------------
 	Hay there! Try not to black out while whatching the rest of th code, this part is under
 	reconstruction and will be hopefully fixed either by me or by @KursonOfficial.
@@ -210,7 +220,7 @@ function Field.draw()
 -- DETAILED VERSION:
 					for x = RTCorX, LBCorX do
 						for y = RTCorY, LBCorY do
-							love.graphics.setLineWidth(Cell.rCorner)
+							lg.setLineWidth(Cell.rCorner)
 							drawRevealedCell = function(mode)
 								lg.rectangle(mode,
 									x * Cell.cellSize,

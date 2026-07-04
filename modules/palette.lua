@@ -1,4 +1,4 @@
-getColorHS = function(hexString)
+local getColorHS = function(hexString)
 	local color = {}
 
 	-- Exluding '#' from the start of the string
@@ -9,7 +9,7 @@ getColorHS = function(hexString)
 
 	return color
 end
-getColorNV = function(nVr, nVg, nVb, nVa)
+local getColorNV = function(nVr, nVg, nVb, nVa)
 	local color = {}
 
 	color.r = nVr
@@ -19,7 +19,7 @@ getColorNV = function(nVr, nVg, nVb, nVa)
 
 	return color
 end
-getColorHL = function(hexLitteral)
+local getColorHL = function(hexLitteral)
 	local color = {}
 	-- Have to comment out part that is for Lua because LOVE
 	-- do not want to run the game without parsing this part
@@ -43,9 +43,11 @@ getColorHL = function(hexLitteral)
 
 	return color
 end
+
 cup = function(color) -- Color unpack
 	return color.r, color.g, color.b, color.a
 end
+
 -- Theme list:
 local themes = {
 	["Theme Zero"] = {
@@ -94,7 +96,10 @@ local themes = {
 
 local DEFAULT_THEME_NAME = "Theme Zero"
 local DEFAULT_THEME = themes[DEFAULT_THEME_NAME]
+
+-- Global
 palette = DEFAULT_THEME
+
 setTheme = function(themeName)
 	assert(themeName, "theme name is not provided")
 	local theme = themes[themeName]
