@@ -113,7 +113,7 @@ end
 
 function love.wheelmoved(x, y)
 	if GM.state == "MainGame" then
-		GM.weelY = clamp(GM.weelY + y*GM.weelVel, -3, 3)
+		GM.weelY = clamp(GM.weelY + y*GM.weelVel, -2.6, 2)
 		Field.zoom = 2 ^ (GM.weelY)
 		Field.inverseZoom = 2 ^ (-GM.weelY)
 		Field.speed = GM.height * (1/2 ^ (GM.weelY/2))
