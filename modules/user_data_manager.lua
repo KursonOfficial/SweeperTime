@@ -20,13 +20,13 @@ local module = {
 		-- TODO: Serealise and write save file to userdata folder
 		assert(false, "Not yet implemented user data saving")
 	end;
-	load = function(need_reset)
-		local need_reset = need_reset or false
+	load = function(reset)
+		local reset = reset or false
 		local save_file_exists = false -- TODO: actually check it
 		
 		-- Read user's save file from disc and dispatch
 		-- all properties accordingly
-		if save_file_exists and (not need_reset) then
+		if save_file_exists and (not reset) then
 			-- TODO: load save file
 			assert(false, "Not yet implemented save file loading")
 		else

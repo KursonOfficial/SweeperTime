@@ -10,7 +10,7 @@ require "modules.palette"
 require "modules.sprite"
 
 -- game manager типо
-GM = {}
+_G.GM = {}
 GM.version = "v0.3.0-dev"
 GM.UD = {}
 -- Ну и кем ты будешь? Бугалтером? Будешь вести учёты? Пффф... А мы-то думали...
@@ -30,6 +30,7 @@ function love.resize(w, h)
 	Field.resize(w, h)
 
 	sprite.quads()
+
 	UI.refreshFonts()
 end
 
@@ -45,7 +46,9 @@ function GM.init()
 end
 
 function GM.draw()
-	Field.draw()
+	if GM.state == "MainGame" then
+		Field.draw()
+	end
 	UI.draw()
 end
 

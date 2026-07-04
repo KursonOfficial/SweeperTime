@@ -3,7 +3,7 @@
 
 Vector2 = {
 	new = function(_x, _y)
-		return setmetatable({x = _x, y = _y}, self)
+		return setmetatable({ x = _x, y = _y }, self)
 	end,
 	__index = {
 		x = 0,
@@ -13,7 +13,7 @@ Vector2 = {
 
 Rec = {
 	new = function(_x, _y, _w, _h)
-		return setmetatable({x = _x, y = _y, w = _w, h = _h}, self)
+		return setmetatable({ x = _x, y = _y, w = _w, h = _h }, self)
 	end,
 	__index = {
 		x = 0,

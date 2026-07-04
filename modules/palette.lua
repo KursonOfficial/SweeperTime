@@ -97,8 +97,7 @@ local themes = {
 local DEFAULT_THEME_NAME = "Theme Zero"
 local DEFAULT_THEME = themes[DEFAULT_THEME_NAME]
 
--- Global
-palette = DEFAULT_THEME
+_G.palette = DEFAULT_THEME
 
 setTheme = function(themeName)
 	assert(themeName, "theme name is not provided")
