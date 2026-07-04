@@ -8,16 +8,16 @@ local lg = love.graphics
 
 function Field.init()
 	Field.firstCell = true
-	Field.speed = GM.Height
+	Field.speed = GM.height
 	Field.selected  = {}
 	Field.zoom = 1
-	Cell.cellSize = GM.Height/10
+	Cell.cellSize = GM.height/10
 	Cell.rCorner = Cell.cellSize/8
 	math.randomseed(os.time())
 end
 
 function Field.update()
-	lg.translate(GM.Widht/2, GM.Height/2)
+	lg.translate(GM.width/2, GM.height/2)
 	lg.scale(Field.zoom, Field.zoom)
 	lg.translate(Field.pos.x, Field.pos.y)
 	local MousePosX, MousePosY = love.graphics.inverseTransformPoint(love.mouse.getPosition())
@@ -31,8 +31,8 @@ function Field.reset()
 end
 
 function Field.resize(w, h)
-	Field.speed = GM.Height
-	Cell.cellSize = GM.Height/10
+	Field.speed = GM.height
+	Cell.cellSize = GM.height/10
 	Cell.rCorner = Cell.cellSize/8
 end
 
@@ -198,12 +198,12 @@ Field.pos = { x = 0 , y = 0 }
 function Field.draw()
 	if GM.state == "MainGame" then
 		lg.push ()
-			lg.translate(GM.Widht/2, GM.Height/2)
+			lg.translate(GM.width/2, GM.height/2)
 			lg.scale(Field.zoom, Field.zoom)
 			lg.push()
 				lg.translate(Field.pos.x, Field.pos.y)
 				local RTCorX, RTCorY = love.graphics.inverseTransformPoint(0, 0)
-				local LBCorX, LBCorY = love.graphics.inverseTransformPoint(GM.Widht, GM.Height)
+				local LBCorX, LBCorY = love.graphics.inverseTransformPoint(GM.width, GM.height)
 				RTCorX, RTCorY = math.floor(RTCorX / Cell.cellSize) , math.floor(RTCorY / Cell.cellSize)
 				LBCorX, LBCorY = math.floor(LBCorX / Cell.cellSize) , math.floor(LBCorY / Cell.cellSize)
 --[[-- FIXME: -------------------------------------------------------------------------------------
@@ -315,23 +315,23 @@ function Field.draw()
 -- OPTIMAZED VERSION:
 					lg.setColor(cup(palette.cellInner))
 					lg.rectangle("fill",
-						-GM.Widht  /2 * Field.inverseZoom - Field.pos.x,
-						-GM.Height /2 * Field.inverseZoom - Field.pos.y,
-						GM.Widht  * Field.inverseZoom,
-						GM.Height * Field.inverseZoom)
+						-GM.width  /2 * Field.inverseZoom - Field.pos.x,
+						-GM.height /2 * Field.inverseZoom - Field.pos.y,
+						GM.width  * Field.inverseZoom,
+						GM.height * Field.inverseZoom)
 					lg.setColor(cup(palette.cellFrame))
 					for x  = RTCorX, LBCorX do
 						love.graphics.line(
 							x * Cell.cellSize,
-							-GM.Height /2 * Field.inverseZoom - Field.pos.y,
+							-GM.height /2 * Field.inverseZoom - Field.pos.y,
 							x * Cell.cellSize,
-							 GM.Height /2 * Field.inverseZoom - Field.pos.y)
+							 GM.height /2 * Field.inverseZoom - Field.pos.y)
 					end
 					for y  = RTCorY, LBCorY do
 						love.graphics.line(
-							-GM.Widht /2 * Field.inverseZoom - Field.pos.x,
+							-GM.width /2 * Field.inverseZoom - Field.pos.x,
 							y * Cell.cellSize,
-							 GM.Widht /2 * Field.inverseZoom - Field.pos.x,
+							 GM.width /2 * Field.inverseZoom - Field.pos.x,
 							y * Cell.cellSize)
 					end
 					for x  = RTCorX, LBCorX do

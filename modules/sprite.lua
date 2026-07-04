@@ -26,10 +26,10 @@ function sprite.init()
 end
 
 function sprite.quads()
-	sprite.numbers.scaleFactor = GM.Height/(10 * 100)
-	sprite.bombs.scaleFactor   = GM.Height/(10 * 200)
-	sprite.flag.scaleFactor    = GM.Height/(10 * 200)
-	sprite.hearts.scaleFactor  = GM.Height/(5  * 512)
+	sprite.numbers.scaleFactor = GM.height/(10 * 100)
+	sprite.bombs.scaleFactor   = GM.height/(10 * 200)
+	sprite.flag.scaleFactor    = GM.height/(10 * 200)
+	sprite.hearts.scaleFactor  = GM.height/(5  * 512)
 
 	--quads for numbers
 	for y = 0 , 1 do

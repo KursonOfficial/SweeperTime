@@ -3,23 +3,23 @@ UI = {}
 local lg = love.graphics
 
 UI.refreshFonts = function()
-	versionFont       = lg.newFont("assets/fonts/ProstoOne-Regular.ttf",GM.Height * 1/72)
-	logoFont          = lg.newFont("assets/fonts/ProstoOne-Regular.ttf", GM.Height * 4/45)
-	MMButtonsFont     = lg.newFont("assets/fonts/ProstoOne-Regular.ttf", GM.Height * 2/80)
-	anyButtonHintFont = lg.newFont(GM.Height * 1/36)
-	debugInfoFont     = lg.newFont(GM.Height * 1/60)
+	versionFont       = lg.newFont("assets/fonts/ProstoOne-Regular.ttf",GM.height * 1/72)
+	logoFont          = lg.newFont("assets/fonts/ProstoOne-Regular.ttf", GM.height * 4/45)
+	MMButtonsFont     = lg.newFont("assets/fonts/ProstoOne-Regular.ttf", GM.height * 2/80)
+	anyButtonHintFont = lg.newFont(GM.height * 1/36)
+	debugInfoFont     = lg.newFont(GM.height * 1/60)
 end
 
 local bgShader
 local versionDisplayText
 local MMButtons -- array
 local MMButtons_len -- (just to not recompute it)
-local GMHUnit -- integer (unit dependent on GM.Height)
+local GMHUnit -- integer (unit dependent on GM.height)
 local focused_on_options = false
 --[[ NOTE:
 	SEGMENTS and NSEGMENT are needed to define paddings of
 	title and buttons from top and bottom of the screen accordingly.
-	SEGMENTS is the ammount of rows for GM.Height division and
+	SEGMENTS is the ammount of rows for GM.height division and
 	NSEGMENT is the index of row you pick from top or bottom
 	(I am aware that this is a wierd solution)
 	.                                           - Cadragonit
@@ -64,7 +64,7 @@ local buttons_Y = {}
 local UIButton = {}
 function UI.update()
 	local mice = Vector2.new(love.mouse.getPosition())
-	GMHUnit = math.ceil(GM.Height/60) -- GM.Height Unit
+	GMHUnit = math.ceil(GM.height/60) -- GM.height Unit
 	if     GM.state == "MainMenu" then
 		-- Background
 		bgShader:send("time", love.timer.getTime())
@@ -76,9 +76,9 @@ function UI.update()
 			w = logoFont:getWidth("SWEEPER TIME")*3/4,
 			h = GMHUnit*3,
 		}
-		UIButton.x = (GM.Widht-UIButton.w)/2
+		UIButton.x = (GM.width-UIButton.w)/2
 		local BUTTON_BLOCK_HEIGHT = UIButton.h*MMButtons_len + UIButtonPad*(MMButtons_len-1)
-		buttons_Y[1] = GM.Height*((SEGMENTS-NSEGMENT)/SEGMENTS)-BUTTON_BLOCK_HEIGHT/2
+		buttons_Y[1] = GM.height*((SEGMENTS-NSEGMENT)/SEGMENTS)-BUTTON_BLOCK_HEIGHT/2
 		assert(MMButtons_len >= 1)
 		for i = 2, MMButtons_len do
 			buttons_Y[i] = buttons_Y[i-1] + UIButton.h + UIButtonPad
@@ -128,19 +128,19 @@ function UI.printLogo(x, y, speed, amplitude)
 	lg.printf("SWEEPER TIME",
 		math.cos(time*speed)*(amplitude+0.2) + x,
 		math.sin(time*speed)*amplitude + y,
-		GM.Widht, "center",
+		GM.width, "center",
 		0, 1, 1, 0, 0, 0.2 * math.cos(time*speed))
 	lg.setColor(cup(palette.logoFront))
 	lg.printf("SWEEPER TIME",
 		x, y,
-		GM.Widht, "center",
+		GM.width, "center",
 		0, 1, 1, 0, 0, 0.2 * math.cos(time*speed))
 end
 
 function UI.draw()
 	if GM.state == "MainMenu" then
 		-- Background
-		local screen = Rec.new(0, 0, GM.Widht, GM.Height)
+		local screen = Rec.new(0, 0, GM.width, GM.height)
 		lg.setShader(bgShader)
 		lg.setColor(1, 1, 1, 1)
 		drawRec("fill", screen)
@@ -151,10 +151,10 @@ function UI.draw()
 		lg.setColor(cup(palette.versionText))
 		lg.printf(versionDisplayText,
 			VERSION_TEXT_PADDING.w,
-			GM.Height - versionFont:getHeight() - VERSION_TEXT_PADDING.h,
-			GM.Widht, "left")
+			GM.height - versionFont:getHeight() - VERSION_TEXT_PADDING.h,
+			GM.width, "left")
 		-- Logo (Which is Title)
-		local logoPosY = (GM.Height - logoFont:getHeight())*(NSEGMENT/SEGMENTS)
+		local logoPosY = (GM.height - logoFont:getHeight())*(NSEGMENT/SEGMENTS)
 		UI.printLogo(0, logoPosY, 2, GMHUnit*3/4)
 		-- Buttons
 		-- TODO: Add cool effects
@@ -205,6 +205,6 @@ function UI.draw()
 		lg.setColor(cup(palette.debugInfo))
 		lg.printf(
 			string.format("FPS: %d", round(1/love.timer.getDelta())),
-			0, 0, GM.Widht, "right")
+			0, 0, GM.width, "right")
 	end
 end

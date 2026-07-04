@@ -25,7 +25,7 @@ local function flipFullscreen()
 end
 
 function love.resize(w, h)
-	GM.Widht, GM.Height = w, h
+	GM.width, GM.height = w, h
 
 	Field.resize(w, h)
 
@@ -37,7 +37,7 @@ function GM.init()
 	GM.UDM.load()
 	GM.UDM.apply()
 	GM.state = "MainMenu"
-	GM.Widht, GM.Height = lg.getDimensions()
+	GM.width, GM.height = lg.getDimensions()
 	GM.weelY = 0
 	GM.weelVel = .2
 	UI.init()
@@ -116,7 +116,7 @@ function love.wheelmoved(x, y)
 		GM.weelY = clamp(GM.weelY + y*GM.weelVel, -3, 3)
 		Field.zoom = 2 ^ (GM.weelY)
 		Field.inverseZoom = 2 ^ (-GM.weelY)
-		Field.speed = GM.Height * (1/2 ^ (GM.weelY/2))
+		Field.speed = GM.height * (1/2 ^ (GM.weelY/2))
 	end
 end
 

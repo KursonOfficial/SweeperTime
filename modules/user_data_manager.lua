@@ -39,7 +39,7 @@ local module = {
 		local ss = GM.UD.settings
 
 		love.window.setFullscreen(ss.fullscreen)
-		GM.Widht, GM.Height = love.graphics.getDimensions()
+		GM.width, GM.height = love.graphics.getDimensions()
 		UI.refreshFonts()
 		setTheme(ss.theme)
 	end;
