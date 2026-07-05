@@ -1,4 +1,6 @@
-local default_user_settings = {
+local UD = {}
+
+local DEFAULT_SETTINGS = {
 	--[[
 		15% default, but little silly Kurson whants BIGGER.
 		But suddenly, this is predestined by fate, and nobody
@@ -8,41 +10,38 @@ local default_user_settings = {
 	theme       = "Ocean",
 	bomb_chance = 15/100,
 }
-local default_UD = {
-	settings = default_user_settings,
+
+local DEFAULD_USER_DATA = {
+	settings = DEFAULT_SETTINGS,
 	-- stats.maxScore = 0
 	-- maingame_state.lives = 3
 	-- ...
 }
 
-local module = {
-	save = function()
-		-- TODO: Serealise and write save file to userdata folder
-		assert(false, "Not yet implemented user data saving")
-	end;
-	load = function(reset)
-		local reset = reset or false
-		local save_file_exists = false -- TODO: actually check it
-		
-		-- Read user's save file from disc and dispatch
-		-- all properties accordingly
-		if save_file_exists and (not reset) then
-			-- TODO: load save file
-			assert(false, "Not yet implemented save file loading")
-		else
-			-- We don' have any saves, load default values and create one
-			GM.UD = default_UD
-			-- self.save()
-		end
-	end;
-	apply = function()
-		local ss = GM.UD.settings
+UD.new = function()
+	return setmetatable(DEFAULD_USER_DATA, { __index = UD })
+end
 
-		love.window.setFullscreen(ss.fullscreen)
-		GM.width, GM.height = love.graphics.getDimensions()
-		UI.refreshFonts()
-		setTheme(ss.theme)
-	end;
-}
-return module
+UD.save = function(self)
+	-- TODO: Serealise and write save file to userdata folder
+	assert(false, "Not yet implemented user data saving")
+end
 
+UD.load = function(self)
+	local save_file_exists = false -- TODO: actually check it
+	-- Read user's save file from disc and dispatch
+	-- all properties accordingly
+	if save_file_exists then
+		-- TODO: load save file
+		assert(false, "Not yet implemented save file loading")
+	end
+end
+
+UD.apply = function(self)
+	love.window.setFullscreen(self.settings.fullscreen)
+	GM.width, GM.height = love.graphics.getDimensions()
+	UI.refreshFonts()
+	setTheme(self.settings.theme)
+end
+
+return UD.new()

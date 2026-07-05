@@ -12,16 +12,15 @@ require "modules.sprite"
 -- game manager типо
 _G.GM = {}
 GM.version = "v0.3.0-dev"
-GM.UD = {}
 -- Ну и кем ты будешь? Бугалтером? Будешь вести учёты? Пффф... А мы-то думали...
-GM.UDM = require "modules.user_data_manager" -- NOTE: must be initialised after GM and may be after GM.UD
+GM.UD = require "modules.user_data_manager"
 
 local lg = love.graphics
 
 local function flipFullscreen()
 	local target_mode = not love.window.getFullscreen()
 	GM.UD.settings.fullscreen = target_mode
-	GM.UDM.apply()
+	GM.UD:apply()
 end
 
 function love.resize(w, h)
@@ -35,8 +34,7 @@ function love.resize(w, h)
 end
 
 function GM.init()
-	GM.UDM.load()
-	GM.UDM.apply()
+	GM.UD:apply()
 	GM.state = "MainMenu"
 	GM.width, GM.height = lg.getDimensions()
 	GM.weelY = 0
