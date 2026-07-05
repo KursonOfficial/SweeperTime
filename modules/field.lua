@@ -214,17 +214,18 @@ function Field.draw()
 		lg.setLineWidth(rCorner)
 
 		-- Draw cell base
-		lg.setColor(cup(palette.cellInner))
+		palette.cellInner:apply()
 		lg.rectangle("fill", x * cellSize, y * cellSize, cellSize, cellSize, rCorner, rCorner, 1)
-		lg.setColor(cup(palette.cellFrame))
+		palette.cellFrame:apply()
 		lg.rectangle("line", x * cellSize, y * cellSize, cellSize, cellSize, rCorner, rCorner, 1)
 
 		if Field.selected.x == x and Field.selected.y == y and not Cell.isRevealed(x, y) then
 			-- Draw selection
-			local t = palette.cellSelectedInner
-			lg.setColor(t.r, t.g, t.b, t.a + 0.05 * math.cos(love.timer.getTime() * math.pi))
+			palette.cellSelectedInner:where {
+				a = palette.cellSelectedInner.a + 0.05 * math.cos(love.timer.getTime() * math.pi)
+			}:apply()
 			lg.rectangle("fill", x * cellSize + rCorner/2, y * cellSize + rCorner/2, cellSize - rCorner, cellSize - rCorner, rCorner / 2)
-			lg.setColor(cup(palette.cellSelectedFrame))
+			palette.cellSelectedFrame:apply()
 			lg.rectangle("line", x * cellSize, y * cellSize, cellSize, cellSize, rCorner, rCorner)
 		end
 
@@ -241,7 +242,7 @@ function Field.draw()
 		end
 
 		if Cell.isRevealed(x, y) then
-			lg.setColor(cup(palette.cellRevealed))
+			palette.cellRevealed:apply()
 			lg.rectangle("fill",
 			             x * cellSize + rCorner/2,
 			             y * cellSize + rCorner/2,

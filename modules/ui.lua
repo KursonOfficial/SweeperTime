@@ -130,7 +130,7 @@ function UI.printLogo(x, y, speed, amplitude)
 		math.sin(time*speed)*amplitude + y,
 		GM.width, "center",
 		0, 1, 1, 0, 0, 0.2 * math.cos(time*speed))
-	lg.setColor(cup(palette.logoFront))
+	palette.logoFront:apply()
 	lg.printf("SWEEPER TIME",
 		x, y,
 		GM.width, "center",
@@ -146,9 +146,9 @@ function UI.draw()
 		drawRec("fill", screen)
 		lg.setShader()
 		-- Verson
-		local VERSION_TEXT_PADDING = {w = 10, h = 5}
+		local VERSION_TEXT_PADDING = { w = 10, h = 5 }
 		lg.setFont(versionFont)
-		lg.setColor(cup(palette.versionText))
+		palette.versionText:apply()
 		lg.printf(versionDisplayText,
 			VERSION_TEXT_PADDING.w,
 			GM.height - versionFont:getHeight() - VERSION_TEXT_PADDING.h,
@@ -163,13 +163,13 @@ function UI.draw()
 			assert(buttons_Y[i])
 			local butrec = Rec.new(UIButton.x, buttons_Y[i], UIButton.w, UIButton.h)
 			if not MMButtons[i].isHover then
-				lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 0x20/0xFF)
+				palette.logoFront:where { a = 0x20/0xFF }:apply()
 			else
-				lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 0x40/0xFF)
+				palette.logoFront:where { a = 0x40/0xFF }:apply()
 			end
 			drawRec("fill", butrec)
 			love.graphics.setLineWidth(button_frame_width)
-			lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 1)
+			palette.logoFront:where { a = 1 }:apply()
 			drawRec("line", butrec)
 			lg.setFont(MMButtonsFont)
 			lg.printf(MMButtons[i].text,
@@ -178,11 +178,9 @@ function UI.draw()
 				butrec.w, "center")
 		end
 		if focused_on_options then
-			local setucol = function(color) lg.setColor(cup(color)) end -- Set unpacked Color
-			local set_col_opacity = function(color, opacity) return {r = color.r, g = color.g, b = color.b, a = opacity} end
-			local bg = set_col_opacity(palette.cellInner, 0.8)
-			local fg = set_col_opacity(palette.cellFrame, 1)
-			local fade = {r = 0, g = 0, b = 0, a = 0.5}
+			local bg = palette.cellInner:where { a = 0.8 }
+			local fg = palette.cellFrame:where { a = 1 }
+			local fade = Color.newNV(0, 0, 0, 0.5)
 			local button_pad = GMHUnit
 			local menu_margin = GMHUnit/3
 			local N = 4
@@ -192,17 +190,17 @@ function UI.draw()
 				(screen.h - menu_height)/2 - menu_margin,
 				UIButton.w                 + menu_margin*2,
 				menu_height                + menu_margin*2)
-			setucol(fade)
+			fade:apply()
 			drawRec("fill", screen)
-			setucol(bg)
+			bg:apply()
 			drawRec("fill", menu_rec)
-			setucol(fg)
+			fg:apply()
 			love.graphics.setLineWidth(button_frame_width)
 			drawRec("line", menu_rec)
 		end
 	elseif GM.state == "MainGame" then
 		lg.setFont(debugInfoFont)
-		lg.setColor(cup(palette.debugInfo))
+		palette.debugInfo:apply()
 		lg.printf(
 			string.format("FPS: %d", round(1/love.timer.getDelta())),
 			0, 0, GM.width, "right")
