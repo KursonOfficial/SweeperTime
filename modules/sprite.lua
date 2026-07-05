@@ -7,8 +7,7 @@ sprite = { numbers  = { image       = nil,
                         quad        = {} },
 
            flag     = { image       = nil,
-                        scaleFactor = nil,
-                        quad        = {} },
+                        scaleFactor = nil },
 
            hearts   = { image       = nil,
                         scaleFactor = nil,
