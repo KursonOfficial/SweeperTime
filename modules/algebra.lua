@@ -13,20 +13,20 @@ Vector2 = {
 
 Rec = {
 	new = function(_x, _y, _w, _h)
-		return setmetatable({ x = _x, y = _y, w = _w, h = _h }, self)
+		return setmetatable({ x = _x, y = _y, w = _w, h = _h }, Rec)
 	end,
 	__index = {
-		x = 0,
-		y = 0,
-		w = 0,
-		h = 0,
+		x = 0, y = 0, w = 0, h = 0,
+		draw = function(self, mode)
+			love.graphics.rectangle(mode, self.x, self.y, self.w, self.h)
+		end
 	},
 }
 
-function drawRec(mode, rec)
-	love.graphics.rectangle(mode, rec.x, rec.y, rec.w, rec.h)
-end
-
+-- function drawRec(mode, rec)
+-- 	love.graphics.rectangle(mode, rec.x, rec.y, rec.w, rec.h)
+-- end
+--
 function checkCollisionPointRec(point, rec)
 	local collision = false
 	if (point.x >= rec.x)          and

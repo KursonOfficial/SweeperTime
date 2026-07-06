@@ -28,9 +28,11 @@ local SEGMENTS = 12
 local NSEGMENT = 4
 
 function UI.init()
-	UI.refreshFonts()
-	bgShader = lg.newShader("assets/background.glsl")
+
 	versionDisplayText = string.format("SweeperTime %s", GM.version)
+
+	bgShader = lg.newShader "assets/background.glsl"
+
 	MMButtons = {
 		{
 			text = "New Game",
@@ -59,9 +61,12 @@ function UI.init()
 		},
 	}
 	MMButtons_len = #MMButtons
+
+	UI.refreshFonts()
 end
-local buttons_Y = {}
-local UIButton = {}
+
+local UIButton_Ys = {}
+local UIButton = { x = nil, w = nil, h = nil }
 function UI.update()
 	local mice = Vector2.new(love.mouse.getPosition())
 	GMHUnit = math.ceil(GM.height/60) -- GM.height Unit
@@ -72,21 +77,19 @@ function UI.update()
 		bgShader:send("size", 3)
 		-- Buttons
 		local UIButtonPad = GMHUnit
-		UIButton = {
-			w = logoFont:getWidth("SWEEPER TIME")*3/4,
-			h = GMHUnit*3,
-		}
+		UIButton.w = logoFont:getWidth("SWEEPER TIME")*3/4
+		UIButton.h = GMHUnit*3
 		UIButton.x = (GM.width-UIButton.w)/2
 		local BUTTON_BLOCK_HEIGHT = UIButton.h*MMButtons_len + UIButtonPad*(MMButtons_len-1)
-		buttons_Y[1] = GM.height*((SEGMENTS-NSEGMENT)/SEGMENTS)-BUTTON_BLOCK_HEIGHT/2
+		UIButton_Ys[1] = GM.height*((SEGMENTS-NSEGMENT)/SEGMENTS)-BUTTON_BLOCK_HEIGHT/2
 		assert(MMButtons_len >= 1)
 		for i = 2, MMButtons_len do
-			buttons_Y[i] = buttons_Y[i-1] + UIButton.h + UIButtonPad
+			UIButton_Ys[i] = UIButton_Ys[i-1] + UIButton.h + UIButtonPad
 		end
 		if not focused_on_options then
 			for i = 1, MMButtons_len do
 				local thisButton = MMButtons[i]
-				local cbuttbbox = Rec.new(UIButton.x, buttons_Y[i], UIButton.w, UIButton.h)
+				local cbuttbbox = Rec.new(UIButton.x, UIButton_Ys[i], UIButton.w, UIButton.h)
 				if checkCollisionPointRec(mice, cbuttbbox) then
 					thisButton.isHover = true
 				else
@@ -117,60 +120,64 @@ function UI.mousereleased(x, y, button)
 	end
 end
 
-function UI.printLogo(x, y, speed, amplitude)
-	local time = love.timer.getTime()
-	lg.setFont(logoFont)
-	lg.setColor(
-		0.2 * math.cos((time-2)*speed) - 0.05,
-		0.2 * math.cos((time  )*speed) - 0.05,
-		0.2 * math.cos((time+2)*speed) - 0.05,
-		0.8)
-	lg.printf("SWEEPER TIME",
-		math.cos(time*speed)*(amplitude+0.2) + x,
-		math.sin(time*speed)*amplitude + y,
-		GM.width, "center",
-		0, 1, 1, 0, 0, 0.2 * math.cos(time*speed))
-	palette.logoFront:apply()
-	lg.printf("SWEEPER TIME",
-		x, y,
-		GM.width, "center",
-		0, 1, 1, 0, 0, 0.2 * math.cos(time*speed))
-end
 
 function UI.draw()
 	if GM.state == "MainMenu" then
-		-- Background
+
+		local time = love.timer.getTime()
 		local screen = Rec.new(0, 0, GM.width, GM.height)
+
+		-- Background
 		lg.setShader(bgShader)
 		lg.setColor(1, 1, 1, 1)
-		drawRec("fill", screen)
+		screen:draw("fill")
 		lg.setShader()
+
 		-- Verson
-		local VERSION_TEXT_PADDING = { w = 10, h = 5 }
 		lg.setFont(versionFont)
 		palette.versionText:apply()
-		lg.printf(versionDisplayText,
-			VERSION_TEXT_PADDING.w,
-			GM.height - versionFont:getHeight() - VERSION_TEXT_PADDING.h,
-			GM.width, "left")
+		lg.printf(versionDisplayText, 10, screen.h - versionFont:getHeight() - 5, screen.w, "left")
+
 		-- Logo (Which is Title)
-		local logoPosY = (GM.height - logoFont:getHeight())*(NSEGMENT/SEGMENTS)
-		UI.printLogo(0, logoPosY, 2, GMHUnit*3/4)
+		do
+			local logoY = (screen.h - logoFont:getHeight())*(NSEGMENT/SEGMENTS)
+			local logoSpeed = 2
+			local logoAmplitude = GMHUnit*3/4
+
+			-- Shadow
+			lg.setFont(logoFont)
+			lg.setColor(0.2 * math.cos((time-2)*logoSpeed) - 0.05,
+			            0.2 * math.cos((time  )*logoSpeed) - 0.05,
+			            0.2 * math.cos((time+2)*logoSpeed) - 0.05,
+			            0.8)
+			lg.printf("SWEEPER TIME",
+			          math.cos(time*logoSpeed)*(logoAmplitude+0.2),
+			          math.sin(time*logoSpeed)*logoAmplitude + logoY,
+			          screen.w, "center",
+			          0, 1, 1, 0, 0, 0.2 * math.cos(time*logoSpeed))
+
+			-- Front
+			palette.logoFront:apply()
+			lg.printf("SWEEPER TIME",
+			          0, logoY,
+			          screen.w, "center",
+			          0, 1, 1, 0, 0, 0.2 * math.cos(time*logoSpeed))
+		end
+
 		-- Buttons
-		-- TODO: Add cool effects
 		local button_frame_width = GMHUnit/12
 		for i = 1, MMButtons_len do
-			assert(buttons_Y[i])
-			local butrec = Rec.new(UIButton.x, buttons_Y[i], UIButton.w, UIButton.h)
+			assert(UIButton_Ys[i])
+			local butrec = Rec.new(UIButton.x, UIButton_Ys[i], UIButton.w, UIButton.h)
 			if not MMButtons[i].isHover then
 				palette.logoFront:where { a = 0x20/0xFF }:apply()
 			else
 				palette.logoFront:where { a = 0x40/0xFF }:apply()
 			end
-			drawRec("fill", butrec)
+			butrec:draw("fill")
 			love.graphics.setLineWidth(button_frame_width)
 			palette.logoFront:where { a = 1 }:apply()
-			drawRec("line", butrec)
+			butrec:draw("line")
 			lg.setFont(MMButtonsFont)
 			lg.printf(MMButtons[i].text,
 				butrec.x,
@@ -191,12 +198,12 @@ function UI.draw()
 				UIButton.w                 + menu_margin*2,
 				menu_height                + menu_margin*2)
 			fade:apply()
-			drawRec("fill", screen)
+			screen:draw("fill")
 			bg:apply()
-			drawRec("fill", menu_rec)
+			menu_rec:draw("fill")
 			fg:apply()
 			love.graphics.setLineWidth(button_frame_width)
-			drawRec("line", menu_rec)
+			menu_rec:draw("line")
 		end
 	elseif GM.state == "MainGame" then
 		lg.setFont(debugInfoFont)
