@@ -55,7 +55,7 @@ function Field.mousepressed(button)
 			Cell.reveal(x, y)
 		end
 		if Cell.isRevealed(x, y) then
-			if Cells[x][y].bombs_around == Cell.countAround(x, y, "flags") then
+			if Cells[x][y].bombsAround == Cell.countAround(x, y, "flags") then
 				if not Cells[x-1][y-1].flag then Cell.reveal(x-1, y-1) end
 				if not Cells[x-1][y  ].flag then Cell.reveal(x-1, y  ) end
 				if not Cells[x-1][y+1].flag then Cell.reveal(x-1, y+1) end
@@ -72,7 +72,7 @@ function Field.mousepressed(button)
 			Cells[x][y].flag = not Cells[x][y].flag
 		end
 		if Cell.isRevealed(x, y) then
-			if Cells[x][y].bombs_around == Cell.countAround(x, y, "hidden") then
+			if Cells[x][y].bombsAround == Cell.countAround(x, y, "hidden") then
 				if not Cells[x-1][y-1].revealed then Cells[x-1][y-1].flag = true end
 				if not Cells[x-1][y  ].revealed then Cells[x-1][y  ].flag = true end
 				if not Cells[x-1][y+1].revealed then Cells[x-1][y+1].flag = true end
@@ -117,7 +117,7 @@ function Cell.reveal(x, y)
 			end
 		end
 		Field.firstCell = false
-		Cells[x][y].bombs_around = BombsAround
+		Cells[x][y].bombsAround = BombsAround
 		local radius = 43 -- Was guessed by many tests. This value is optimal
 		local inRadius = math.sqrt((x - lastClickedCell.x)^2 + (y - lastClickedCell.y)^2) <= radius
 		if BombsAround == 0 and inRadius then
@@ -256,8 +256,8 @@ function Field.draw()
 				        x * cellSize + rCorner/2,
 				        y * cellSize + rCorner/2,
 				        0, sprite.bombs.scaleFactor - rCorner/200)
-			elseif Cells[x][y].bombs_around > 0 then
-				lg.draw(sprite.numbers.image, sprite.numbers.quad[Cells[x][y].bombs_around],
+			elseif Cells[x][y].bombsAround > 0 then
+				lg.draw(sprite.numbers.image, sprite.numbers.quad[Cells[x][y].bombsAround],
 				        x * cellSize + rCorner/2,
 				        y * cellSize + rCorner/2,
 				        0, sprite.numbers.scaleFactor - rCorner/100)
