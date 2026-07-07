@@ -34,6 +34,31 @@ Color.newHL = function(hexLitteral)
 	return setmetatable(color, { __index = Color })
 end
 
+Color.newHSV = function(h, s, v, a)
+	local color = Color.newNV(0, 0, 0, a)
+	local k, t
+
+	k = (5 + h/60) % 6
+	t = 4 - k
+	k = math.min(t, k)
+	k = clamp(k, 0, 1)
+	color.r = v - v*s*k
+
+	k = (3 + h/60) % 6
+	t = 4 - k
+	k = math.min(t, k)
+	k = clamp(k, 0, 1)
+	color.g = v - v*s*k
+
+	k = (1 + h/60) % 6
+	t = 4 - k
+	k = math.min(t, k)
+	k = clamp(k, 0, 1)
+	color.b = v - v*s*k
+
+	return color
+end
+
 Color.spill = function(self)
 	return self.r, self.g, self.b, self.a
 end

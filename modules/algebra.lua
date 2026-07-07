@@ -23,10 +23,7 @@ Rec = {
 	},
 }
 
--- function drawRec(mode, rec)
--- 	love.graphics.rectangle(mode, rec.x, rec.y, rec.w, rec.h)
--- end
---
+-- TODO: make that a method of rec
 function checkCollisionPointRec(point, rec)
 	local collision = false
 	if (point.x >= rec.x)          and
