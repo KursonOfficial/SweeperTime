@@ -1,11 +1,11 @@
 -- Чё, самый умный?
 require "modules.algebra"
--- слыш UI подойтика сюда!
-require "modules.ui"
+-- Чё, самый пёстрый?
+require "modules.color"
+-- Йоу, радуга, палитра
+_G.palette = require "modules.palette"
 -- Field! да ты! идём поговорим.
 require "modules.field"
--- Йоу, радуга, палитра
-require "modules.palette"
 -- А НУКА СПРАЙТ СЮДА БЫСТРО, Я ПИТЬ ХОЧУ!
 require "modules.sprite"
 
@@ -14,6 +14,8 @@ _G.GM = {}
 GM.version = "v0.3.0-dev"
 -- Ну и кем ты будешь? Бугалтером? Будешь вести учёты? Пффф... А мы-то думали...
 GM.UD = require "modules.user-data"
+-- слыш UI подойтика сюда!
+GM.UI = require "modules.ui"
 
 local lg = love.graphics
 
@@ -30,28 +32,22 @@ function love.resize(w, h)
 
 	sprite.quads()
 
-	UI.refreshFonts()
+	GM.UI.refreshFonts(w, h)
 end
 
-function GM.init()
+function GM.init(self)
 	GM.UD:apply()
 	GM.state = "MainMenu"
 	GM.width, GM.height = lg.getDimensions()
 	GM.weelY = 0
 	GM.weelVel = .2
-	UI.init()
+	GM.UI:init(self)
+	Field.init()
 	sprite.init()
 end
 
-function GM.draw()
-	if GM.state == "MainGame" then
-		Field.draw()
-	end
-	UI.draw()
-end
-
-function GM.update(dt)
-	UI.update()
+function GM.update(self, dt)
+	GM.UI.update(self, dt)
 	if needReturn == true then
 		if math.abs(Field.pos.x) > 10 or math.abs(Field.pos.y) > 10 then
 			Field.pos.x = Field.pos.x - Field.pos.x / 2 * dt * 10
@@ -78,12 +74,19 @@ function GM.update(dt)
 	end
 end
 
+function GM.draw(self)
+	if GM.state == "MainGame" then
+		Field.draw()
+	end
+	GM.UI.draw(self)
+end
+
 function love.keyreleased(key, scancode)
-	UI.keyreleased(key, scancode)
+	GM.UI.keyreleased(key, scancode)
 end
 
 function love.keypressed(key, scancode, isrepeat)
-	UI.keypressed(key, scancode, isrepeat)
+	GM.UI.keypressed(key, scancode, isrepeat)
 	if GM.state == "MainMenu" then
 	elseif GM.state == "MainGame" then
 		if key == "space" then needReturn = true end
@@ -102,13 +105,13 @@ function love.mousepressed(x, y, button, istouch)
 	if GM.state == "MainGame" then
 		Field.mousepressed(button)
 	elseif GM.state == "MainMenu" then
-		UI.mousepressed(x, y, button)
+		GM.UI.mousepressed(x, y, button)
 	end
 end
 function love.mousereleased(x, y, button, istouch)
 	if GM.state == "MainGame" then
 	elseif GM.state == "MainMenu" then
-		UI.mousereleased(x, y, button)
+		GM.UI.mousereleased(x, y, button)
 	end
 end
 
@@ -121,6 +124,6 @@ function love.wheelmoved(x, y)
 	end
 end
 
-function love.load() GM.init() end
-function love.update(dt) GM.update(dt) end
-function love.draw() GM.draw() end
+function love.load() GM:init() end
+function love.update(dt) GM:update(dt) end
+function love.draw() GM:draw() end

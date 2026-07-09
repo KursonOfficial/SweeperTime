@@ -40,8 +40,7 @@ end
 UD.apply = function(self)
 	love.window.setFullscreen(self.settings.fullscreen)
 	GM.width, GM.height = love.graphics.getDimensions()
-	UI.refreshFonts()
-	setTheme(self.settings.theme)
+	palette = palette.getPaletteByName(self.settings.theme)
 end
 
 return UD.new()

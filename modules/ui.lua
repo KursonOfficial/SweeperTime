@@ -1,23 +1,23 @@
-_G.UI = {}
+local UI = {}
 
 local lg = love.graphics
 
 local unit
 
-local time
+local time = 0
 local shaderBG
 
 local fonts = {} -- { string : love.graphics.Font } (see function refreshFonts)
 
-function UI.refreshFonts()
-	local unit = math.min(GM.width, GM.height)
+function UI.refreshFonts(screenWidth, screenHeight)
+	local unit = math.min(screenWidth, screenHeight)
 	fonts["Version"]           = lg.newFont("assets/fonts/ProstoOne-Regular.ttf", unit/72)
 	fonts["Title"]             = lg.newFont("assets/fonts/ProstoOne-Regular.ttf", unit*4/45)
 	fonts["Main menu buttons"] = lg.newFont("assets/fonts/ProstoOne-Regular.ttf", unit/40)
 	fonts["Debug Info"]        = lg.newFont(unit/60)
 end
 
-function UI.init()
+function UI.init(self, GM)
 
 	unit = math.min(GM.width, GM.height)
 
@@ -25,7 +25,7 @@ function UI.init()
 	shaderBG:send("speed", 0.1)
 	shaderBG:send("size", 3)
 
-	UI.refreshFonts()
+	self.refreshFonts(GM.width, GM.height)
 end
 
 -- Things for buttons @ugly
@@ -38,7 +38,6 @@ local MMButtons = {
 		isHover = false,
 		action = function(self)
 			-- Starting game at this point
-			Field.init()
 			GM.state = "MainGame"
 		end,
 	},
@@ -63,9 +62,9 @@ local MMButtons_len = #MMButtons
 local SEGMENTS = 12
 local NSEGMENT = 4
 
-function UI.update()
+function UI.update(GM, dt)
 
-	time = love.timer.getTime()
+	time = time + dt
 	unit = math.min(GM.width, GM.height)
 
 	if GM.state == "MainMenu" then
@@ -104,7 +103,7 @@ function UI.update()
 	end
 end
 
-function UI.draw()
+function UI.draw(GM)
 
 	local screen = Rec.new(0, 0, GM.width, GM.height)
 
@@ -225,3 +224,5 @@ function UI.mousereleased(x, y, button)
 		end
 	end
 end
+
+return UI
