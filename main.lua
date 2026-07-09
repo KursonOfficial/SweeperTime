@@ -13,7 +13,7 @@ require "modules.sprite"
 _G.GM = {}
 GM.version = "v0.3.0-dev"
 -- Ну и кем ты будешь? Бугалтером? Будешь вести учёты? Пффф... А мы-то думали...
-GM.UD = require "modules.user_data_manager"
+GM.UD = require "modules.user-data"
 
 local lg = love.graphics
 
