@@ -34,8 +34,8 @@ function Field.reset()
 end
 
 function Field.resize(w, h)
-	Field.speed = GM.height
-	Cell.cellSize = GM.height/10
+	Field.speed = h
+	Cell.cellSize = h/10
 	Cell.rCorner = Cell.cellSize/8
 end
 

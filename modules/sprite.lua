@@ -16,10 +16,10 @@ sprite = { numbers  = { image       = nil,
 local lg = love.graphics
 
 function sprite.init()
-	sprite.numbers.image = love.graphics.newImage("assets/images/numbers.png")
-	sprite.bombs.image   = love.graphics.newImage("assets/images/bombs.png"  )
-	sprite.flag.image    = love.graphics.newImage("assets/images/flag.png"   )
-	sprite.hearts.image  = love.graphics.newImage("assets/images/hearts.png" )
+	sprite.numbers.image = lg.newImage("assets/images/numbers.png")
+	sprite.bombs.image   = lg.newImage("assets/images/bombs.png"  )
+	sprite.flag.image    = lg.newImage("assets/images/flag.png"   )
+	sprite.hearts.image  = lg.newImage("assets/images/hearts.png" )
 
 	sprite.quads()
 end
