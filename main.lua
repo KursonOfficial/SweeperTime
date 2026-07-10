@@ -80,7 +80,7 @@ end
 
 function love.mousepressed(x, y, button, istouch)
 	if GM.state == "MainGame" then
-		GM.Field.mousepressed(button)
+		GM.Field:mousepressed(button)
 	elseif GM.state == "MainMenu" then
 		GM.UI.mousepressed(x, y, button)
 	end
