@@ -229,11 +229,11 @@ function Field.draw(self, GM)
 	local cellSize = Cell.cellSize
 	local rCorner = Cell.rCorner
 
-	local RTCorX, RTCorY = love.graphics.inverseTransformPoint(0, 0)
-	local LBCorX, LBCorY = love.graphics.inverseTransformPoint(GM.width, GM.height)
-	RTCorX, RTCorY = math.floor(RTCorX / cellSize), math.floor(RTCorY / cellSize)
-	LBCorX, LBCorY = math.floor(LBCorX / cellSize), math.floor(LBCorY / cellSize)
-	for x = RTCorX, LBCorX do for y = RTCorY, LBCorY do
+	local LTCorX, LTCorY = love.graphics.inverseTransformPoint(0, 0)
+	local RBCorX, RBCorY = love.graphics.inverseTransformPoint(GM.width, GM.height)
+	LTCorX, LTCorY = math.floor(LTCorX / cellSize), math.floor(LTCorY / cellSize)
+	RBCorX, RBCorY = math.floor(RBCorX / cellSize), math.floor(RBCorY / cellSize)
+	for x = LTCorX, RBCorX do for y = LTCorY, RBCorY do
 
 		lg.setLineWidth(rCorner)
 
