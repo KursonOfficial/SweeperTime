@@ -63,12 +63,12 @@ function Field.resize(self, w, h)
 	Cell.rCorner = Cell.cellSize/8
 end
 
-function Field.mousepressed(button)
-	local x, y = Field.selected.x, Field.selected.y
+function Field.mousepressed(self, button)
+	local x, y = self.selected.x, self.selected.y
 	if button == 1 then
-		lastClickedCell.x = Field.selected.x
-		lastClickedCell.y = Field.selected.y
-		if not Field.firstCell then
+		lastClickedCell.x = self.selected.x
+		lastClickedCell.y = self.selected.y
+		if not self.firstCell then
 			if Cell.isNotNil(x, y) then
 				if not Cells[x][y].flag then
 					Cell.reveal(x, y)
@@ -223,8 +223,8 @@ end
 function Field.draw(self, GM)
 	lg.push()
 	  lg.translate(GM.width/2, GM.height/2)
-	  lg.scale(Field.zoom, Field.zoom)
-	  lg.translate(Field.pos.x, Field.pos.y)
+	  lg.scale(self.zoom, self.zoom)
+	  lg.translate(self.pos.x, self.pos.y)
 
 	local cellSize = Cell.cellSize
 	local rCorner = Cell.rCorner
@@ -243,7 +243,7 @@ function Field.draw(self, GM)
 		palette.cellFrame:apply()
 		lg.rectangle("line", x * cellSize, y * cellSize, cellSize, cellSize, rCorner, rCorner, 1)
 
-		if Field.selected.x == x and Field.selected.y == y and not Cell.isRevealed(x, y) then
+		if self.selected.x == x and self.selected.y == y and not Cell.isRevealed(x, y) then
 			-- Draw selection
 			palette.cellSelectedInner:where {
 				a = palette.cellSelectedInner.a + 0.05 * math.cos(love.timer.getTime() * math.pi)
