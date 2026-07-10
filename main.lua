@@ -2,10 +2,6 @@
 require "modules.algebra"
 -- Чё, самый пёстрый?
 require "modules.color"
--- Йоу, радуга, палитра
-_G.palette = require "modules.palette"
--- Field! да ты! идём поговорим.
-require "modules.field"
 -- А НУКА СПРАЙТ СЮДА БЫСТРО, Я ПИТЬ ХОЧУ!
 require "modules.sprite"
 
@@ -16,6 +12,10 @@ GM.version = "v0.3.0-dev"
 GM.UD = require "modules.user-data"
 -- слыш UI подойтика сюда!
 GM.UI = require "modules.ui"
+-- Field! да ты! идём поговорим.
+GM.Field = require "modules.field"
+-- Йоу, радуга, палитра
+_G.palette = require "modules.palette"
 
 local lg = love.graphics
 
@@ -28,7 +28,7 @@ end
 function love.resize(w, h)
 	GM.width, GM.height = w, h
 
-	Field.resize(w, h)
+	GM.Field:resize(w, h)
 
 	sprite.quads()
 
@@ -36,49 +36,26 @@ function love.resize(w, h)
 end
 
 function GM.init(self)
-	GM.UD:apply()
-	GM.state = "MainMenu"
-	GM.width, GM.height = lg.getDimensions()
-	GM.weelY = 0
-	GM.weelVel = .2
-	GM.UI:init(self)
-	Field.init()
+	self.UD:apply()
+	self.state = "MainMenu"
+	self.width, GM.height = lg.getDimensions()
+	self.weelY = 0
+	self.weelVel = .2
+	self.UI:init(self)
+	self.Field:init(self)
 	sprite.init()
 end
 
 function GM.update(self, dt)
-	GM.UI.update(self, dt)
-	if needReturn == true then
-		if math.abs(Field.pos.x) > 10 or math.abs(Field.pos.y) > 10 then
-			Field.pos.x = Field.pos.x - Field.pos.x / 2 * dt * 10
-			Field.pos.y = Field.pos.y - Field.pos.y / 2 * dt * 10
-		else
-			needReturn = false
-		end
-	else
-		if GM.state == "MainGame" then
-			if love.keyboard.isDown("w", "up") then
-				Field.pos.y = Field.pos.y + dt * Field.speed
-			end
-			if love.keyboard.isDown("s", "down") then
-				Field.pos.y = Field.pos.y - dt * Field.speed
-			end
-			if love.keyboard.isDown("a", "left") then
-				Field.pos.x = Field.pos.x + dt * Field.speed
-			end
-			if love.keyboard.isDown("d", "right") then
-				Field.pos.x = Field.pos.x - dt * Field.speed
-			end
-			Field.update()
-		end
-	end
+	self.UI.update(self, dt)
+	self.Field:update(self, dt)
 end
 
 function GM.draw(self)
-	if GM.state == "MainGame" then
-		Field.draw()
+	if self.state == "MainGame" then
+		self.Field:draw(self)
 	end
-	GM.UI.draw(self)
+	self.UI.draw(self)
 end
 
 function love.keyreleased(key, scancode)
@@ -96,14 +73,14 @@ end
 
 function love.mousemoved(x, y, dx, dy, istouch)
 	if love.mouse.isDown(3) and GM.state == "MainGame" then
-		Field.pos.x = Field.pos.x + dx / Field.zoom
-		Field.pos.y = Field.pos.y + dy / Field.zoom
+		GM.Field.pos.x = GM.Field.pos.x + dx / GM.Field.zoom
+		GM.Field.pos.y = GM.Field.pos.y + dy / GM.Field.zoom
 	end
 end
 
 function love.mousepressed(x, y, button, istouch)
 	if GM.state == "MainGame" then
-		Field.mousepressed(button)
+		GM.Field.mousepressed(button)
 	elseif GM.state == "MainMenu" then
 		GM.UI.mousepressed(x, y, button)
 	end
@@ -118,9 +95,9 @@ end
 function love.wheelmoved(x, y)
 	if GM.state == "MainGame" then
 		GM.weelY = clamp(GM.weelY + y*GM.weelVel, -2.6, 2)
-		Field.zoom = 2 ^ (GM.weelY)
-		Field.inverseZoom = 2 ^ (-GM.weelY)
-		Field.speed = GM.height * (1/2 ^ (GM.weelY/2))
+		GM.Field.zoom = 2 ^ (GM.weelY)
+		GM.Field.inverseZoom = 2 ^ (-GM.weelY)
+		GM.Field.speed = GM.height * (1/2 ^ (GM.weelY/2))
 	end
 end
 

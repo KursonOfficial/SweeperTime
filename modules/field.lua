@@ -1,4 +1,4 @@
-Field = {}
+local Field = {}
 
 local Cell = {}
 local Cells = {}
@@ -6,36 +6,60 @@ local lastClickedCell = { x = nil, y = nil }
 
 local lg = love.graphics
 
-function Field.init()
-	Field.firstCell = true
-	Field.speed     = GM.height
-	Field.selected  = {}
-	Field.zoom      = 1
-	Field.pos       = { x = 0, y = 0 }
+function Field.init(self, GM)
+	self.firstCell = true
+	self.speed     = GM.height
+	self.selected  = {}
+	self.zoom      = 1
+	self.pos       = { x = 0, y = 0 }
 	Cell.cellSize = GM.height/10
 	Cell.rCorner  = Cell.cellSize/8
 	math.randomseed(os.time())
 end
 
-function Field.update()
+function Field.update(self, GM, dt)
+	if needReturn == true then
+		if math.abs(self.pos.x) > 10 or math.abs(self.pos.y) > 10 then
+			self.pos.x = self.pos.x - self.pos.x / 2 * dt * 10
+			self.pos.y = self.pos.y - self.pos.y / 2 * dt * 10
+		else
+			needReturn = false
+		end
+	else
+		if GM.state == "MainGame" then
+			if love.keyboard.isDown("w", "up") then
+				self.pos.y = self.pos.y + dt * self.speed
+			end
+			if love.keyboard.isDown("s", "down") then
+				self.pos.y = self.pos.y - dt * self.speed
+			end
+			if love.keyboard.isDown("a", "left") then
+				self.pos.x = self.pos.x + dt * self.speed
+			end
+			if love.keyboard.isDown("d", "right") then
+				self.pos.x = self.pos.x - dt * self.speed
+			end
+		end
+	end
+
 	lg.push()
 	lg.translate(GM.width/2, GM.height/2)
-	lg.scale(Field.zoom, Field.zoom)
-	lg.translate(Field.pos.x, Field.pos.y)
+	lg.scale(self.zoom, self.zoom)
+	lg.translate(self.pos.x, self.pos.y)
 	local MousePosX, MousePosY = love.graphics.inverseTransformPoint(love.mouse.getPosition())
-	Field.selected.x = math.floor(MousePosX / Cell.cellSize)
-	Field.selected.y = math.floor(MousePosY / Cell.cellSize)
+	self.selected.x = math.floor(MousePosX / Cell.cellSize)
+	self.selected.y = math.floor(MousePosY / Cell.cellSize)
 	lg.pop()
 end
 
-function Field.reset()
+function Field.reset(self)
 	Cells = {}
-	Field.firstCell = true
+	self.firstCell = true
 end
 
-function Field.resize(w, h)
-	Field.speed = h
-	Cell.cellSize = h/10
+function Field.resize(self, w, h)
+	self.speed = math.min(w, h)
+	Cell.cellSize = math.min(w, h)/10
 	Cell.rCorner = Cell.cellSize/8
 end
 
@@ -196,7 +220,7 @@ function Cell.isRevealed(x, y)
 	return Cell.isNotNil(x, y) and Cells[x][y].revealed
 end
 
-function Field.draw()
+function Field.draw(self, GM)
 	lg.push()
 	  lg.translate(GM.width/2, GM.height/2)
 	  lg.scale(Field.zoom, Field.zoom)
@@ -268,3 +292,5 @@ function Field.draw()
 	end end
 	lg.pop()
 end
+
+return Field
