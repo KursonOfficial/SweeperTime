@@ -207,7 +207,7 @@ function Cell.new(x, y, isBomb)
 	self.flag      = false
 	self.mines     = 0
 	self.bomb      = isBomb
-	self.bombImage = isBomb and math.random(0 , #sprite.bombs.quad) or nil
+	self.bombImage = isBomb and math.random(0, #sprites.bombs.quad) or nil
 	self.revealed  = false
 	Cells[x][y] = self
 end
@@ -258,10 +258,10 @@ function Field.draw(self, GM)
 
 		if Cells[x][y].flag then
 			lg.setColor(1, 1, 1)
-			lg.draw(sprite.flag.image,
+			lg.draw(sprites.flag.image,
 			        x * cellSize,
 			        y * cellSize,
-			        0, sprite.flag.scaleFactor)
+			        0, sprites.flag.scaleFactor)
 			goto continue
 		end
 
@@ -276,15 +276,15 @@ function Field.draw(self, GM)
 
 			lg.setColor(1, 1, 1)
 			if Cells[x][y].bomb then
-				lg.draw(sprite.bombs.image, sprite.bombs.quad[Cells[x][y].bombImage],
+				lg.draw(sprites.bombs.image, sprites.bombs.quad[Cells[x][y].bombImage],
 				        x * cellSize + rCorner/2,
 				        y * cellSize + rCorner/2,
-				        0, sprite.bombs.scaleFactor - rCorner/200)
+				        0, sprites.bombs.scaleFactor - rCorner/200)
 			elseif Cells[x][y].bombsAround > 0 then
-				lg.draw(sprite.numbers.image, sprite.numbers.quad[Cells[x][y].bombsAround],
+				lg.draw(sprites.numbers.image, sprites.numbers.quad[Cells[x][y].bombsAround],
 				        x * cellSize + rCorner/2,
 				        y * cellSize + rCorner/2,
-				        0, sprite.numbers.scaleFactor - rCorner/100)
+				        0, sprites.numbers.scaleFactor - rCorner/100)
 			end
 		end
 

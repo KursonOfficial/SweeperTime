@@ -2,8 +2,6 @@
 require "modules.algebra"
 -- Чё, самый пёстрый?
 require "modules.color"
--- А НУКА СПРАЙТ СЮДА БЫСТРО, Я ПИТЬ ХОЧУ!
-require "modules.sprite"
 
 -- game manager типо
 _G.GM = {}
@@ -16,6 +14,8 @@ GM.UI = require "modules.ui"
 GM.Field = require "modules.field"
 -- Йоу, радуга, палитра
 _G.palette = require "modules.palette"
+-- А НУКА СПРАЙТ СЮДА БЫСТРО, Я ПИТЬ ХОЧУ!
+_G.sprites = require "modules.sprites"
 
 local lg = love.graphics
 
@@ -30,7 +30,7 @@ function love.resize(w, h)
 
 	GM.Field:resize(w, h)
 
-	sprite.quads()
+	sprites:refresh(w, h)
 
 	GM.UI.refreshFonts(w, h)
 end
@@ -43,7 +43,7 @@ function GM.init(self)
 	self.weelVel = .2
 	self.UI:init(self)
 	self.Field:init(self)
-	sprite.init()
+	sprites:init(self)
 end
 
 function GM.update(self, dt)
