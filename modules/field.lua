@@ -6,15 +6,16 @@ local lastClickedCell = { x = nil, y = nil }
 
 local lg = love.graphics
 
+local needReturn
+local cellSize
+local rCorner
+
 function Field.init(self, GM)
+	self:resize(GM.width, GM.height)
 	self.firstCell = true
-	self.speed     = GM.height
 	self.selected  = {}
 	self.zoom      = 1
 	self.pos       = { x = 0, y = 0 }
-	Cell.cellSize = GM.height/10
-	Cell.rCorner  = Cell.cellSize/8
-	math.randomseed(os.time())
 end
 
 function Field.update(self, GM, dt)
@@ -39,6 +40,7 @@ function Field.update(self, GM, dt)
 			if love.keyboard.isDown("d", "right") then
 				self.pos.x = self.pos.x - dt * self.speed
 			end
+			if love.keyboard.isDown("space") then needReturn = true end
 		end
 	end
 
@@ -47,8 +49,8 @@ function Field.update(self, GM, dt)
 	lg.scale(self.zoom, self.zoom)
 	lg.translate(self.pos.x, self.pos.y)
 	local MousePosX, MousePosY = love.graphics.inverseTransformPoint(love.mouse.getPosition())
-	self.selected.x = math.floor(MousePosX / Cell.cellSize)
-	self.selected.y = math.floor(MousePosY / Cell.cellSize)
+	self.selected.x = math.floor(MousePosX / cellSize)
+	self.selected.y = math.floor(MousePosY / cellSize)
 	lg.pop()
 end
 
@@ -59,8 +61,8 @@ end
 
 function Field.resize(self, w, h)
 	self.speed = math.min(w, h)
-	Cell.cellSize = math.min(w, h)/10
-	Cell.rCorner = Cell.cellSize/8
+	cellSize   = math.min(w, h)/10
+	rCorner    = cellSize/8
 end
 
 function Field.mousepressed(self, button)
@@ -145,30 +147,16 @@ function Cell.reveal(x, y)
 		local radius = 43 -- Was guessed by many tests. This value is optimal
 		local inRadius = math.sqrt((x - lastClickedCell.x)^2 + (y - lastClickedCell.y)^2) <= radius
 		if BombsAround == 0 and inRadius then
-			Cell.revealAround(x,y)
+			Cell.reveal(x - 1, y - 1)
+			Cell.reveal(x - 1, y    )
+			Cell.reveal(x - 1, y + 1)
+			Cell.reveal(x    , y + 1)
+			Cell.reveal(x    , y - 1)
+			Cell.reveal(x + 1, y - 1)
+			Cell.reveal(x + 1, y    )
+			Cell.reveal(x + 1, y + 1)
 		end
 	end
-end
-
-function Cell.revealAround(x, y)
-	Cell.reveal(x - 1, y - 1)
-	Cell.reveal(x - 1, y    )
-	Cell.reveal(x - 1, y + 1)
-	Cell.reveal(x    , y + 1)
-	Cell.reveal(x    , y - 1)
-	Cell.reveal(x + 1, y - 1)
-	Cell.reveal(x + 1, y    )
-	Cell.reveal(x + 1, y + 1)
-	-- Unroll of:
-	--[[
-	for dx = -1, 1 do
-		for dy = -1, 1 do
-			if dx ~= 0 or dy ~= 0 then
-				Cell.reveal(x + dx, y + dy)
-			end
-		end
-	end
-	]]
 end
 
 function Cell.countAround(x, y, type)
@@ -225,9 +213,6 @@ function Field.draw(self, GM)
 	  lg.translate(GM.width/2, GM.height/2)
 	  lg.scale(self.zoom, self.zoom)
 	  lg.translate(self.pos.x, self.pos.y)
-
-	local cellSize = Cell.cellSize
-	local rCorner = Cell.rCorner
 
 	local LTCorX, LTCorY = love.graphics.inverseTransformPoint(0, 0)
 	local RBCorX, RBCorY = love.graphics.inverseTransformPoint(GM.width, GM.height)

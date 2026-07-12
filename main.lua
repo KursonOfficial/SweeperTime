@@ -44,6 +44,7 @@ function GM.init(self)
 	self.UI:init(self)
 	self.Field:init(self)
 	sprites:init(self)
+	math.randomseed(os.time())
 end
 
 function GM.update(self, dt)
@@ -64,10 +65,6 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
 	GM.UI.keypressed(key, scancode, isrepeat)
-	if GM.state == "MainMenu" then
-	elseif GM.state == "MainGame" then
-		if key == "space" then needReturn = true end
-	end
 	if key == "f11" then flipFullscreen() end
 end
 
