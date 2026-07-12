@@ -1,6 +1,5 @@
 local Field = {}
 
-local Cell = {}
 local Cells = {}
 local lastClickedCell = { x = nil, y = nil }
 
@@ -113,49 +112,50 @@ function Field.mousepressed(self, button)
 end
 
 function Cell.reveal(x, y)
+
+	if Cells[x][y].revealed then return end
+
 	if Cells[x][y].bomb then
 		--Field.reset()
 		--GM.state = "MainMenu"
 		--return
 		-- TODO: ultraMegaSuperScaryScreamer()
 	end
-	if not Cells[x][y].revealed then
-		Cells[x][y].revealed = true
-		Cells[x][y].flag = nil
-		local BombsAround = 0
-		for dx = -1, 1 do
-			for dy = -1, 1 do
-				if not Cell.isNotNil(x + dx, y + dy) then
-					if dx ~= 0 or dy ~= 0 then
-						local isBomb = math.random() < GM.UD.settings.bomb_chance
-						if not Field.firstCell then
-							Cell.new(x + dx, y + dy, isBomb)
-							BombsAround = BombsAround + (isBomb and 1 or 0)
-						else
-							Cell.new(x + dx, y + dy, false)
-						end
+	Cells[x][y].revealed = true
+	Cells[x][y].flag = nil
+	local BombsAround = 0
+	for dx = -1, 1 do
+		for dy = -1, 1 do
+			if not Cell.isNotNil(x + dx, y + dy) then
+				if dx ~= 0 or dy ~= 0 then
+					local isBomb = math.random() < GM.UD.settings.bomb_chance
+					if not Field.firstCell then
+						Cell.new(x + dx, y + dy, isBomb)
+						BombsAround = BombsAround + (isBomb and 1 or 0)
+					else
+						Cell.new(x + dx, y + dy, false)
 					end
-				else
-					if Cells[x + dx][y + dy].bomb then
-						BombsAround = BombsAround + 1
-					end
+				end
+			else
+				if Cells[x + dx][y + dy].bomb then
+					BombsAround = BombsAround + 1
 				end
 			end
 		end
-		Field.firstCell = false
-		Cells[x][y].bombsAround = BombsAround
-		local radius = 43 -- Was guessed by many tests. This value is optimal
-		local inRadius = math.sqrt((x - lastClickedCell.x)^2 + (y - lastClickedCell.y)^2) <= radius
-		if BombsAround == 0 and inRadius then
-			Cell.reveal(x - 1, y - 1)
-			Cell.reveal(x - 1, y    )
-			Cell.reveal(x - 1, y + 1)
-			Cell.reveal(x    , y + 1)
-			Cell.reveal(x    , y - 1)
-			Cell.reveal(x + 1, y - 1)
-			Cell.reveal(x + 1, y    )
-			Cell.reveal(x + 1, y + 1)
-		end
+	end
+	Field.firstCell = false
+	Cells[x][y].bombsAround = BombsAround
+	local radius = 43 -- Was guessed by many tests. This value is optimal
+	local inRadius = math.sqrt((x - lastClickedCell.x)^2 + (y - lastClickedCell.y)^2) <= radius
+	if BombsAround == 0 and inRadius then
+		Cell.reveal(x - 1, y - 1)
+		Cell.reveal(x - 1, y    )
+		Cell.reveal(x - 1, y + 1)
+		Cell.reveal(x    , y + 1)
+		Cell.reveal(x    , y - 1)
+		Cell.reveal(x + 1, y - 1)
+		Cell.reveal(x + 1, y    )
+		Cell.reveal(x + 1, y + 1)
 	end
 end
 
@@ -186,6 +186,8 @@ function Cell.countAround(x, y, type)
 	end
 	assert(false, "UNREACHABLE")
 end
+
+local Cell = {}
 
 function Cell.new(x, y, isBomb)
 	if Cells[x] == nil then
