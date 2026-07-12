@@ -1,13 +1,14 @@
 local Field = {}
 
 local Cells = {}
-local lastClickedCell = { x = nil, y = nil }
-
-local lg = love.graphics
-
+local Cell = {}
 local needReturn
 local cellSize
 local rCorner
+
+local lastClickedCell = { x = nil, y = nil }
+
+local lg = love.graphics
 
 function Field.init(self, GM)
 	self:resize(GM.width, GM.height)
@@ -186,8 +187,6 @@ function Cell.countAround(x, y, type)
 	end
 	assert(false, "UNREACHABLE")
 end
-
-local Cell = {}
 
 function Cell.new(x, y, isBomb)
 	if Cells[x] == nil then
