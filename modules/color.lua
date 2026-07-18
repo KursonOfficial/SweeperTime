@@ -1,4 +1,4 @@
-_G.Color = { r = 0, g = 0, b = 0, a = 0, }
+local Color = { r = 0, g = 0, b = 0, a = 0, }
 
 Color.newHS = function(hexString)
 	local color = {}
@@ -82,3 +82,5 @@ Color.blend = function(self, color, t)
 		a = lerp(self.a, color.a, t)
 	}, { __index = Color })
 end
+
+return Color

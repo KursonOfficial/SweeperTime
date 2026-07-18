@@ -1,10 +1,16 @@
--- Чё, самый умный?
-require "modules.algebra"
--- Чё, самый пёстрый?
-require "modules.color"
-
 -- game manager типо
 _G.GM = {}
+
+-- Чё, самый умный?
+require "modules.algebra"
+
+-- Чё, самый пёстрый?
+_G.Color = require "modules.color"
+-- Йоу, радуга, палитра
+_G.palette = require "modules.palette"
+-- А НУКА СПРАЙТ СЮДА БЫСТРО, Я ПИТЬ ХОЧУ!
+_G.sprites = require "modules.sprites"
+
 GM.version = "v0.3.0-dev"
 -- Ну и кем ты будешь? Бугалтером? Будешь вести учёты? Пффф... А мы-то думали...
 GM.UD = require "modules.user-data"
@@ -12,10 +18,6 @@ GM.UD = require "modules.user-data"
 GM.UI = require "modules.ui"
 -- Field! да ты! идём поговорим.
 GM.Field = require "modules.field"
--- Йоу, радуга, палитра
-_G.palette = require "modules.palette"
--- А НУКА СПРАЙТ СЮДА БЫСТРО, Я ПИТЬ ХОЧУ!
-_G.sprites = require "modules.sprites"
 
 local lg = love.graphics
 
