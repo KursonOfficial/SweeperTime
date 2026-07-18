@@ -1,205 +1,227 @@
-UI = {}
+local UI = {}
 
-UI.refreshFonts = function()
-	versionFont       = lg.newFont("assets/fonts/ProstoOne-Regular.ttf",GM.Height * 1/72)
-	logoFont          = lg.newFont("assets/fonts/ProstoOne-Regular.ttf", GM.Height * 4/45)
-	MMButtonsFont     = lg.newFont("assets/fonts/ProstoOne-Regular.ttf", GM.Height * 2/80)
-	anyButtonHintFont = lg.newFont(GM.Height * 1/36)
-	debugInfoFont     = lg.newFont(GM.Height * 1/60)
+local lg = love.graphics
+
+local unit
+
+local time = 0
+local shaderBG
+
+local fonts = {} -- { string : love.graphics.Font } (see function refreshFonts)
+
+function UI.refreshFonts(screenWidth, screenHeight)
+	local unit = math.min(screenWidth, screenHeight)
+	fonts["Version"]           = lg.newFont("assets/fonts/ProstoOne-Regular.ttf", unit/72)
+	fonts["Title"]             = lg.newFont("assets/fonts/ProstoOne-Regular.ttf", unit*4/45)
+	fonts["Main menu buttons"] = lg.newFont("assets/fonts/ProstoOne-Regular.ttf", unit/40)
+	fonts["Debug Info"]        = lg.newFont(unit/60)
 end
-local versionDisplayText = ""
-local MMButtons = {}
-local BUTTON_AMMOUNT = -1
-local GMHUnit = -1
---[[ NOTE:
-	SEGMENTS and NSEGMENT are needed to define paddings of
-	title and buttons from top and bottom of the screen accordingly.
-	SEGMENTS is the ammount of rows for GM.Height division and
-	NSEGMENT is the index of row you pick from top or bottom
-	(I am aware that this is a wierd solution)
-	.                                           - Cadragonit
---]]
+
+function UI.init(self, GM)
+
+	unit = math.min(GM.width, GM.height)
+	shaderBG = lg.newShader "assets/background.glsl"
+	shaderBG:send("speed", 0.1)
+	shaderBG:send("size", 3)
+
+	self.refreshFonts(GM.width, GM.height)
+end
+
+-- Things for buttons @ugly
+local UIButton_Ys = {}
+local UIButton = { x = nil, w = nil, h = nil }
+local focused_on_options = false
+local MMButtons = {
+	{
+		text = "New Game",
+		isHover = false,
+		action = function(self, GM)
+			-- Starting game at this point
+			GM.state = "MainGame"
+		end,
+	},
+	{
+		text = "Options",
+		isHover = false,
+		action = function(self, GM)
+			-- TODO: It's really easy to implement an animation for opening
+			--       of this menu using coroutines but I'm not doing that now
+			--       because it requires a global queue of coroutines and a loop
+			--       to drain all of them which is really off-topic.
+
+			print("WARNING: Options are not implemented yet.")
+			focused_on_options = true
+
+			-- Don't really know how to do it better
+			self.isHover = false
+		end,
+	},
+}
+local MMButtons_len = #MMButtons
 local SEGMENTS = 12
 local NSEGMENT = 4
 
-local focused_on_options = false
-function UI.init()
-	UI.refreshFonts()
-	bgShader = lg.newShader("assets/background.glsl")
-	versionDisplayText = string.format("SweeperTime %s", GM.version)
-	MMButtons = {
-		{
-			text = "New Game",
-			isHover = false,
-			action = function()
-				-- Starting game at this point
-				Field.init()
-				GM.state = "MainGame"
-			end,
-		},
-		{
-			text = "Options",
-			isHover = false,
-			action = function()
-				-- TODO: It's really easy to implement an animation for opening
-				--       of this menu using coroutines but I'm not doing that now
-				--       because it requires a global queue of coroutines and a loop
-				--       to drain all of them which is really off-topic.
-				focused_on_options = true
-				-- Don't really know how to do it better
-				MMButtons[2].isHover = false
-			end,
-		},
-	}
-	BUTTON_AMMOUNT = #MMButtons
-	assert(BUTTON_AMMOUNT >= 1)
-end
-local buttons_Y = {}
-local UIButton = {}
-function UI.update()
-	local mice = Vector2.new(love.mouse.getPosition())
-	GMHUnit = math.ceil(GM.Height/60) -- GM.Height Unit
-	if     GM.state == "MainMenu" then
-		-- Background
-		bgShader:send("time", love.timer.getTime())
-		bgShader:send("speed", 0.1)
-		bgShader:send("size", 3)
-		-- Buttons
-		local UIButtonPad = GMHUnit
-		UIButton = {
-			w = logoFont:getWidth("SWEEPER TIME")*3/4,
-			h = GMHUnit*3,
-		}
-		UIButton.x = (GM.Widht-UIButton.w)/2
-		local BUTTON_BLOCK_HEIGHT = UIButton.h*BUTTON_AMMOUNT + UIButtonPad*(BUTTON_AMMOUNT-1)
-		buttons_Y[1] = GM.Height*((SEGMENTS-NSEGMENT)/SEGMENTS)-BUTTON_BLOCK_HEIGHT/2
-		assert(BUTTON_AMMOUNT >= 1)
-		for i = 2, BUTTON_AMMOUNT do
-			buttons_Y[i] = buttons_Y[i-1] + UIButton.h + UIButtonPad
-		end
-		if not focused_on_options then
-			for i = 1, BUTTON_AMMOUNT do
-				local thisButton = MMButtons[i]
-				local cbuttbbox = Rec.new(UIButton.x, buttons_Y[i], UIButton.w, UIButton.h)
-				if checkCollisionPointRec(mice, cbuttbbox) then
-					thisButton.isHover = true
-				else
-					thisButton.isHover = false
-				end
+function UI.update(GM, dt)
+
+	time = time + dt
+	unit = math.min(GM.width, GM.height)
+
+	if GM.state == "MainMenu" then
+
+		shaderBG:send("time", time)
+
+		-- Buttons @ugly
+		do
+			local mouse = Vector2.new(love.mouse.getPosition())
+			local font = fonts["Title"]
+			local UIButtonPad = unit/60
+			UIButton.w = unit*9/16
+			UIButton.h = unit/20
+			UIButton.x = (GM.width-UIButton.w)/2
+			local BUTTON_BLOCK_HEIGHT = UIButton.h*MMButtons_len + UIButtonPad*(MMButtons_len-1)
+			UIButton_Ys[1] = GM.height*((SEGMENTS-NSEGMENT)/SEGMENTS)-BUTTON_BLOCK_HEIGHT/2
+			assert(MMButtons_len >= 1)
+			for i = 2, MMButtons_len do
+				UIButton_Ys[i] = UIButton_Ys[i-1] + UIButton.h + UIButtonPad
 			end
-		else
-			-- options menu update
-			-- nothing yet
+			if not focused_on_options then
+				for i = 1, MMButtons_len do
+					local thisButton = MMButtons[i]
+					local cbuttbbox = Rec.new(UIButton.x, UIButton_Ys[i], UIButton.w, UIButton.h)
+					if checkCollisionPointRec(mouse, cbuttbbox) then
+						thisButton.isHover = true
+					else
+						thisButton.isHover = false
+					end
+				end
+			else
+				-- options menu update
+				-- nothing yet
+			end
+		end
+	end
+end
+
+function UI.draw(GM)
+
+	local screen = Rec.new(0, 0, GM.width, GM.height)
+
+	if GM.state == "MainMenu" then
+
+		-- Background
+		lg.setShader(shaderBG)
+		screen:draw("fill")
+		lg.setShader()
+		lg.setColor(0, 0, 0, 0.3)
+		screen:draw("fill")
+
+		-- Version
+		do
+			local font = fonts["Version"]
+			local pad_left = 10
+			local pad_bottom = 5
+			lg.setFont(font)
+			palette.versionText:apply()
+			lg.printf("SweeperTime "..GM.version, pad_left, screen.h - font:getHeight() - pad_bottom, screen.w, "left")
+		end
+
+		-- Title
+		do
+			local text = "SWEEPER TIME"
+			local font = fonts["Title"]
+			local x = 0
+			local y = screen.h/3 - font:getHeight()/2
+			local w = screen.w
+			local speed = math.pi*2/3
+			local shadowOffset = unit/144
+
+			lg.setFont(font)
+
+			-- Shadow
+			Color.newHSV(time*360/6, 1, 0.5, 1):apply()
+			lg.printf(text, x + math.cos(time*speed)*shadowOffset, y + math.sin(time*speed)*shadowOffset, w, "center", 0, 1, 1, 0, 0, 0.2 * math.cos(time*speed))
+
+			-- Title
+			palette.logoFront:apply()
+			lg.printf(text, x, y, w, "center", 0, 1, 1, 0, 0, 0.2 * math.cos(time*speed))
+		end
+
+		-- Buttons @ugly
+		do
+			local font = fonts["Main menu buttons"]
+			local frameWidth = unit/60/12
+			for i = 1, MMButtons_len do
+				assert(UIButton_Ys[i])
+				local butrec = Rec.new(UIButton.x, UIButton_Ys[i], UIButton.w, UIButton.h)
+				if not MMButtons[i].isHover then
+					palette.logoFront:where { a = 0x20/0xFF }:apply()
+				else
+					palette.logoFront:where { a = 0x40/0xFF }:apply()
+				end
+				butrec:draw("fill")
+				love.graphics.setLineWidth(frameWidth)
+				palette.logoFront:where { a = 1 }:apply()
+				butrec:draw("line")
+				lg.setFont(font)
+				lg.printf(MMButtons[i].text,
+					butrec.x,
+					butrec.y + (butrec.h - font:getHeight())/2,
+					butrec.w, "center")
+			end
+			if focused_on_options then
+				local bg = palette.cellInner:where { a = 0.8 }
+				local fg = palette.cellFrame:where { a = 1 }
+				local fade = Color.newNV(0, 0, 0, 0.5)
+				local button_pad = unit/60
+				local menu_margin = unit/60/3
+				local N = 4
+				local menu_height = UIButton.h*N + button_pad*(N - 1)
+				local menu_rec = Rec.new(
+					(screen.w - UIButton.w)/2  - menu_margin,
+					(screen.h - menu_height)/2 - menu_margin,
+					UIButton.w                 + menu_margin*2,
+					menu_height                + menu_margin*2)
+				fade:apply()
+				screen:draw("fill")
+				bg:apply()
+				menu_rec:draw("fill")
+				fg:apply()
+				lg.setLineWidth(frameWidth)
+				menu_rec:draw("line")
+			end
 		end
 	elseif GM.state == "MainGame" then
+		-- FPS
+		do
+			font = fonts["Debug Info"]
+			lg.setFont(font)
+			palette.debugInfo:apply()
+			lg.printf(
+				string.format("FPS: %d", round(1/love.timer.getDelta())),
+				0, 5, GM.width - 10, "right")
+		end
 	end
 end
 
 function UI.keypressed(key, scancode, isrepeat)
+	-- For buttons @ugly
 	if key == "escape" then focused_on_options = false end
 end
+
 function UI.keyreleased(key, scancode)
 end
+
 function UI.mousepressed(x, y, button)
 end
-function UI.mousereleased(x, y, button)
-	for i = 1, BUTTON_AMMOUNT do
+
+function UI.mousereleased(x, y, button, GM)
+	-- For buttons @ugly
+	for i = 1, MMButtons_len do
 		local thisButton = MMButtons[i]
 		if button == 1 and thisButton.isHover then
-			thisButton.action()
+			thisButton:action(GM)
 		end
 	end
 end
 
-function UI.printLogo(x, y, speed, amplitude)
-	local time = love.timer.getTime()
-	lg.setFont(logoFont)
-	lg.setColor(
-		0.2 * math.cos((time-2)*speed) - 0.05,
-		0.2 * math.cos((time  )*speed) - 0.05,
-		0.2 * math.cos((time+2)*speed) - 0.05,
-		0.8)
-	lg.printf("SWEEPER TIME",
-		math.cos(time*speed)*(amplitude+0.2) + x,
-		math.sin(time*speed)*amplitude + y,
-		GM.Widht, "center",
-		0, 1, 1, 0, 0, 0.2 * math.cos(time*speed))
-	lg.setColor(cup(palette.logoFront))
-	lg.printf("SWEEPER TIME",
-		x, y,
-		GM.Widht, "center",
-		0, 1, 1, 0, 0, 0.2 * math.cos(time*speed))
-end
-
-function UI.draw()
-	if GM.state == "MainMenu" then
-		-- Background
-		local screen = Rec.new(0, 0, GM.Widht, GM.Height)
-		lg.setShader(bgShader)
-		lg.setColor(1, 1, 1, 1)
-		drawRec("fill", screen)
-		lg.setShader()
-		-- Verson
-		local VERSION_TEXT_PADDING = {w = 10, h = 5}
-		lg.setFont(versionFont)
-		lg.setColor(cup(palette.versionText))
-		lg.printf(versionDisplayText,
-			VERSION_TEXT_PADDING.w,
-			GM.Height - versionFont:getHeight() - VERSION_TEXT_PADDING.h,
-			GM.Widht, "left")
-		-- Logo (Which is Title)
-		local logoPosY =
-			(GM.Height - logoFont:getHeight())*(NSEGMENT/SEGMENTS)
-		UI.printLogo(0, logoPosY, 2, GMHUnit*3/4)
-		-- Buttons
-		-- TODO: Add cool effects
-		local button_frame_width = GMHUnit/12
-		for i = 1, BUTTON_AMMOUNT do
-			assert(buttons_Y[i])
-			local butrec = Rec.new(UIButton.x, buttons_Y[i], UIButton.w, UIButton.h)
-			if not MMButtons[i].isHover then
-				lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 0x20/0xFF)
-			else
-				lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 0x40/0xFF)
-			end
-			drawRec("fill", butrec)
-			love.graphics.setLineWidth(button_frame_width)
-			lg.setColor(palette.logoFront.r, palette.logoFront.g, palette.logoFront.b, 1)
-			drawRec("line", butrec)
-			lg.setFont(MMButtonsFont)
-			lg.printf(MMButtons[i].text,
-				butrec.x,
-				butrec.y + (butrec.h - MMButtonsFont:getHeight())/2,
-				butrec.w, "center")
-		end
-		if focused_on_options then
-			local setucol = function(color) lg.setColor(cup(color)) end -- Set unpacked Color
-			local set_col_opacity = function(color, opacity) return {r = color.r, g = color.g, b = color.b, a = opacity} end
-			local bg = set_col_opacity(palette.cellInner, 0.8)
-			local fg = set_col_opacity(palette.cellFrame, 1)
-			local fade = {r = 0, g = 0, b = 0, a = 0.5}
-			local button_pad = GMHUnit
-			local menu_margin = GMHUnit/3
-			local N = 4
-			local menu_height = UIButton.h*N + button_pad*(N - 1)
-			local menu_rec = Rec.new(
-				(screen.w - UIButton.w)/2  - menu_margin,
-				(screen.h - menu_height)/2 - menu_margin,
-				UIButton.w                 + menu_margin*2,
-				menu_height                + menu_margin*2)
-			setucol(fade)
-			drawRec("fill", screen)
-			setucol(bg)
-			drawRec("fill", menu_rec)
-			setucol(fg)
-			love.graphics.setLineWidth(button_frame_width)
-			drawRec("line", menu_rec)
-		end
-	elseif GM.state == "MainGame" then
-		lg.setFont(debugInfoFont)
-		lg.setColor(cup(palette.debugInfo))
-		lg.printf(
-			string.format("FPS: %d", round(1/love.timer.getDelta())),
-			0, 0, GM.Widht, "right")
-	end
-end
+return UI

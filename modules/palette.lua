@@ -1,108 +1,62 @@
-getColorHS = function(hexString)
-	local color = {}
+local Palette = {}
 
-	-- Exluding '#' from the start of the string
-	color.r = tonumber(string.sub(hexString, 2, 3), 16)/255
-	color.g = tonumber(string.sub(hexString, 4, 5), 16)/255
-	color.b = tonumber(string.sub(hexString, 6, 7), 16)/255
-	color.a = tonumber(string.sub(hexString, 8, 9), 16)/255
-
-	return color
-end
-getColorNV = function(nVr, nVg, nVb, nVa)
-	local color = {}
-
-	color.r = nVr
-	color.g = nVg
-	color.b = nVb
-	color.a = nVa
-
-	return color
-end
-getColorHL = function(hexLitteral)
-	local color = {}
-	-- Have to comment out part that is for Lua because LOVE
-	-- do not want to run the game without parsing this part
-	-- of a code that is for Lua and not Luajit
-	--[[ case Lua
-		-- We are on lua, everything is ok
-		color.r = ((hexLitteral >> 24) & 0xFF)/255
-		color.g = ((hexLitteral >> 16) & 0xFF)/255
-		color.b = ((hexLitteral >> 8 ) & 0xFF)/255
-		color.a = ( hexLitteral        & 0xFF)/255
-	]]-- case Luajit
-		-- We are on luajit that dont have normal syntax
-		-- but have a bit.* functions.
-		-- ("band" stands for "binary and" btw)
-		color.r = bit.band(bit.rshift(hexLitteral, 24), 0xFF)/255
-		color.g = bit.band(bit.rshift(hexLitteral, 16), 0xFF)/255
-		color.b = bit.band(bit.rshift(hexLitteral,  8), 0xFF)/255
-		color.a = bit.band(           hexLitteral     , 0xFF)/255
-		
-	--
-
-	return color
-end
-cup = function(color) -- Color unpack
-	return color.r, color.g, color.b, color.a
-end
 -- Theme list:
 local themes = {
 	["Theme Zero"] = {
-		logoFront    = getColorHS("#CCCCFFFF");
-		versionText  = getColorHS("#333333FF");
-		debugInfo    = getColorNV(0, 0, 0, 1);
-		cellInner    = getColorHS("#333333FF");
-		cellRevealed = getColorHS("#FFFFFF22");
-		cellFrame    = getColorHS("#FFFFFF33");
-		cellSelectedInner = getColorHS("#4C4C47FF");
-		cellSelectedFrame = getColorHS("#FFFFF233");
+		logoFront    = Color.newHS("#CCCCFFFF");
+		versionText  = Color.newHS("#333333FF");
+		debugInfo    = Color.newNV(0, 0, 0, 1);
+		cellInner    = Color.newHS("#333333FF");
+		cellRevealed = Color.newHS("#FFFFFF22");
+		cellFrame    = Color.newHS("#FFFFFF33");
+		cellSelectedInner = Color.newHS("#4C4C47FF");
+		cellSelectedFrame = Color.newHS("#FFFFF233");
 	},
 	["Ocean"] = {
-		logoFront    = getColorHS("#CCCCFFFF");
-		versionText  = getColorHS("#333333FF");
-		debugInfo    = getColorHL(0x5DfDCDFF);
-		cellInner    = getColorHS("#04151FFF");
-		cellRevealed = getColorHS("#66999B44");
-		cellFrame    = getColorHS("#6E889488");
-		cellSelectedInner = getColorHS("#85BAA1CC");
-		cellSelectedFrame = getColorHS("#FFFFF233");
+		logoFront    = Color.newHS("#CCCCFFFF");
+		versionText  = Color.newHS("#333333FF");
+		debugInfo    = Color.newHL(0x5DfDCDFF);
+		cellInner    = Color.newHS("#04151FFF");
+		cellRevealed = Color.newHS("#66999B44");
+		cellFrame    = Color.newHS("#6E889488");
+		cellSelectedInner = Color.newHS("#85BAA1CC");
+		cellSelectedFrame = Color.newHS("#FFFFF233");
 	},
 	["Coffee"] = {
-		logoFront    = getColorHS("#CCCCFFFF");
-		versionText  = getColorHS("#333333FF");
-		debugInfo    = getColorHS("#8EC07CFF");
-		cellInner    = getColorHS("#282828FF");
-		cellRevealed = getColorHS("#92837444");
-		cellFrame    = getColorHS("#92837488");
-		cellSelectedInner = getColorHS("#85BAA1FF");
-		cellSelectedFrame = getColorHS("#FFFFF233");
+		logoFront    = Color.newHS("#CCCCFFFF");
+		versionText  = Color.newHS("#333333FF");
+		debugInfo    = Color.newHS("#8EC07CFF");
+		cellInner    = Color.newHS("#282828FF");
+		cellRevealed = Color.newHS("#92837444");
+		cellFrame    = Color.newHS("#92837488");
+		cellSelectedInner = Color.newHS("#85BAA1FF");
+		cellSelectedFrame = Color.newHS("#FFFFF233");
 	},
 	--[[ Not Ready yet
 	["EverForest"] = {
-		logoFront    = getColorHS("#CCCCFFFF");
-		versionText  = getColorHS("#333333FF");
-		debugInfo    = getColorNV(0, 0, 0, 1);
-		cellInner    = getColorHS("#1e2326FF");
-		cellRevealed = getColorHS("#2e383cAA");
-		-- cellFrame    = getColorHS("#4f5b5866");
-		cellFrame    = getColorHS("#a7c08034");
-		cellSelectedInner = getColorHS("#4C4C47FF");
-		cellSelectedFrame = getColorHS("#FFFFF233");
+		logoFront    = Color.newHS("#CCCCFFFF");
+		versionText  = Color.newHS("#333333FF");
+		debugInfo    = Color.newNV(0, 0, 0, 1);
+		cellInner    = Color.newHS("#1e2326FF");
+		cellRevealed = Color.newHS("#2e383cAA");
+		-- cellFrame    = Color.newHS("#4f5b5866");
+		cellFrame    = Color.newHS("#a7c08034");
+		cellSelectedInner = Color.newHS("#4C4C47FF");
+		cellSelectedFrame = Color.newHS("#FFFFF233");
 	},]]
 }
 
 local DEFAULT_THEME_NAME = "Theme Zero"
-local DEFAULT_THEME = themes[DEFAULT_THEME_NAME]
-palette = DEFAULT_THEME
-setTheme = function(themeName)
-	assert(themeName, "theme name is not provided")
-	local theme = themes[themeName]
-	if not theme then
-		print(string.format("WARNING: Theme `%s` not found, using default `%s`", themeName, DEFAULT_THEME_NAME))
-		palette = DEFAULT_THEME
-		return
+
+function Palette.getPaletteByName(themeName)
+	assert(themeName, "Theme name is not provided!")
+	local colors = themes[themeName]
+	if colors then
+		return setmetatable(colors, { __index = Palette })
 	end
-	palette = theme
+
+	print(string.format("WARNING: Theme `%s` not found, using default `%s`", themeName, DEFAULT_THEME_NAME))
+	return setmetatable(themes[DEFAULT_THEME_NAME], { __index = Palette })
 end
 
+return Palette.getPaletteByName(DEFAULT_THEME_NAME)
