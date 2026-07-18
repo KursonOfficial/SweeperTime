@@ -1,5 +1,5 @@
 -- game manager типо
-_G.GM = {}
+local GM = {}
 
 -- Чё, самый умный?
 require "modules.algebra"
@@ -79,7 +79,7 @@ end
 
 function love.mousepressed(x, y, button, istouch)
 	if GM.state == "MainGame" then
-		GM.Field:mousepressed(button)
+		GM.Field:mousepressed(button, GM)
 	elseif GM.state == "MainMenu" then
 		GM.UI.mousepressed(x, y, button)
 	end
@@ -87,7 +87,7 @@ end
 function love.mousereleased(x, y, button, istouch)
 	if GM.state == "MainGame" then
 	elseif GM.state == "MainMenu" then
-		GM.UI.mousereleased(x, y, button)
+		GM.UI.mousereleased(x, y, button, GM)
 	end
 end
 

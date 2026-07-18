@@ -20,7 +20,6 @@ end
 function UI.init(self, GM)
 
 	unit = math.min(GM.width, GM.height)
-
 	shaderBG = lg.newShader "assets/background.glsl"
 	shaderBG:send("speed", 0.1)
 	shaderBG:send("size", 3)
@@ -36,7 +35,7 @@ local MMButtons = {
 	{
 		text = "New Game",
 		isHover = false,
-		action = function(self)
+		action = function(self, GM)
 			-- Starting game at this point
 			GM.state = "MainGame"
 		end,
@@ -44,7 +43,7 @@ local MMButtons = {
 	{
 		text = "Options",
 		isHover = false,
-		action = function(self)
+		action = function(self, GM)
 			-- TODO: It's really easy to implement an animation for opening
 			--       of this menu using coroutines but I'm not doing that now
 			--       because it requires a global queue of coroutines and a loop
@@ -215,12 +214,12 @@ end
 function UI.mousepressed(x, y, button)
 end
 
-function UI.mousereleased(x, y, button)
+function UI.mousereleased(x, y, button, GM)
 	-- For buttons @ugly
 	for i = 1, MMButtons_len do
 		local thisButton = MMButtons[i]
 		if button == 1 and thisButton.isHover then
-			thisButton:action()
+			thisButton:action(GM)
 		end
 	end
 end

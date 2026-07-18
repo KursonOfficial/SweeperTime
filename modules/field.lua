@@ -65,31 +65,30 @@ function Field.resize(self, w, h)
 	rCorner    = cellSize/8
 end
 
-function Field.mousepressed(self, button)
+function Field.mousepressed(self, button, GM)
 	local x, y = self.selected.x, self.selected.y
+	local bombChance = GM.UD.settings.bomb_chance
 	if button == 1 then
 		lastClickedCell.x = self.selected.x
 		lastClickedCell.y = self.selected.y
 		if not self.firstCell then
-			if Cell.isNotNil(x, y) then
-				if not Cells[x][y].flag then
-					Cell.reveal(x, y)
-				end
+			if Cell.isNotNil(x, y) and (not Cells[x][y].flag) then
+				Cell.reveal(x, y, bombChance)
 			end
 		else
 			Cell.new(x, y, false)
-			Cell.reveal(x, y)
+			Cell.reveal(x, y, bombChance)
 		end
 		if Cell.isRevealed(x, y) then
 			if Cells[x][y].bombsAround == Cell.countAround(x, y, "flags") then
-				if not Cells[x-1][y-1].flag then Cell.reveal(x-1, y-1) end
-				if not Cells[x-1][y  ].flag then Cell.reveal(x-1, y  ) end
-				if not Cells[x-1][y+1].flag then Cell.reveal(x-1, y+1) end
-				if not Cells[x  ][y+1].flag then Cell.reveal(x  , y+1) end
-				if not Cells[x  ][y-1].flag then Cell.reveal(x  , y-1) end
-				if not Cells[x+1][y-1].flag then Cell.reveal(x+1, y-1) end
-				if not Cells[x+1][y  ].flag then Cell.reveal(x+1, y  ) end
-				if not Cells[x+1][y+1].flag then Cell.reveal(x+1, y+1) end
+				if not Cells[x-1][y-1].flag then Cell.reveal(x - 1, y - 1, bombChance) end
+				if not Cells[x-1][y  ].flag then Cell.reveal(x - 1, y    , bombChance) end
+				if not Cells[x-1][y+1].flag then Cell.reveal(x - 1, y + 1, bombChance) end
+				if not Cells[x  ][y+1].flag then Cell.reveal(x    , y + 1, bombChance) end
+				if not Cells[x  ][y-1].flag then Cell.reveal(x    , y - 1, bombChance) end
+				if not Cells[x+1][y-1].flag then Cell.reveal(x + 1, y - 1, bombChance) end
+				if not Cells[x+1][y  ].flag then Cell.reveal(x + 1, y    , bombChance) end
+				if not Cells[x+1][y+1].flag then Cell.reveal(x + 1, y + 1, bombChance) end
 			end
 		end
 	end
@@ -112,7 +111,7 @@ function Field.mousepressed(self, button)
 	end
 end
 
-function Cell.reveal(x, y)
+function Cell.reveal(x, y, bombChance)
 
 	if Cells[x][y].revealed then return end
 
@@ -129,7 +128,7 @@ function Cell.reveal(x, y)
 		for dy = -1, 1 do
 			if not Cell.isNotNil(x + dx, y + dy) then
 				if dx ~= 0 or dy ~= 0 then
-					local isBomb = math.random() < GM.UD.settings.bomb_chance
+					local isBomb = math.random() < bombChance
 					if not Field.firstCell then
 						Cell.new(x + dx, y + dy, isBomb)
 						BombsAround = BombsAround + (isBomb and 1 or 0)
@@ -149,14 +148,14 @@ function Cell.reveal(x, y)
 	local radius = 43 -- Was guessed by many tests. This value is optimal
 	local inRadius = math.sqrt((x - lastClickedCell.x)^2 + (y - lastClickedCell.y)^2) <= radius
 	if BombsAround == 0 and inRadius then
-		Cell.reveal(x - 1, y - 1)
-		Cell.reveal(x - 1, y    )
-		Cell.reveal(x - 1, y + 1)
-		Cell.reveal(x    , y + 1)
-		Cell.reveal(x    , y - 1)
-		Cell.reveal(x + 1, y - 1)
-		Cell.reveal(x + 1, y    )
-		Cell.reveal(x + 1, y + 1)
+		Cell.reveal(x - 1, y - 1, bombChance)
+		Cell.reveal(x - 1, y    , bombChance)
+		Cell.reveal(x - 1, y + 1, bombChance)
+		Cell.reveal(x    , y + 1, bombChance)
+		Cell.reveal(x    , y - 1, bombChance)
+		Cell.reveal(x + 1, y - 1, bombChance)
+		Cell.reveal(x + 1, y    , bombChance)
+		Cell.reveal(x + 1, y + 1, bombChance)
 	end
 end
 

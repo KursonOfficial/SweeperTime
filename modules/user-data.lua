@@ -39,7 +39,6 @@ end
 
 UD.apply = function(self)
 	love.window.setFullscreen(self.settings.fullscreen)
-	GM.width, GM.height = love.graphics.getDimensions()
 	palette = palette.getPaletteByName(self.settings.theme)
 end
 
